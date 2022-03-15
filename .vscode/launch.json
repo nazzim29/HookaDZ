@@ -1,0 +1,15 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Debug in Exponent",
+			"request": "launch",
+			"type": "reactnative",
+			"cwd": "${workspaceFolder}",
+			"platform": "exponent",
+			"expoHostType": "lan",
+			"skipFiles": ["node_modules/**"],
+			"sdkVersion": "40.0.0"
+		}
+	]
+}
