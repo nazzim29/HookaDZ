@@ -11,6 +11,7 @@ theme.colors.background = "#0D1117";
 theme.dark = true;
 const store = configureStore();
 export default function App({ navigation }) {
+
 	return (
 		<Provider store={store}>
 			<NavigationContainer

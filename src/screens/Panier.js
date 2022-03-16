@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
 });
 export default function Commandes(props) {
 	//show list of past order
+	console.log("rendring panier")
 	const handleCommandePress = () => {};
 	const dispatch = useDispatch();
 	const commandes = useSelector((state) => state.commande.commandes);

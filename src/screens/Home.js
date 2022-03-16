@@ -150,7 +150,7 @@ export default (props) => {
 					<FlatList style={styles.produitsSection} horizontal={true}></FlatList>
 				</ScrollView>
 			</Box>
-			<TouchableHighlight style={styles.bagButton} onPress={handleBagClick}>
+			<TouchableHighlight style={styles.bagButton} onPressIn={handleBagClick}>
 					<DropShadow style={styles.dropShadow}>
 						<Image source={bagIcon} style={styles.bagIcon} />
 					</DropShadow>

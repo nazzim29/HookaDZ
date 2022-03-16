@@ -1,20 +1,6 @@
-import {
-	Text,
-	View,
-	StyleSheet,
-	TextInput,
-	TouchableWithoutFeedback,
-	Image,
-	Animated,
-} from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { deg } from "react-native-linear-gradient-degree";
-import React, { useRef, useState, useEffect, forwardRef } from "react";
-import { LinearGradient } from "expo-linear-gradient";
-import { useDispatch, useSelector, useStore } from "react-redux";
-import { login } from "../actions/auth";
-import { useToast } from "native-base";
-import Input from "../components/Input";
+import { View, Text } from 'react-native'
+import React from 'react'
+import Input from "../../components/Input";
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
@@ -77,33 +63,8 @@ const styles = StyleSheet.create({
 		color: "#C9D1D9",
 	},
 });
-
-export default (props) => {
-	const personIcon = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "person-icon")
-	);
-	const passwordRef = useRef();
-	const toast = useToast();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const dispatch = useDispatch();
-	const error = useSelector((state) => state.error.message);
-	useEffect(() => {
-		if (error) {
-			toast.show({
-				description: error,
-				duration: 2000,
-				placement: "bottom",
-				onCloseComplete: () => {
-					dispatch({ type: "CLEAR_ERROR" });
-				},
-			});
-		}
-	}, [error]);
-	const loginHandler = () => {
-		dispatch(login({email, password}));
-	};
-	return (
+export default function ForgotPassword() {
+  return (
 		<KeyboardAwareScrollView style={{ flex: 1 }}>
 			<View style={styles.screen}>
 				<Text style={styles.title}>S'identifier</Text>
@@ -205,4 +166,4 @@ export default (props) => {
 			</View>
 		</KeyboardAwareScrollView>
 	);
-};
+}

@@ -11,7 +11,7 @@ import { useFonts } from "expo-font";
 import SplashScreen from "../screens/SplashScreen";
 import { useSelector,useDispatch } from "react-redux";
 import { getAllProducts } from "../actions/products";
-
+import Forgot1 from "../screens/ForgotPassword/step-1"
 const AuthStack = createStackNavigator();
 
 const AuthStackScreen = () => {
@@ -23,6 +23,7 @@ const AuthStackScreen = () => {
 		>
 			<AuthStack.Screen name="Login" component={Login} />
 			<AuthStack.Screen name="Signup" component={SignUp} />
+			<AuthStack.Screen name="Forgot-1" component={Forgot1} />
 		</AuthStack.Navigator>
 	);
 };

@@ -9,6 +9,7 @@ const images = [
 	require("../../assets/plus-icon.png"),
 	require("../../assets/bag-icon.png"),
 	require("../../assets/arrow-back.png"),
+	require("../../assets/phone-icon.png"),
 ];
 
 export function startLoading() {
