@@ -8,7 +8,6 @@ const initialState = {
 };
 
 const authReducer = (state = initialState, action) => {
-	console.log(action.type);
 	switch (action.type) {
 
 		case "RESTORE_TOKEN":
@@ -17,7 +16,6 @@ const authReducer = (state = initialState, action) => {
 				userToken: action.token,
 			};
 		case "LOGIN":
-			console.log("hello")
 			return {
 				...state,
 				...action.payload,

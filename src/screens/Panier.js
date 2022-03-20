@@ -6,16 +6,23 @@ import {
 	Image,
 	TouchableWithoutFeedback,
 	TouchableOpacity,
+	ScrollView,
 } from "react-native";
 import React, { useEffect } from "react";
 import { OrderRow } from "../components/Order";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllCommandes } from "../actions/commandes";
-import { Button } from "native-base";
-import DropShadow from "react-native-drop-shadow";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
+import Extra from "../components/Extra";
+import { PostCommande } from "../actions/commandes";
 const styles = StyleSheet.create({
+	border: {
+		padding: 2,
+		borderRadius: 10,
+		flex: 1,
+		height: "100%",
+		marginBottom: 10,
+	},
 	header: {
 		justifyContent: "flex-start",
 		// backgroundColor: "#161B22",
@@ -36,10 +43,9 @@ const styles = StyleSheet.create({
 		width: 12.5,
 	},
 	container: {
-		flex: 1,
 		backgroundColor: "#0D1117",
 		width: "100%",
-		height: "100%",
+		maxHeight: "50%",
 	},
 	contentContainer: {
 		alignItems: "center",
@@ -49,10 +55,9 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	floating: {
-		position: "absolute",
-		bottom: 0,
 		minWidth: "100%",
-		padding: 30,
+		minHeight: "25%",
+		padding: 15,
 		flexDirection: "column",
 	},
 	details: {
@@ -89,18 +94,22 @@ const styles = StyleSheet.create({
 		fontFamily: "Inter-Bold",
 		fontSize: 20,
 		color: "white",
-		
 	},
 });
 export default function Commandes(props) {
 	//show list of past order
-	console.log("rendring panier")
-	const handleCommandePress = () => {};
 	const dispatch = useDispatch();
-	const commandes = useSelector((state) => state.commande.commandes);
+	const handleCommandePress = () => {
+		dispatch(PostCommande())
+	};
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
+	const commandeEnCours = useSelector(
+		(state) => state.commande.commandeEnCours
+	);
+	const extras = useSelector((state) => state.product.extras);
+	
 	return (
 		<>
 			<View style={styles.header}>
@@ -109,58 +118,82 @@ export default function Commandes(props) {
 				</TouchableOpacity>
 				<Text style={styles.headerText}>Panier</Text>
 			</View>
-			<FlatList
+			<ScrollView
 				style={styles.container}
 				contentContainerStyle={styles.contentContainer}
-				data={commandes}
-				renderItem={({ item }) => <OrderRow order={item} />}
-				keyExtractor={(item) => item._id}
+			>
+				{commandeEnCours.produits.map((item) => {
+					return <OrderRow key={item.prd} order={item} />;
+				})}
+			</ScrollView>
+			<View
+				style={{
+					borderWidth: 0.5,
+					borderColor: "rgba(176, 176, 176, 1)",
+					width: "80%",
+					alignSelf: "center",
+					marginVertical: 5,
+				}}
 			/>
+			{extras.map((extra, index) => (
+				<Extra key={index} extra={extra} commandeEnCours={commandeEnCours} />
+			))}
 			<View style={styles.floating}>
-				<DropShadow style={styles.details}>
+				<LinearGradient
+					colors={[
+						"rgba(11, 103, 255, 1)",
+						"rgba(255, 255, 255, 0)",
+						"rgba(11, 103, 255, 1)",
+					]}
+					locations={[0, 0.5, 1]}
+					{...deg(3)}
+					style={styles.border}
+				>
 					<View
 						style={{
-							maxWidth: "100%",
-							flexDirection: "row",
-							justifyContent: "space-between",
+							flex: 1,
+							backgroundColor: "#0D1117",
+							padding: 10,
+							borderRadius: 10,
+							justifyContent: "space-evenly",
 						}}
-					>
-						<Text style={styles.detailsHeader}>Total</Text>
-						<Text style={styles.totalPrice}>2000 Da</Text>
-					</View>
-					<View
-						style={{
-							maxWidth: "100%",
-							flexDirection: "row",
-							justifyContent: "space-between",
-						}}
-					>
-						<Text style={[styles.detailsHeader, { color: "#7C7C7C" }]}>
-							Livraison
-						</Text>
-						<Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>free</Text>
-					</View>
-				</DropShadow>
-				<TouchableWithoutFeedback onPress={handleCommandePress}>
-					<LinearGradient
-						colors={["#5D31BF", "#0B67FFD6", "transparent"]}
-						locations={[0.1, 0.9, 0.1]}
-						{...deg(1)}
-						style={{ padding: 1, width: "100%", height: 50, borderRadius: 15 }}
 					>
 						<View
 							style={{
-								width: "100%",
-								height: "100%",
-								borderRadius: 15,
-								backgroundColor: "#0D1117",
-								alignItems: "center",
-								justifyContent: "center",
-
+								maxWidth: "100%",
+								flexDirection: "row",
+								justifyContent: "space-between",
 							}}
 						>
-							<Text style={styles.txtbtn}>Commander</Text>
+							<Text style={styles.detailsHeader}>Total</Text>
+							<Text style={styles.totalPrice}>2000 Da</Text>
 						</View>
+						<View
+							style={{
+								maxWidth: "100%",
+								flexDirection: "row",
+								justifyContent: "space-between",
+							}}
+						>
+							<Text style={[styles.detailsHeader, { color: "#7C7C7C" }]}>
+								Livraison
+							</Text>
+							<Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>
+								free
+							</Text>
+						</View>
+					</View>
+				</LinearGradient>
+				<TouchableWithoutFeedback onPress={handleCommandePress}>
+					<LinearGradient
+						colors={[
+							"rgba(93, 49, 191, 1)",
+							"rgba(11, 103, 255, 0.84)",
+						]}
+						{...deg(60)}
+						style={{ padding: 1, width: "100%", height: 40, borderRadius: 10,alignItems:"center",justifyContent:"center" }}
+					>
+						<Text style={styles.txtbtn}>Commander</Text>
 					</LinearGradient>
 				</TouchableWithoutFeedback>
 			</View>

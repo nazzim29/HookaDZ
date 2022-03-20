@@ -1,5 +1,7 @@
+import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
-import {Image} from "react-native";
+import { Image } from "react-native";
+
 const images = [
 	require("../../assets/apple.svg"),
 	require("../../assets/person-icon.png"),
@@ -10,16 +12,31 @@ const images = [
 	require("../../assets/bag-icon.png"),
 	require("../../assets/arrow-back.png"),
 	require("../../assets/phone-icon.png"),
+	require("../../assets/key-icon.png"),
+	require("../../assets/check-icon.png"),
+	require("../../assets/remove-icon.png"),
+	require("../../assets/minus-icon.png"),
+	require("../../assets/info-icon.png"),
+	require("../../assets/step-1-slider.png"),
+	require("../../assets/step-2-slider.png"),
+	require("../../assets/step-3-slider.png"),
+	require("../../assets/step-4-slider.png"),
 ];
 
 export function startLoading() {
-	return {
-		type: "START_LOADING",
+	return (dispatch, getState) => {
+		if (getState().ui.isLoading == true) return;
+		dispatch({
+			type: "START_LOADING",
+		});
 	};
 }
 export function stopLoading() {
-	return {
-		type: "STOP_LOADING",
+	return (dispatch, getState) => {
+		if (getState().ui.isLoading == false) return;
+		dispatch({
+			type: "STOP_LOADING",
+		});
 	};
 }
 
@@ -36,18 +53,17 @@ export function closeCommandePanel() {
 }
 
 export function LoadAssests() {
-    return (dispatch, getState) => {
-        dispatch(startLoading());
-        const icache = images.map(el => {
-            if (typeof el == "string")
-                return Image.prefetch(el);
-            else
-                return Asset.fromModule(el).downloadAsync();
-        })
-		return Promise.all(icache).then((res) => {
-			dispatch({type: "LOAD_ASSETS", payload: res});
-			dispatch(stopLoading());
-		}).catch(err=>console.warn(err));
-    }
-        
+	return (dispatch, getState) => {
+		dispatch(startLoading());
+		const icache = images.map((el) => {
+			if (typeof el == "string") return Image.prefetch(el);
+			else return Asset.fromModule(el).downloadAsync();
+		});
+		return Promise.all(icache)
+			.then((res) => {
+				dispatch({ type: "LOAD_ASSETS", payload: res });
+				dispatch(stopLoading());
+			})
+			.catch((err) => console.warn(err));
+	};
 }

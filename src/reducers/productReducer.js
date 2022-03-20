@@ -1,5 +1,25 @@
 const initialState = {
 	products: [],
+	extras: [
+		{
+			name: "Andy Capp’s Hot Fries",
+		},
+		{
+			name: "Andy Capp’s Hot Fries",
+		},
+		{
+			name: "Andy Capp’s Hot Fries",
+		},
+		{
+			name: "Andy Capp’s Hot Fries",
+		},
+		{
+			name: "Andy Capp’s Hot Fries",
+		},
+		{
+			name: "Andy Capp’s Hot Fries",
+		},
+	],
 };
 
 const productReducer = (state = initialState, action) => {
@@ -13,6 +33,11 @@ const productReducer = (state = initialState, action) => {
 			return {
 				...state,
 				products: action.payload,
+			};
+		case "GET_ALL_EXTRAS":
+			return {
+				...state,
+				extras: action.payload,
 			};
 		default:
 			return state;

@@ -6,11 +6,14 @@ import {
 	TouchableWithoutFeedback,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Input from "../components/Input";
+import Input from "../../components/Input";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
 import { useDispatch } from "react-redux";
+
+
+import { signup } from "../../actions/auth";
 const styles = StyleSheet.create({
 	title: {
 		color: "#3299F1",
@@ -78,6 +81,7 @@ export default (props) => {
 	const phoneRef = React.useRef();
 	const dispatch = useDispatch();
 	const signupHandler = () => {
+		props.navigation.navigate("SignupSuccess");
 		dispatch(
 			signUp({
 				nom: nameRef.current.value,

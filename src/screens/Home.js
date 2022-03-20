@@ -3,14 +3,13 @@ import {
 	Text,
 	View,
 	Image,
-	TouchableHighlight,
+	TouchableWithoutFeedback,
 } from "react-native";
 
-import { Box, FlatList, IconButton, ScrollView } from "native-base";
+import { Box, ScrollView } from "native-base";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
-import DropShadow from "react-native-drop-shadow";
 const styles = StyleSheet.create({
 	header: {
 		justifyContent: "space-between",
@@ -21,10 +20,13 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 	headerText: {
-		fontSize: 20,
+		fontSize: 25,
 		fontWeight: "bold",
 		fontFamily: "Inter-Bold",
-		color: "white",
+		color: "#7638FF",
+		textAlign: "center",
+		width: "100%",
+		marginVertical: "10%",
 	},
 	headerIcon: {
 		height: 25,
@@ -41,10 +43,13 @@ const styles = StyleSheet.create({
 	screenContent: {
 		flex: 1,
 		minWidth: "100%",
+		minHeight: "100%",
+		justifyContent: "center",
+		flexDirection: "row",
+		flexWrap: "wrap",
 	},
 	locationHeader: {
-		backgroundColor: "#161B22",
-		minWidth: "100%",
+		// backgroundColor: "#161B22",
 		paddingVertical: 8,
 		flexDirection: "row",
 		justifyContent: "center",
@@ -69,14 +74,15 @@ const styles = StyleSheet.create({
 		paddingVertical: 5,
 		maxHeight: 250,
 	},
-	bagButton: {
-		bottom: 20,
-		right: 30,
-		position: "absolute",
-		height: 40,
-		width: 40,
-		borderColor: "white",
+	panierBtn: {
+		bottom: 0,
+		width: "80%",
+		height: "7%",
+		backgroundColor: "#7638FF",
+		borderRadius: 15,
 		alignItems: "center",
+		alignSelf: "center",
+		flexDirection: "row",
 		justifyContent: "center",
 	},
 	dropShadow: {
@@ -84,7 +90,7 @@ const styles = StyleSheet.create({
 		padding: 15,
 		backgroundColor: "#161B22",
 		borderColor: "#3299F1",
-		position:"relative",
+		position: "relative",
 		borderWidth: 0.25,
 		shadowColor: "#3299F1",
 		shadowOffset: {
@@ -95,10 +101,17 @@ const styles = StyleSheet.create({
 		shadowRadius: 3.84,
 		elevation: 14,
 	},
-	bagIcon: {
+	arrowIcon: {
 		resizeMode: "contain",
-		height: 30,
-		width: 30,
+		height: 20,
+		width: 20,
+		marginLeft: "5%",
+		transform: [{ rotate: "180deg" }],
+	},
+	paniertxt: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "Inter-Bold",
 	},
 });
 export default (props) => {
@@ -106,11 +119,13 @@ export default (props) => {
 	const historyIcon = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "history-icon")
 	);
-	const bagIcon = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "bag-icon")
+	const arrowIcon = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "arrow-back")
+	);
+	const panier = useSelector((state) =>
+		state.commande.commandeEnCours.produits
 	);
 	let products = useSelector((state) => state.product.products);
-	console.log(products);
 	const handleBagClick = () => {
 		console.log("click");
 		props.navigation.navigate("Panier");
@@ -119,42 +134,32 @@ export default (props) => {
 		<>
 			<Box style={styles.container}>
 				<View style={styles.header}>
-					<Text style={styles.headerText}>Shicha App Logo</Text>
-					<Image
-						source={historyIcon}
-						style={[styles.headerIcon, { resizeMode: "contain" }]}
-					/>
-				</View>
-				<ScrollView contentContainerStyle={styles.screenContent}>
-					<View
-						style={{
-							width: "100%",
-							height: 200,
-							// borderWidth: 2,
-							// borderColor: "white",
-						}}
-					></View>
 					<View style={styles.locationHeader}>
 						<Text style={styles.locationText}>Deliver to </Text>
 						<Text style={styles.location}>C74 + P37, mila Algerie </Text>
 					</View>
-					<Text style={styles.headertxt}>Nos Produits</Text>
-					<FlatList
-						style={styles.produitsSection}
-						horizontal={true}
-						data={products}
-						keyExtractor={(item) => item._id}
-						renderItem={(item) => <Card product={item} />}
-					/>
-					<Text style={styles.headertxt}>Nos Extras</Text>
-					<FlatList style={styles.produitsSection} horizontal={true}></FlatList>
+					<TouchableWithoutFeedback onPress={() => props.navigation.navigate('Historique')}>
+					<Image
+						source={historyIcon}
+						style={[styles.headerIcon, { resizeMode: "contain" }]}
+						/>
+					</TouchableWithoutFeedback>
+				</View>
+				<Text style={styles.headerText}>Sicha App Logo</Text>
+				<ScrollView contentContainerStyle={styles.screenContent}>
+					{products.map((el) => (
+						<Card key={el._id} product={el} />
+					))}
 				</ScrollView>
 			</Box>
-			<TouchableHighlight style={styles.bagButton} onPressIn={handleBagClick}>
-					<DropShadow style={styles.dropShadow}>
-						<Image source={bagIcon} style={styles.bagIcon} />
-					</DropShadow>
-			</TouchableHighlight>
+			{panier.length > 0 && (
+				<TouchableWithoutFeedback onPressIn={handleBagClick}>
+				<View style={styles.panierBtn}>
+					<Text style={styles.paniertxt}>Aller au panier</Text>
+					<Image source={arrowIcon} style={styles.arrowIcon} />
+				</View>
+			</TouchableWithoutFeedback>
+			)}
 		</>
 	);
 };

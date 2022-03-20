@@ -1,8 +1,8 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Nazim\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add expo-assets
+  C:\Program Files\nodejs\node.exe C:\Users\Nazim\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add .\.vscode\/>
 
 PATH: 
-  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\dotnet\;C:\xampp\php;C:\composer;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Microsoft Network Monitor 3\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\ProgramData\chocolatey\bin;C:\Users\Nazim\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\Nazim\AppData\Local\Programs\Python\Python39\;C:\Users\Nazim\AppData\Local\VanDyke Software\Clients\;C:\Users\Nazim\AppData\Local\Microsoft\WindowsApps;C:\Users\Nazim\AppData\Roaming\npm;C:\Users\Nazim\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Nazim\AppData\Roaming\Composer\vendor\bin;C:\Users\Nazim\.dotnet\tools;C:\Program Files\ffmpeg\bin;%USERPROFILE%\AppData\Local\Microsoft\WindowsApps;
+  C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\VMware\VMware Workstation\bin\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\dotnet\;C:\xampp\php;C:\composer;C:\Program Files\Git\cmd;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Microsoft Network Monitor 3\;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\ProgramData\chocolatey\bin;C:\laragon\bin;C:\laragon\bin\apache\httpd-2.4.47-win64-VS16\bin;C:\laragon\bin\composer;C:\laragon\bin\git\bin;C:\laragon\bin\git\cmd;C:\laragon\bin\git\mingw64\bin;C:\laragon\bin\git\usr\bin;C:\laragon\bin\laragon\utils;C:\laragon\bin\mysql\mysql-5.7.33-winx64\bin;C:\laragon\bin\nginx\nginx-1.19.10;C:\laragon\bin\ngrok;C:\laragon\bin\nodejs\node-v14;C:\laragon\bin\notepad++;C:\laragon\bin\php\php-7.4.19-Win32-vc15-x64;C:\laragon\bin\redis\redis-x64-3.2.100;C:\laragon\bin\telnet;C:\laragon\usr\bin;C:\Users\Nazim\AppData\Local\Yarn\config\global\node_modules\.bin;C:\Users\Nazim\AppData\Roaming\Composer\vendor\bin;C:\Users\Nazim\AppData\Roaming\npm;C:\Users\Nazim\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\Nazim\AppData\Local\Programs\Python\Python39\;C:\Users\Nazim\AppData\Local\VanDyke Software\Clients\;C:\Users\Nazim\AppData\Local\Microsoft\WindowsApps;C:\Users\Nazim\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\ffmpeg\bin;;%USERPROFILE%\AppData\Local\Microsoft\WindowsApps
 
 Yarn version: 
   1.22.17
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/expo-assets: Not found
+  Error: https://registry.yarnpkg.com/.vscode/%2f%3E: Not found
       at Request.params.callback [as _callback] (C:\Users\Nazim\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:67029:18)
       at Request.self.callback (C:\Users\Nazim\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140883:22)
       at Request.emit (events.js:400:28)
@@ -51,6 +51,7 @@ npm manifest:
       "axios": "^0.26.0",
       "expo": "~44.0.0",
       "expo-app-loading": "~1.3.0",
+      "expo-asset": "~8.4.6",
       "expo-blur": "^11.0.0",
       "expo-font": "~10.0.4",
       "expo-linear-gradient": "~11.0.3",
@@ -63,9 +64,12 @@ npm manifest:
       "react-native": "0.64.3",
       "react-native-card-stack-swiper": "^1.2.5",
       "react-native-draggable-panel": "^1.2.3",
+      "react-native-drop-shadow": "^0.0.4",
       "react-native-elements": "^3.4.2",
       "react-native-gesture-handler": "~2.1.0",
+      "react-native-keyboard-aware-scroll-view": "^0.9.5",
       "react-native-linear-gradient": "^2.5.6",
+      "react-native-linear-gradient-degree": "^0.0.1",
       "react-native-safe-area-context": "3.3.2",
       "react-native-screens": "~3.10.1",
       "react-native-svg": "12.1.1",
@@ -9902,6 +9906,13 @@ Lockfile:
     resolved "https://registry.npmjs.org/react-native-draggable-panel/-/react-native-draggable-panel-1.2.3.tgz"
     integrity sha512-t7fbleUswHcad4dgD18q/DCXZFkvv48qLTspjrhhpWEzOcc5oGGNX9Pg3BvpjALA/t6n+xPdZcuY8g/ZbJurlQ==
   
+  react-native-drop-shadow@^0.0.4:
+    version "0.0.4"
+    resolved "https://registry.yarnpkg.com/react-native-drop-shadow/-/react-native-drop-shadow-0.0.4.tgz#af2ceff6a3e1468b01cd5fb55941854cbe30dad6"
+    integrity sha512-45Bsq24dcc1rK9H+42H91xEYN/Ql5S0693FseQWdCKgri6D+4vkFeL9dgtrSD5Bg3+RffjMbPDD7BuNS9BZuvg==
+    dependencies:
+      logkitty "^0.7.1"
+  
   react-native-elements@^3.4.2:
     version "3.4.2"
     resolved "https://registry.npmjs.org/react-native-elements/-/react-native-elements-3.4.2.tgz"
@@ -9934,11 +9945,16 @@ Lockfile:
   
   react-native-keyboard-aware-scroll-view@^0.9.5:
     version "0.9.5"
-    resolved "https://registry.npmjs.org/react-native-keyboard-aware-scroll-view/-/react-native-keyboard-aware-scroll-view-0.9.5.tgz"
+    resolved "https://registry.yarnpkg.com/react-native-keyboard-aware-scroll-view/-/react-native-keyboard-aware-scroll-view-0.9.5.tgz#e2e9665d320c188e6b1f22f151b94eb358bf9b71"
     integrity sha512-XwfRn+T/qBH9WjTWIBiJD2hPWg0yJvtaEw6RtPCa5/PYHabzBaWxYBOl0usXN/368BL1XktnZPh8C2lmTpOREA==
     dependencies:
       prop-types "^15.6.2"
       react-native-iphone-x-helper "^1.0.3"
+  
+  react-native-linear-gradient-degree@^0.0.1:
+    version "0.0.1"
+    resolved "https://registry.yarnpkg.com/react-native-linear-gradient-degree/-/react-native-linear-gradient-degree-0.0.1.tgz#faae928107e6a4646833b458ab067d1483df9f1d"
+    integrity sha512-c099XLtAkqhjcBx2vsMmHP1iTt5IWzqa2Q59EtxGwm85o6jfDqCEsc2tQctBl/SQ73AsxY8Mx0A4Tj9kBe9mfw==
   
   react-native-linear-gradient@^2.5.6:
     version "2.5.6"

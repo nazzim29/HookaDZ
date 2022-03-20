@@ -4,11 +4,29 @@ import { addError } from "./error";
 import * as Location from "expo-location";
 export function addProduit(produit) {
 	return (dispatch, getState) => {
+		const state = getState();
+		if (
+			state.commande.commandeEnCours.produits.find(
+				(el) => el.prd == produit._id
+			)
+		) {
+			state.commande.commandeEnCours.produits.find(
+				(el) => el.prd == produit._id
+			).quantite++;
+			state.commande.commandeEnCours.montant += produit.prix;
+			return dispatch({
+				type: "ADD_PRODUCT",
+				payload: state.commande.commandeEnCours.produits,
+			});
+		}
+		state.commande.commandeEnCours.produits.push({
+			prd: produit._id,
+			quantite: 1,
+		});
+		state.commande.commandeEnCours.montant += produit.prix;
 		dispatch({
 			type: "ADD_PRODUCT",
-			payload: {
-				...produit,
-			},
+			payload: state.commande.commandeEnCours.produits,
 		});
 	};
 }
@@ -46,6 +64,7 @@ export function getAllCommandes() {
 	return (dispatch, getState) => {
 		const token = getState().auth.userToken;
 		dispatch(startLoading());
+
 		return axios
 			.get("http://chicha-dz.herokuapp.com/commandes/commande", {
 				headers: {
@@ -63,52 +82,83 @@ export function getAllCommandes() {
 			.catch(({ data }) => {
 				dispatch(stopLoading());
 				dispatch(addError(data));
-				dispatch({type:'LOG_OUT'})
+				dispatch({ type: "LOG_OUT" });
 			});
 	};
 }
 
-export function PostCommande() {
+export function getCommandeDetails(id) {
 	return (dispatch, getState) => {
-		const { commandeEnCours } = getState();
+		const token = getState().auth.userToken;
 		dispatch(startLoading());
+		console.log({id,token})
 		return axios
-			.post("http://chicha-dz.herokuapp.com/commandes", commandeEnCours, {
+			.get("http://chicha-dz.herokuapp.com/commandes/" + id, {
 				headers: {
 					"Content-Type": "application/json",
-					Authorisation: `Bearer ${token || ""}`,
+					Authorization: `TOKEN ${token || ""}`,
 				},
 			})
 			.then(({ data }) => {
+				console.log(data)
 				dispatch(stopLoading());
 				dispatch({
-					type: "POST_COMMANDES",
+					type: "GET_COMMANDE_DETAILS",
+					payload: data,
 				});
+			})
+			.catch((err) => {
+				console.log(err);
+				dispatch(stopLoading());
+				dispatch(addError(err));
+				dispatch({ type: "LOG_OUT" });
 			});
 	};
 }
-export function Locate(fn) {
+export function PostCommande() {
 	return (dispatch, getState) => {
-		Location.requestForegroundPermissionsAsync().then(({ status }) => {
-			if (status !== "granted") {
-				console.log("autorisation manquante");
-				fn();
-				return;
-			}
-			return Location.getCurrentPositionAsync({}).then(({coords}) => {
-				console.log(coords);
-				dispatch({
-					type: "LOCATE",
-					payload: {
-						latitude: coords.latitude,
-						longitude: coords.longitude,
-					}
+		const { commandeEnCours } = getState().commande;
+		const token = getState().auth.userToken;
+		console.log(commandeEnCours);
+		dispatch(startLoading());
+		Location.requestForegroundPermissionsAsync()
+			.then(({ status }) => {
+				if (status !== "granted") {
+					console.log("autorisation manquante");
+					return;
+				}
+				return Location.getCurrentPositionAsync({}).then(({ coords }) => {
+					commandeEnCours.commande.latitude = coords.latitude;
+					commandeEnCours.commande.longitude = coords.longitude;
+					commandeEnCours.commande.montant = 0
+					return axios
+						.post(
+							"http://chicha-dz.herokuapp.com/commandes/insert",
+							commandeEnCours,
+							{
+								headers: {
+									"Content-Type": "application/json",
+									authorization: `Bearer ${token || ""}`,
+								},
+							}
+						)
+						.then(({ data }) => {
+							dispatch(stopLoading());
+							dispatch({
+								type: "POST_COMMANDES",
+							});
+							dispatch(getAllCommandes());
+						}).catch(err => {
+							dispatch(stopLoading());
+							console.log(JSON.stringify(err, null, 2));
+						});
 				});
-				fn();
+			})
+			.catch((err) => {
+				console.log(err);
 			});
-		}).catch((err) => {
-			console.log(err);
-			fn();
-		})
 	};
+}
+export function Locate() {
+	return (dispatch, getState) => {};
 }

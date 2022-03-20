@@ -11,7 +11,6 @@ theme.colors.background = "#0D1117";
 theme.dark = true;
 const store = configureStore();
 export default function App({ navigation }) {
-
 	return (
 		<Provider store={store}>
 			<NavigationContainer
@@ -24,6 +23,7 @@ export default function App({ navigation }) {
 						width: "100%",
 						overflow: "hidden",
 						backgroundColor: "#0D1117",
+						
 						flex: 1,
 					}}
 				>

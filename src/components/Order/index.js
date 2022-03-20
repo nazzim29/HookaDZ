@@ -1,5 +1,4 @@
 import Row from "./OrderRow.js"
-import Panel from "./Panel"
-
+import Card from "./OrderCard"
 export const OrderRow = Row
-export const OrderPanel = Panel
+export const OrderCard = Card

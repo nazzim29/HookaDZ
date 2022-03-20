@@ -1,20 +1,30 @@
 const initialState = {
 	commandes: [],
 	commandeEnCours: {
-		geolocalisation: null,
+		commande: {
+			latitude: null,
+			longitude: null,
+			montant: 0,
+		},
 		produits: [],
-		valid: false,
-		sended: false,
-        get prixTotal() {
-            return this.produits.reduce((sum,{comm_quantite,prix})=>sum+(comm_quantite*prix),0)
-        },
+		confirmation: false,
 		extras: [],
 	},
+	commande:null
 };
 const commandeReducer = (state = initialState, action) => {
 	switch (action.type) {
 		case "GET_ALL_COMMANDES":
-			return state.commandes = action.payload;
+			return {
+				...state,
+				commandes: action.payload,
+			}
+		case "GET_COMMANDE_DETAILS":
+		
+			return {
+				...state,
+				commande: action.payload
+			}
 		case "POST_COMMANDE":
 			state.commandes.push(action.payload);
 			state.commandeEnCours = action.payload;
@@ -35,19 +45,15 @@ const commandeReducer = (state = initialState, action) => {
 				);
 			return state;
 		case "ADD_PRODUCT":
-			const p = state.commandeEnCours.produits.find((el) => action.payload._id == el.prd)
-			if (!p) {
-				state.commandeEnCours.produits.push({
-					prd: action.payload._id,
-					quantite:1,
-				});
-			} else {
-				p.quantite++;
-			}
-			console.log(state)
+			console.log(action.payload);
+			//if product exist in commandeEnCours 
 			return {
-				...state
-			};
+				...state,
+				commandeEnCours: {
+					...state.commandeEnCours,
+					produits: [...action.payload]
+				},
+			}
 		case "ADD_EXTRAS":
 			if (
 				state.commandeEnCours.extras.find((el) => action.payload._id == el._id)
@@ -80,9 +86,9 @@ const commandeReducer = (state = initialState, action) => {
 			state.commandeEnCours.valid = true;
             return state;
         case "LOCATE":
-            state.commandeEnCours.geolocalisation = action.payload
 			return {
-				...state
+				...state,
+				...action.payload
 			}
 		default:
 			return state;

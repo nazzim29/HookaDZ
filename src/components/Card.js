@@ -1,46 +1,53 @@
-import {
-	Text,
-	StyleSheet,
-	Image,
-	TouchableOpacity,
-} from "react-native";
+import { Text, StyleSheet, Image, TouchableOpacity, View } from "react-native";
 import { Box } from "native-base";
 import React from "react";
 import { Card } from "react-native-card-stack-swiper";
 import { useSelector, useDispatch } from "react-redux";
-import { LinearGradient } from "react-native-svg";
+import { LinearGradient } from "expo-linear-gradient";
+import { deg } from "react-native-linear-gradient-degree";
+import { addProduit } from "../actions/commandes";
 const styles = StyleSheet.create({
+	border: {
+		padding: 2,
+		borderRadius: 10,
+		flex: 1,
+		height: "100%",
+	},
 	card: {
-		overflow: "hidden",
+		maxHeight: 250,
+		maxWidth: 150,
+		flex: 1,
+		marginHorizontal: 10,
+		backgroundColor: "#0D1117",
 		flexDirection: "column",
 		borderRadius: 10,
-		backgroundColor: "#161B22",
-		height: "100%",
-		maxWidth: 100,
-		marginHorizontal: 10,
-		justifyContent: "space-between",
+		justifyContent: "center",
+	},
+	imageContainer: {
+		width: "100%",
+		height: "60%",
 	},
 	image: {
-		minWidth: "100%",
-		minHeight: "60%",
 		resizeMode: "contain",
+		flex: 1,
 	},
 	details: {
-		backgroundColor: "#161B22",
-		maxHeight: "40%",
+		marginTop: "5%",
+		height: "35%",
+		width: "100%",
 		flexDirection: "column",
 		color: "#C9D1D9",
-		paddingBottom: 10,
 	},
 	addBtn: {
-		position: "relative",
-		bottom: 15,
-		marginLeft: "auto",
-		marginRight: 5,
-		backgroundColor: "#2e8bdc",
 		width: 30,
 		height: 30,
+	},
+	addBtnContainer: {
+		width: 30,
 		borderRadius: 999,
+		position: "absolute",
+		bottom: -15,
+		right: -15,
 	},
 	productTitle: {
 		fontSize: 18,
@@ -53,7 +60,6 @@ const styles = StyleSheet.create({
 	price: {
 		fontSize: 18,
 		marginLeft: 5,
-		marginTop: 10,
 		fontFamily: "Inter-Bold",
 		color: "#3299F1",
 	},
@@ -68,27 +74,45 @@ export default (props) => {
 	const plusIcon = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "plus-icon")
 	);
-	console.log(product.item.nom);
+	const addToCart = () => {
+		dispatch(addProduit(product));
+	};
 	return (
-			<Card style={styles.card}>
-				<Box minWidth={"100%"} minHeight={"60%"}>
-					<Image
-						source={appleIcon}
-						style={styles.image}
-						alt={"product image"}
-					/>
-					<TouchableOpacity>
+		<Card style={styles.card}>
+			<View style={styles.imageContainer}>
+				<LinearGradient
+					colors={[
+						"rgba(11, 103, 255, 1)",
+						"rgba(255, 255, 255, 0)",
+						"rgba(11, 103, 255, 1)",
+					]}
+					locations={[0, 0.5, 1]}
+					{...deg(45)}
+					style={styles.border}
+				>
+					<View
+						style={{ backgroundColor: "#0D1117", flex: 1, borderRadius: 10 }}
+					>
 						<Image
-							source={plusIcon}
-							style={styles.addBtn}
-							alt={"add product to cart"}
+							source={appleIcon}
+							style={styles.image}
+							alt={"product image"}
 						/>
-					</TouchableOpacity>
-				</Box>
-				<Box style={styles.details}>
-					<Text style={styles.productTitle}>{product.item.nom}</Text>
-					<Text style={styles.price}>{product.item.prix || "NaN"} Da</Text>
-				</Box>
-			</Card>
+					</View>
+				</LinearGradient>
+				<TouchableOpacity style={styles.addBtnContainer} onPressOut={addToCart}>
+					<Image
+						source={plusIcon}
+						style={styles.addBtn}
+						alt={"add product to cart"}
+					/>
+				</TouchableOpacity>
+			</View>
+
+			<Box style={styles.details}>
+				<Text style={styles.productTitle}>{product.nom}</Text>
+				<Text style={styles.price}>{product.prix || "NaN"} Da</Text>
+			</Box>
+		</Card>
 	);
 };
