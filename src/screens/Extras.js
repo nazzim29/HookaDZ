@@ -13,8 +13,9 @@ import { OrderRow } from "../components/Order";
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
-import { getAllExtras } from "../actions/products";
-
+import Extra from "../components/Extra";
+import { PostCommande } from "../actions/commandes";
+import SplashScreen from "./SplashScreen";
 const styles = StyleSheet.create({
 	border: {
 		padding: 2,
@@ -96,13 +97,12 @@ const styles = StyleSheet.create({
 		color: "white",
 	},
 });
-export default function Commandes(props) {
+export default function Extras(props) {
 	//show list of past order
 	const dispatch = useDispatch();
 	const handleCommandePress = () => {
-		// dispatch(PostCommande());
-		dispatch(getAllExtras());
-		props.navigation.navigate("Extras");
+
+		dispatch(PostCommande(props.navigation.reset));
 	};
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
@@ -111,15 +111,12 @@ export default function Commandes(props) {
 		(state) => state.commande.commandeEnCours
 	);
 	const extras = useSelector((state) => state.product.extras);
-	const produits = useSelector((state) => state.product.products);
-	useEffect(() => {
-		if (commandeEnCours.produits.length === 0) {
-			props.navigation.navigate("Home");
-			dispatch({
-				type: "CLEAR_COMMANDE",
-			})
-		}
-	}, [commandeEnCours.produits]);
+	extras.forEach(element => {
+		let or = commandeEnCours.extras.find(el => el.prd == element._id)
+		element.quantite = or?.quantite ||0
+	});
+	const isLoading = useSelector(state=>state.ui.isLoading)
+	if(isLoading) return (<SplashScreen/>)
 	return (
 		<>
 			<View style={styles.header}>
@@ -128,17 +125,17 @@ export default function Commandes(props) {
 						<Image source={arrowBackIcon} style={styles.headerIcon} />
 					</TouchableOpacity>
 				</View>
-				<Text style={styles.headerText}>Panier</Text>
+				<Text style={styles.headerText}>Extras</Text>
 			</View>
 			<ScrollView
 				style={styles.container}
 				contentContainerStyle={styles.contentContainer}
 			>
-				{commandeEnCours.produits.map((item) => {
-					return <OrderRow key={item.prd} order={{...produits.find(el=>el._id == item.prd),...item}} />;
+				{extras.map((item) => {
+					return <Extra key={item._id} extra={item} />;
 				})}
 			</ScrollView>
-			
+
 			<View style={styles.floating}>
 				<LinearGradient
 					colors={[
@@ -167,7 +164,9 @@ export default function Commandes(props) {
 							}}
 						>
 							<Text style={styles.detailsHeader}>Total</Text>
-							<Text style={styles.totalPrice}>{commandeEnCours.commande.montant+''}</Text>
+							<Text style={styles.totalPrice}>
+								{commandeEnCours.commande.montant + ""}
+							</Text>
 						</View>
 						<View
 							style={{
@@ -198,7 +197,7 @@ export default function Commandes(props) {
 							justifyContent: "center",
 						}}
 					>
-						<Text style={styles.txtbtn}>Suivant</Text>
+						<Text style={styles.txtbtn}>Commander</Text>
 					</LinearGradient>
 				</TouchableWithoutFeedback>
 			</View>

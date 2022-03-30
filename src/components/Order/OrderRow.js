@@ -9,7 +9,11 @@ import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
 import { useSelector, useDispatch } from "react-redux";
-import { removeProduit } from "../../actions/commandes";
+import {
+	removeProduit,
+	addProduit,
+	minusProduit,
+} from "../../actions/commandes";
 const styles = StyleSheet.create({
 	border: {
 		padding: 2,
@@ -36,21 +40,16 @@ const styles = StyleSheet.create({
 		borderColor: "white",
 	},
 	deleteIcon: {
-		position: "absolute",
-		top: 10,
-		right: -10,
 		height: 25,
 		width: 25,
 		resizeMode: "contain",
 	},
 });
 export default function OrderRow(props) {
+	const { order } = props;
 	const dispatch = useDispatch();
 	const appleIcon = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "apple")
-	);
-	const product = useSelector((state) =>
-		state.product.products.find((el) => el._id == props.order.prd)
 	);
 	const PlusIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "plus-icon")
@@ -62,18 +61,17 @@ export default function OrderRow(props) {
 		state.ui.assets.find((asset) => asset.name === "remove-icon")
 	);
 	const removeFromCart = () => {
-		console.log("remove from cart");
-		// dispatch(removeProduit(props.order.prd));
+		dispatch(removeProduit(order));
 	};
 	const plusQuantite = () => {
-		console.log("plus quantite");
+		//add produit to cart
+		dispatch(addProduit(order));
 	};
 	const minusQuantite = () => {
-		console.log("minus quantite");
+		dispatch(minusProduit(order));
 	};
-
 	return (
-		<View style={{ position: "relative" }}>
+		<View style={[{ position: "relative" },props.style]}>
 			<LinearGradient
 				colors={[
 					"rgba(11, 103, 255, 1)",
@@ -88,10 +86,10 @@ export default function OrderRow(props) {
 					<Image style={styles.image} source={appleIcon} />
 					<View style={{ flex: 1, flexDirection: "column", marginLeft: 15 }}>
 						<Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
-							{product.nom}
+							{order.nom}
 						</Text>
 						<Text style={{ fontSize: 15, color: "white" }}>
-							{product.prix || "NaN"} Da
+							{order.prix} Da
 						</Text>
 						<View
 							style={{
@@ -102,12 +100,14 @@ export default function OrderRow(props) {
 						>
 							<View style={{ flexDirection: "row", alignItems: "center" }}>
 								{props.editable !== false && (
-									<TouchableWithoutFeedback onPressOut={minusQuantite}>
-										<Image
-											style={{ width: 20, height: 20 }}
-											source={MinusIcon}
-										/>
-									</TouchableWithoutFeedback>
+									<View style={{ padding: 4 }}>
+										<TouchableWithoutFeedback onPressOut={minusQuantite}>
+											<Image
+												style={{ width: 20, height: 20 }}
+												source={MinusIcon}
+											/>
+										</TouchableWithoutFeedback>
+									</View>
 								)}
 								{props.editable === false && (
 									<Text
@@ -128,14 +128,20 @@ export default function OrderRow(props) {
 										marginHorizontal: 10,
 									}}
 								>
-									{props.order.quantite}
+									{order.quantite}
 								</Text>
 								{props.editable !== false && (
 									<TouchableWithoutFeedback onPressOut={plusQuantite}>
-										<Image
-											style={{ width: 20, height: 20 }}
-											source={PlusIcon}
-										/>
+										<View
+											style={{
+												padding: 4,
+											}}
+										>
+											<Image
+												style={{ width: 20, height: 20 }}
+												source={PlusIcon}
+											/>
+										</View>
 									</TouchableWithoutFeedback>
 								)}
 							</View>
@@ -143,10 +149,19 @@ export default function OrderRow(props) {
 					</View>
 				</View>
 			</LinearGradient>
-			{props.editable !== false && (
-				<TouchableWithoutFeedback onPressOut={removeFromCart}>
-					<Image source={deleteIcon} style={styles.deleteIcon} />
-				</TouchableWithoutFeedback>
+			{props.deletable !== false && (
+				<View
+					style={{
+						padding: 4,
+						position: "absolute",
+						top: 10,
+						right: -10,
+					}}
+				>
+					<TouchableWithoutFeedback onPressOut={removeFromCart}>
+						<Image source={deleteIcon} style={styles.deleteIcon} />
+					</TouchableWithoutFeedback>
+				</View>
 			)}
 		</View>
 	);

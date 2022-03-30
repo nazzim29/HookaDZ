@@ -7,17 +7,17 @@ import {
 	TextInput,
 	TouchableOpacity,
 } from "react-native";
-import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
+import React, { useEffect, useRef, useState } from "react";
+import { Calendar } from "react-native-calendars";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
-
+import moment from "moment";
 const styles = StyleSheet.create({
 	step: {
 		maxWidth: "80%",
-		marginVertical: "20%",
+		marginVertical: "15%",
 		marginHorizontal: "10%",
 		resizeMode: "contain",
 		alignItems: "center",
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 		fontWeight: "700",
 		fontSize: 22,
 		marginLeft: "10%",
-		marginTop: "10%",
+		marginTop: "5%",
 		width: "80%",
 		// borderWidth: 1,
 		// borderColor: '#C9D1D9',
@@ -77,16 +77,23 @@ const styles = StyleSheet.create({
 		width: 12.5,
 	},
 });
-export default function Step1(props) {
-	const [email, setEmail] = useState("");
+export default function ForgotPassword(props) {
+	const [date, setDate] = useState(null);
+	// const dispatch = useDispatch();
 	const slider = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "step-1-slider")
 	);
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
-	const suivantHandler = () => {
-		props.navigation.navigate("Forgot-2", { email });
+	const handleDateClick = (day) => {
+		setDate(day.dateString);
+	};
+	const handleSuivant = () => {
+		if (date && moment().diff(moment(date)) >= 0) {
+			return;
+		}
+		props.navigation.navigate("Event2", { date });
 	};
 	return (
 		<>
@@ -98,35 +105,55 @@ export default function Step1(props) {
 			<KeyboardAwareScrollView style={{ flex: 1 }}>
 				<View style={styles.screen}>
 					<Image style={styles.step} source={slider} />
-					<Text style={styles.title}>C'est pour quand ?</Text>
-					<Text style={styles.texte}>
-						Entrez votre email pour récupérer le mot de passe
+					<Text style={styles.title}>
+						Quand pouvons nous vous rendre service ?
 					</Text>
-					<Input
-						icon={"email-1"}
-						style={{ marginVertical: "5%", marginHorizontal: "10%" }}
-					>
-						<TextInput
-							placeholder="Adresse email"
-							textContentType="emailAddress"
-							editable
-							keyboardType="email-address"
-							autoComplete="email"
-							onChangeText={(e) => setEmail(e)}
-							onSubmitEditing={() => {
-								suivantHandler();
-							}}
-							blurOnSubmit={false}
-							style={{
-								flex: 1,
-								fontFamily: "Inter-Regular",
-								fontSize: 16,
-								color: "#C9D1D9",
-							}}
-							placeholderTextColor={"#858585"}
-						/>
-					</Input>
-					<TouchableWithoutFeedback onPressOut={suivantHandler}>
+					<Text style={styles.texte}>Selectionner une date</Text>
+					<Calendar
+						onDayPress={handleDateClick}
+						// firstDay={1}
+						markedDates={{
+							[date]: {
+								selected: true,
+								disableTouchEvent: true,
+								selectedColor: "#F1EFFE",
+								selectedTextColor: "#7954FA",
+							},
+						}}
+						current={date}
+						style={{
+							width: "90%",
+							marginVertical: "5%",
+							marginHorizontal: "5%",
+						}}
+						theme={{
+							backgroundColor: "#0D1117",
+							calendarBackground: "#0D1117",
+							textSectionTitleColor: "#b6c1cd",
+							textSectionTitleDisabledColor: "#d9e1e8",
+							selectedDayBackgroundColor: "#3299F1",
+							selectedDayTextColor: "#0D1117",
+							todayTextColor: "#00adf5",
+							dayTextColor: "#2d4150",
+							textDisabledColor: "#d9e1e8",
+							dotColor: "#00adf5",
+							selectedDotColor: "#0D1117",
+							arrowColor: "orange",
+							disabledArrowColor: "#d9e1e8",
+							monthTextColor: "blue",
+							indicatorColor: "blue",
+							textDayFontFamily: "Inter-Regular",
+							textMonthFontFamily: "Inter-Bold",
+							textDayHeaderFontFamily: "Inter-Regular",
+							textDayFontWeight: "300",
+							textMonthFontWeight: "bold",
+							textDayHeaderFontWeight: "300",
+							textDayFontSize: 16,
+							textMonthFontSize: 16,
+							textDayHeaderFontSize: 16,
+						}}
+					/>
+					<TouchableWithoutFeedback onPressOut={handleSuivant}>
 						<LinearGradient
 							colors={["#5D31BF", "#0B67FFD6"]}
 							{...deg(90)}

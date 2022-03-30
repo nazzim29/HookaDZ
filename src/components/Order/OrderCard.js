@@ -55,7 +55,7 @@ export default function OrderCard({ order, navigation }) {
     const openDetails = () => {
         dispatch(getCommandeDetails(order._id));
         navigation.navigate("Details", { order })
-    }
+	}
 	return (
 		<LinearGradient
 			colors={[
@@ -96,8 +96,8 @@ export default function OrderCard({ order, navigation }) {
                 </View>
                 <View style={{ borderTopWidth: 1, borderColor: 'white', width: '90%', marginVertical: 10, alignSelf: 'center' }} />
                 <Text style={{ color: 'white', fontFamily: 'Inter-Bold', textAlign: 'center' }}>{formatDate(order.createdAt)}</Text>
-                <View style={{marginVertical:5,marginHorizontal:20,padding:5,borderRadius:5,backgroundColor:(order.confirmation===false || !order.livrer)?'red':'white'}}>
-                    <Text style={{ color: (order.confirmation===false || !order.livrer)?'white':'black', fontFamily: 'Inter-Bold', textAlign: 'center' }}>{order.confirmation===false?'En attente':order.livrer?'Livré':'Livraison'}</Text>
+                <View style={{marginVertical:5,marginHorizontal:20,padding:5,borderRadius:5,backgroundColor:(order.rejete===true || !order.livrer)?'red':'white'}}>
+                    <Text style={{ color: (order.rejete===true || !order.livrer)?'white':'black', fontFamily: 'Inter-Bold', textAlign: 'center' }}>{order.rejete===true?'Refusé':order.confirmation === false?'en attente':order.livrer === true?'Livré':'Livraison'}</Text>
                 </View>
 			</View>
 		</LinearGradient>

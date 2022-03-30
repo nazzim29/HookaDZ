@@ -30,8 +30,11 @@ export function login(credidentials) {
 				},
 			})
 			.then(({ data }) => {
+				console.log()
 				AsyncStorage.setItem("token", data.token)
+					
 					.then((hh) => {
+
 						dispatch(stopLoading());
 						dispatch({
 							type: "LOGIN",
@@ -42,15 +45,17 @@ export function login(credidentials) {
 								prenom: data.result.prenom,
 								numero: data.result.numero,
 								isAuthenticated: true,
+								role: data.result.role,
+								_id : data.result._id
 							},
 						});
-						dispatch(getAllCommandes());
 					})
 					.catch((err) => {
 						console.log(err);
 					});
 			})
 			.catch((err) => {
+				console.log(err.response)
 				if (err.response.data.message == "user not found") {
 					dispatch({
 						type: "ADD_ERROR",
@@ -67,6 +72,10 @@ export function login(credidentials) {
 export function signup(user) {
 	return (dispatch, getState) => {
 		dispatch(startLoading());
+		user = {
+			...user,
+			confirmPassword: user.password,
+		}
 		return axios
 			.post("http://chicha-dz.herokuapp.com/auth/signup", user, {
 				headers: {
@@ -77,6 +86,7 @@ export function signup(user) {
 			.then(({ data }) => {
 				AsyncStorage.setItem("token", data.token)
 					.then((hh) => {
+						console.log({data})
 						dispatch(stopLoading());
 						dispatch({
 							type: "LOGIN",
@@ -84,9 +94,10 @@ export function signup(user) {
 								userToken: data.token,
 								email: data.result.email,
 								nom: data.result.nom,
-								prenom: data.result.prenom,
 								numero: data.result.numero,
 								isAuthenticated: true,
+								role: data.result.role,
+								_id : data.result._id
 							},
 						});
 						dispatch(getAllCommandes());
@@ -96,6 +107,7 @@ export function signup(user) {
 					});
 			})
 			.catch((err) => {
+				console.log(err.response)
 				dispatch({
 					type: "ADD_ERROR",
 					payload: err.response?.data?.message || "une erreur est survenue",

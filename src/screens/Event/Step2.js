@@ -8,12 +8,73 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
+import Input from "../../components/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
+import moment from "moment";
+import * as _ from "lodash"
+moment.locale("fr", {
+	months:
+		"janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split(
+			"_"
+		),
+	monthsShort:
+		"janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
+	monthsParseExact: true,
+	weekdays: "dimanche_lundi_mardi_mercredi_jeudi_vendredi_samedi".split("_"),
+	weekdaysShort: "dim._lun._mar._mer._jeu._ven._sam.".split("_"),
+	weekdaysMin: "Di_Lu_Ma_Me_Je_Ve_Sa".split("_"),
+	weekdaysParseExact: true,
+	longDateFormat: {
+		LT: "HH:mm",
+		LTS: "HH:mm:ss",
+		L: "DD/MM/YYYY",
+		LL: "D MMMM YYYY",
+		LLL: "D MMMM YYYY HH:mm",
+		LLLL: "dddd D MMMM YYYY HH:mm",
+	},
+	calendar: {
+		sameDay: "[Aujourd’hui à] LT",
+		nextDay: "[Demain à] LT",
+		nextWeek: "dddd [à] LT",
+		lastDay: "[Hier à] LT",
+		lastWeek: "dddd [dernier à] LT",
+		sameElse: "L",
+	},
+	relativeTime: {
+		future: "dans %s",
+		past: "il y a %s",
+		s: "quelques secondes",
+		m: "une minute",
+		mm: "%d minutes",
+		h: "une heure",
+		hh: "%d heures",
+		d: "un jour",
+		dd: "%d jours",
+		M: "un mois",
+		MM: "%d mois",
+		y: "un an",
+		yy: "%d ans",
+	},
+	dayOfMonthOrdinalParse: /\d{1,2}(er|e)/,
+	ordinal: function (number) {
+		return number + (number === 1 ? "er" : "e");
+	},
+	meridiemParse: /PD|MD/,
+	isPM: function (input) {
+		return input.charAt(0) === "M";
+	},
 
+	meridiem: function (hours, minutes, isLower) {
+		return hours < 12 ? "PD" : "MD";
+	},
+	week: {
+		dow: 1, // Monday is the first day of the week.
+		doy: 4, // Used to determine first week of the year.
+	},
+});
 const styles = StyleSheet.create({
 	step: {
 		maxWidth: "80%",
@@ -25,7 +86,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontWeight: "700",
 		fontSize: 22,
-		marginLeft: "10%",
+		marginLeft: "5%",
 		marginTop: "10%",
 		width: "80%",
 		// borderWidth: 1,
@@ -35,25 +96,27 @@ const styles = StyleSheet.create({
 	},
 	texte: {
 		fontSize: 16,
-		marginLeft: "10%",
-		marginTop: "1%",
-		width: "80%",
+		marginLeft: "5%",
+		marginTop: "2%",
+		width: "90%",
 		// borderWidth: 1,
 		// borderColor: '#C9D1D9',
 		fontFamily: "Inter-Regular",
 		color: "#C9D1D9",
 	},
 	link: {
-		fontFamily: "Inter-Bold",
-		fontSize: 20,
+		fontFamily: "Inter-Regular",
+		fontSize: 16,
 		color: "#3299F1",
+		marginLeft: "10%",
+		marginVertical: "5%",
 	},
 	btn: {
-		width: "80%",
+		width: "90%",
 		height: 50,
 		marginTop: "5%",
 		borderRadius: 15,
-		marginHorizontal: "10%",
+		marginHorizontal: "5%",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 1,
@@ -77,16 +140,22 @@ const styles = StyleSheet.create({
 		width: 12.5,
 	},
 });
-export default function Step1(props) {
-	const [email, setEmail] = useState("");
+
+export default function Forgot2(props) {
+	const [adresse, setAdresse] = useState();
 	const slider = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "step-1-slider")
+		state.ui.assets.find((el) => el.name == "step-2-slider")
 	);
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
+	const resend = () => {};
 	const suivantHandler = () => {
-		props.navigation.navigate("Forgot-2", { email });
+		if (_.trim(adresse).length == 0) return;
+		props.navigation.navigate("Event3", {
+			date: props.route.params.date,
+			adresse:_.trim(adresse),
+		});
 	};
 	return (
 		<>
@@ -98,21 +167,21 @@ export default function Step1(props) {
 			<KeyboardAwareScrollView style={{ flex: 1 }}>
 				<View style={styles.screen}>
 					<Image style={styles.step} source={slider} />
-					<Text style={styles.title}>C'est pour quand ?</Text>
+					<Text style={styles.title}>Adresse</Text>
 					<Text style={styles.texte}>
-						Entrez votre email pour récupérer le mot de passe
+						Vous commandez pour le{" "}
+						{moment(props.route.params.date).format("dddd D MMMM")}
 					</Text>
 					<Input
-						icon={"email-1"}
-						style={{ marginVertical: "5%", marginHorizontal: "10%" }}
+						icon={"key-icon"}
+						style={{ marginTop: "5%", marginHorizontal: "5%", width: "90%" }}
 					>
 						<TextInput
-							placeholder="Adresse email"
-							textContentType="emailAddress"
+							placeholder="Adresse de livraison"
 							editable
-							keyboardType="email-address"
-							autoComplete="email"
-							onChangeText={(e) => setEmail(e)}
+							keyboardType="default"
+							autoComplete="street-address"
+							onChangeText={(e) => setAdresse(e)}
 							onSubmitEditing={() => {
 								suivantHandler();
 							}}

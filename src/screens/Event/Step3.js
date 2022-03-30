@@ -8,12 +8,12 @@ import {
 	TouchableOpacity,
 } from "react-native";
 import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
-
+import SplashScreen from '../SplashScreen'
+import { PostEvent } from "../../actions/commandes";
 const styles = StyleSheet.create({
 	step: {
 		maxWidth: "80%",
@@ -25,9 +25,9 @@ const styles = StyleSheet.create({
 	title: {
 		fontWeight: "700",
 		fontSize: 22,
-		marginLeft: "10%",
+		marginLeft: "5%",
 		marginTop: "10%",
-		width: "80%",
+		width: "90%",
 		// borderWidth: 1,
 		// borderColor: '#C9D1D9',
 		fontFamily: "Inter-Bold",
@@ -35,25 +35,27 @@ const styles = StyleSheet.create({
 	},
 	texte: {
 		fontSize: 16,
-		marginLeft: "10%",
+		marginLeft: "5%",
 		marginTop: "1%",
-		width: "80%",
+		width: "90%",
 		// borderWidth: 1,
 		// borderColor: '#C9D1D9',
 		fontFamily: "Inter-Regular",
 		color: "#C9D1D9",
 	},
 	link: {
-		fontFamily: "Inter-Bold",
-		fontSize: 20,
+		fontFamily: "Inter-Regular",
+		fontSize: 16,
 		color: "#3299F1",
+		marginLeft: "10%",
+		marginVertical: "5%",
 	},
 	btn: {
-		width: "80%",
+		width: "90%",
 		height: 50,
 		marginTop: "5%",
 		borderRadius: 15,
-		marginHorizontal: "10%",
+		marginHorizontal: "5%",
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 1,
@@ -77,17 +79,30 @@ const styles = StyleSheet.create({
 		width: 12.5,
 	},
 });
-export default function Step1(props) {
-	const [email, setEmail] = useState("");
+
+export default function Forgot2(props) {
+	const [description, setDescription] = useState("");
+	const { date, adresse } = props.route.params
+	const isLoading = useSelector((state) => state.ui.isLoading);
+	const dispatch = useDispatch();
 	const slider = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "step-1-slider")
+		state.ui.assets.find((el) => el.name == "step-3-slider")
 	);
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
+	const icon = useSelector((state) =>
+		state.ui.assets.find((el) => el.name === "phone-icon")
+	);
 	const suivantHandler = () => {
-		props.navigation.navigate("Forgot-2", { email });
+		const event = {
+			date: new Date(date),
+			adresse,
+			description,
+		}
+		dispatch(PostEvent(event, props.navigation.navigate));
 	};
+	if(isLoading) return <SplashScreen />
 	return (
 		<>
 			<View style={styles.header}>
@@ -98,24 +113,43 @@ export default function Step1(props) {
 			<KeyboardAwareScrollView style={{ flex: 1 }}>
 				<View style={styles.screen}>
 					<Image style={styles.step} source={slider} />
-					<Text style={styles.title}>C'est pour quand ?</Text>
+					<Text style={styles.title}>Description</Text>
 					<Text style={styles.texte}>
-						Entrez votre email pour récupérer le mot de passe
+						Donnez nous plus de details un administrateur les confirmeras par la
+						suite
 					</Text>
-					<Input
-						icon={"email-1"}
-						style={{ marginVertical: "5%", marginHorizontal: "10%" }}
+					<View
+						style={[
+							{
+								width: "90%",
+								maxHeight: "50%",
+								marginHorizontal: "5%",
+								marginTop: "5%",
+								backgroundColor: "#161B22",
+								borderBottomWidth: 1,
+								borderBottomColor: "#3299F1",
+								flexDirection: "row",
+								alignItems: "center",
+							},
+						]}
 					>
-						<TextInput
-							placeholder="Adresse email"
-							textContentType="emailAddress"
-							editable
-							keyboardType="email-address"
-							autoComplete="email"
-							onChangeText={(e) => setEmail(e)}
-							onSubmitEditing={() => {
-								suivantHandler();
+						<Image
+							source={icon}
+							style={{
+								height: 25,
+								width: 25,
+								margin: 5,
+								resizeMode: "contain",
 							}}
+						/>
+
+						<TextInput
+							placeholder="Description"
+							editable
+							multiline={true}
+							keyboardType="default"
+							onChangeText={(e) => setDescription(e)}
+							onSubmitEditing={() => {}}
 							blurOnSubmit={false}
 							style={{
 								flex: 1,
@@ -125,7 +159,7 @@ export default function Step1(props) {
 							}}
 							placeholderTextColor={"#858585"}
 						/>
-					</Input>
+					</View>
 					<TouchableWithoutFeedback onPressOut={suivantHandler}>
 						<LinearGradient
 							colors={["#5D31BF", "#0B67FFD6"]}

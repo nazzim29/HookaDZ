@@ -4,11 +4,9 @@ import {
 	StyleSheet,
 	TouchableWithoutFeedback,
 	Image,
-	TextInput,
 	TouchableOpacity,
 } from "react-native";
-import React, { useRef, useState } from "react";
-import Input from "../../../components/Input";
+import React from "react";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
@@ -22,31 +20,20 @@ const styles = StyleSheet.create({
 		resizeMode: "contain",
 		alignItems: "center",
 	},
+	screen: {
+		justifyContent: "center",
+		alignItems: "center",
+	},
 	title: {
 		fontWeight: "700",
-		fontSize: 22,
-		marginLeft: "10%",
-		marginTop: "10%",
-		width: "80%",
-		// borderWidth: 1,
-		// borderColor: '#C9D1D9',
-		fontFamily: "Inter-Bold",
-		color: "#C9D1D9",
-	},
-	texte: {
-		fontSize: 16,
-		marginLeft: "10%",
-		marginTop: "1%",
-		width: "80%",
-		// borderWidth: 1,
-		// borderColor: '#C9D1D9',
-		fontFamily: "Inter-Regular",
-		color: "#C9D1D9",
-	},
-	link: {
-		fontFamily: "Inter-Bold",
 		fontSize: 20,
-		color: "#3299F1",
+		marginLeft: "10%",
+		marginBottom: "10%",
+		width: "90%",
+		// borderWidth: 1,
+		// borderColor: '#C9D1D9',
+		fontFamily: "Inter-Bold",
+		color: "#C9D1D9",
 	},
 	btn: {
 		width: "80%",
@@ -76,17 +63,27 @@ const styles = StyleSheet.create({
 		height: 20.5,
 		width: 12.5,
 	},
+	checkIcon: {
+		resizeMode: "contain",
+		height: 100,
+		width: 100,
+		marginBottom: "10%",
+	},
 });
-export default function Step1(props) {
-	const [email, setEmail] = useState("");
+
+export default function Forgot2(props) {
 	const slider = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "step-1-slider")
+		state.ui.assets.find((el) => el.name == "step-4-slider")
 	);
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
+	const checkIcon = useSelector((state) =>
+		state.ui.assets.find((asset) => asset.name === "check-icon")
+	);
+	const resend = () => {};
 	const suivantHandler = () => {
-		props.navigation.navigate("Forgot-2", { email });
+		props.navigation.navigate("Login");
 	};
 	return (
 		<>
@@ -98,41 +95,15 @@ export default function Step1(props) {
 			<KeyboardAwareScrollView style={{ flex: 1 }}>
 				<View style={styles.screen}>
 					<Image style={styles.step} source={slider} />
-					<Text style={styles.title}>C'est pour quand ?</Text>
-					<Text style={styles.texte}>
-						Entrez votre email pour récupérer le mot de passe
-					</Text>
-					<Input
-						icon={"email-1"}
-						style={{ marginVertical: "5%", marginHorizontal: "10%" }}
-					>
-						<TextInput
-							placeholder="Adresse email"
-							textContentType="emailAddress"
-							editable
-							keyboardType="email-address"
-							autoComplete="email"
-							onChangeText={(e) => setEmail(e)}
-							onSubmitEditing={() => {
-								suivantHandler();
-							}}
-							blurOnSubmit={false}
-							style={{
-								flex: 1,
-								fontFamily: "Inter-Regular",
-								fontSize: 16,
-								color: "#C9D1D9",
-							}}
-							placeholderTextColor={"#858585"}
-						/>
-					</Input>
+					<Text style={styles.title}>Le mot de passe a été réinitialisé</Text>
+					<Image style={styles.checkIcon} source={checkIcon} />
 					<TouchableWithoutFeedback onPressOut={suivantHandler}>
 						<LinearGradient
 							colors={["#5D31BF", "#0B67FFD6"]}
 							{...deg(90)}
 							style={styles.btn}
 						>
-							<Text style={styles.txtbtn}>Suivant</Text>
+							<Text style={styles.txtbtn}>Terminé</Text>
 						</LinearGradient>
 					</TouchableWithoutFeedback>
 				</View>

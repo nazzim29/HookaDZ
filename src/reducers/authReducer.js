@@ -1,13 +1,17 @@
 const initialState = {
+	_id: null,
 	isAuthenticated: false,
     userToken: null,
     email: null,
     nom: null,
     prenom: null,
-    numero: null,
+	numero: null,
+	isAdmin: false,
+	role: null
 };
 
 const authReducer = (state = initialState, action) => {
+	console.log(action.type)
 	switch (action.type) {
 
 		case "RESTORE_TOKEN":

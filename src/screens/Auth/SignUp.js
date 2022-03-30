@@ -10,10 +10,11 @@ import Input from "../../components/Input";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
-import { useDispatch } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
 
 import { signup } from "../../actions/auth";
+import SplashScreen from "../SplashScreen";
+import { addError } from "../../actions/error";
 const styles = StyleSheet.create({
 	title: {
 		color: "#3299F1",
@@ -79,22 +80,44 @@ export default (props) => {
 	const nameRef = React.useRef();
 	const passwordRef = React.useRef();
 	const phoneRef = React.useRef();
+	const [email, setEmail] = React.useState("");
+	const [name, setName] = React.useState("");
+	const [password, setPassword] = React.useState("");
+	const [phone, setPhone] = React.useState("");
+	const isLoading = useSelector((state) => state.ui.isLoading);
 	const dispatch = useDispatch();
 	const signupHandler = () => {
-		props.navigation.navigate("SignupSuccess");
-		dispatch(
-			signUp({
-				nom: nameRef.current.value,
-				email: emailRef.current.value,
-				password: passwordRef.current.value,
-				phone: phoneRef.current.value,
-			})
-		);
-	};
-	return (
-		<KeyboardAwareScrollView style={{ flex: 1 }}
-			contentContainerStyle={{ flex: 1, justifyContent: "center" }}
+		const user = {
+			nom: name,
+			email: email,
+			password: password,
+			numero: phone,
+		};
 
+		if (
+			!user.nom ||
+			user.email.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) == -1 ||
+			user.password.length < 8 ||
+			user.numero.search(/^(\+\d{3})( )?\d{9}$|^0( )?(\d( )?){9}$/g) == -1
+		)
+			dispatch(addError("Formulaire incomplet ou données incorrectes")) &&
+				console.log({
+					nom: !user.nom,
+					email: user.email.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) == -1,
+					password: user.password.length < 8,
+					numero:
+						user.numero.search(/^(\+\d{3})( )?\d{9}$|^0( )?(\d( )?){9}$/g) ==
+						-1,
+				});
+		else {
+			dispatch(signup(user));
+		}
+	};
+	if (isLoading) return <SplashScreen />;
+	return (
+		<KeyboardAwareScrollView
+			style={{ flex: 1 }}
+			contentContainerStyle={{ flex: 1, justifyContent: "center" }}
 		>
 			<View style={{ flex: 1, justifyContent: "center", alignitems: "center" }}>
 				<Text style={styles.title}>Shicha App Logo</Text>
@@ -117,6 +140,7 @@ export default (props) => {
 							onSubmitEditing={() => {
 								emailRef.current.focus();
 							}}
+							onChangeText={(text) => setName(text)}
 							blurOnSubmit={false}
 							placeholderTextColor={"#858585"}
 						/>
@@ -133,6 +157,7 @@ export default (props) => {
 							onSubmitEditing={() => {
 								phoneRef.current.focus();
 							}}
+							onChangeText={(text) => setEmail(text)}
 							blurOnSubmit={false}
 							placeholderTextColor={"#858585"}
 						/>
@@ -149,6 +174,7 @@ export default (props) => {
 							onSubmitEditing={() => {
 								passwordRef.current.focus();
 							}}
+							onChangeText={(text) => setPhone(text)}
 							blurOnSubmit={false}
 							placeholderTextColor={"#858585"}
 						/>
@@ -162,6 +188,7 @@ export default (props) => {
 							placeholderTextColor={"#858585"}
 							editable
 							ref={passwordRef}
+							onChangeText={(text) => setPassword(text)}
 							style={styles.input}
 							onSubmitEditing={() => signupHandler()}
 						/>

@@ -7,9 +7,13 @@ import {
 } from "react-native";
 
 import { Box, ScrollView } from "native-base";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
+import SplashScreen from "./SplashScreen";
+import { Locate } from "../actions/commandes";
+import { LinearGradient } from "expo-linear-gradient";
+import { deg } from "react-native-linear-gradient-degree";
 const styles = StyleSheet.create({
 	header: {
 		justifyContent: "space-between",
@@ -122,30 +126,77 @@ export default (props) => {
 	const arrowIcon = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "arrow-back")
 	);
-	const panier = useSelector((state) =>
-		state.commande.commandeEnCours.produits
+	const panier = useSelector(
+		(state) => state.commande.commandeEnCours.produits
 	);
+	const currentAddress = useSelector((state) => state.ui.currentAddress);
 	let products = useSelector((state) => state.product.products);
+	const isLoading = useSelector((state) => state.ui.isLoading);
 	const handleBagClick = () => {
-		console.log("click");
 		props.navigation.navigate("Panier");
 	};
+	useEffect(() => {
+		dispatch(Locate());
+	}, []);
+	if (isLoading) return <SplashScreen />;
 	return (
 		<>
 			<Box style={styles.container}>
 				<View style={styles.header}>
 					<View style={styles.locationHeader}>
 						<Text style={styles.locationText}>Deliver to </Text>
-						<Text style={styles.location}>C74 + P37, mila Algerie </Text>
+						<Text style={styles.location}>{currentAddress || "..."}</Text>
 					</View>
-					<TouchableWithoutFeedback onPress={() => props.navigation.navigate('Historique')}>
-					<Image
-						source={historyIcon}
-						style={[styles.headerIcon, { resizeMode: "contain" }]}
-						/>
+					<TouchableWithoutFeedback
+						onPress={() => props.navigation.navigate("Historique")}
+					>
+						<View style={{ padding: 4 }}>
+							<Image
+								source={historyIcon}
+								style={[styles.headerIcon, { resizeMode: "contain" }]}
+							/>
+						</View>
 					</TouchableWithoutFeedback>
 				</View>
 				<Text style={styles.headerText}>Sicha App Logo</Text>
+				<TouchableWithoutFeedback
+					onPress={() => props.navigation.navigate("Event1")}
+				>
+					<Box
+						marginX={"5%"}
+						borderRadius={"md"}
+						marginBottom={"5%"}
+						background={"white"}
+						minWidth={"90%"}
+						height={20}
+						overflow={"hidden"}
+						backgroundColor={"#161B22"}
+						justifyContent={"center"}
+						alignItems={"center"}
+						shadowColor={"#5D31BF"}
+						shadowOffset={{ width: 15, height: 15 }}
+						shadowOpacity={0.72}
+						shadowRadius={1.84}
+						elevation={14}
+					>
+						<Text
+							style={{
+								fontSize: 18,
+								fontFamily: "Inter-Regular",
+								color: "white",
+							}}
+						>
+							Faites votre commande{" "}
+							<Text
+								style={{
+									fontFamily: "Inter-Bold",
+								}}
+							>
+								SPECIALE!
+							</Text>
+						</Text>
+					</Box>
+				</TouchableWithoutFeedback>
 				<ScrollView contentContainerStyle={styles.screenContent}>
 					{products.map((el) => (
 						<Card key={el._id} product={el} />
@@ -154,11 +205,11 @@ export default (props) => {
 			</Box>
 			{panier.length > 0 && (
 				<TouchableWithoutFeedback onPressIn={handleBagClick}>
-				<View style={styles.panierBtn}>
-					<Text style={styles.paniertxt}>Aller au panier</Text>
-					<Image source={arrowIcon} style={styles.arrowIcon} />
-				</View>
-			</TouchableWithoutFeedback>
+					<View style={styles.panierBtn}>
+						<Text style={styles.paniertxt}>Aller au panier</Text>
+						<Image source={arrowIcon} style={styles.arrowIcon} />
+					</View>
+				</TouchableWithoutFeedback>
 			)}
 		</>
 	);

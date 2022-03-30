@@ -19,6 +19,24 @@ export function getAllProducts() {
 			});
 	};
 }
+export function getAllExtras() {
+	return (dispatch, getState) => {
+		dispatch(startLoading());
+		return axios
+            .get("https://chicha-dz.herokuapp.com/extras", {
+                headers: {
+                    "Content-Type":"application/json",
+                }
+            })
+			.then(({ data }) => {
+				dispatch(stopLoading());
+				dispatch({
+					type: "GET_ALL_EXTRAS",
+					payload: data,
+				});
+			});
+	};
+}
 
 export function updateProductsArray(products) {
 	return (dispatch, getState) => {

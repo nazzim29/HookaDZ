@@ -1,16 +1,17 @@
 const initialState = {
 	commandes: [],
+	evenements:[],
 	commandeEnCours: {
 		commande: {
 			latitude: null,
 			longitude: null,
-			montant: 0,
+			montant: 0
 		},
 		produits: [],
-		confirmation: false,
 		extras: [],
 	},
-	commande:null
+	livreurs:[],
+	commande: null,
 };
 const commandeReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -18,56 +19,91 @@ const commandeReducer = (state = initialState, action) => {
 			return {
 				...state,
 				commandes: action.payload,
-			}
-		case "GET_COMMANDE_DETAILS":
-		
+			};
+		case "GET_ALL_EVENTS":
 			return {
 				...state,
-				commande: action.payload
+				evenements: action.payload,
+			};
+		case "GET_LIVREURS":
+			return {
+				...state,
+				livreurs: action.payload,
 			}
+		case "GET_COMMANDE_DETAILS":
+			return {
+				...state,
+				commande: action.payload,
+			};
 		case "POST_COMMANDE":
 			state.commandes.push(action.payload);
 			state.commandeEnCours = action.payload;
-			return state;
+			return {
+				...state,
+				commandeEnCours: initialState.commandeEnCours,
+			};
 		case "REMOVE_PRODUCT":
-			if (!state.commandeEnCours.produits.includes(action.payload))
-				return state;
-			state.commandeEnCours[
-				state.commandeEnCours.produits.indexOf(action.payload)
-			].quantité--;
-			if (
-				state.commandeEnCours[
-					state.commandeEnCours.produits.indexOf(action.payload)
-				].quantité <= 0
-			)
-				state = state.commandeEnCours.produits.filter(
-					({ _id }) => _id != action.payload._id
-				);
-			return state;
-		case "ADD_PRODUCT":
-			console.log(action.payload);
-			//if product exist in commandeEnCours 
 			return {
 				...state,
 				commandeEnCours: {
 					...state.commandeEnCours,
-					produits: [...action.payload]
+					produits: [...action.payload.produits],
+					commande: {
+						...state.commandeEnCours.commande,
+						montant: action.payload.montant,
+					},
 				},
-			}
+			};
+		case "MINUS_PRODUCT":
+			return {
+				...state,
+				commandeEnCours: {
+					...state.commandeEnCours,
+					produits: [...action.payload.produits],
+					commande: {
+						...state.commandeEnCours.commande,
+						montant: action.payload.montant,
+					},
+				},
+			};
+		case "MINUS_EXTRA":
+			return {
+				...state,
+				commandeEnCours: {
+					...state.commandeEnCours,
+					extras: [...action.payload.extras],
+					commande: {
+						...state.commandeEnCours.commande,
+						montant: action.payload.montant,
+					},
+				},
+			};
+
+		case "ADD_PRODUCT":
+			//if product exist in commandeEnCours
+			return {
+				...state,
+				commandeEnCours: {
+					...state.commandeEnCours,
+					produits: [...action.payload.produits],
+					commande: {
+						...state.commandeEnCours.commande,
+						montant: action.payload.montant,
+					},
+				},
+			};
 		case "ADD_EXTRAS":
-			if (
-				state.commandeEnCours.extras.find((el) => action.payload._id == el._id)
-			)
-				state.commandeEnCours[
-					state.commandeEnCours.extras.findIndex(
-						(el) => action.payload._id == el._id
-					)
-				].quantite++;
-			else
-				state.commandeEnCours.extras.push({
-					extra: action.payload._id,
-					quantite: 1,
-				});
+			return {
+				...state,
+				commandeEnCours: {
+					...state.commandeEnCours,
+					extras: [...action.payload.extras],
+					commande: {
+						...state.commandeEnCours.commande,
+						montant: action.payload.montant,
+					},
+				},
+			};
 		case "REMOVE_EXTRAS":
 			if (!state.commandeEnCours.extras.includes(action.payload)) return state;
 			state.commandeEnCours[
@@ -84,16 +120,32 @@ const commandeReducer = (state = initialState, action) => {
 			return state;
 		case "VALIDATE":
 			state.commandeEnCours.valid = true;
-            return state;
-        case "LOCATE":
+			return state;
+		// case "LOCATE":
+		// 	return {
+		// 		...state,
+		// 		commandeEnCours: {
+		// 			...state.commandeEnCours,
+		// 			latitude: action.payload.latitude,
+		// 			longitude: action.payload.longitude,
+		// 		},
+		// 	};
+		case "CLEAR_COMMANDE":
 			return {
 				...state,
-				...action.payload
-			}
+				commandeEnCours: {
+					commande: {
+						latitude: null,
+						longitude: null,
+						montant: 0,
+					},
+					produits: [],
+					extras: [],
+				},
+			};
 		default:
 			return state;
 	}
 };
-
 
 export default commandeReducer;

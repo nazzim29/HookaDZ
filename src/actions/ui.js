@@ -21,6 +21,14 @@ const images = [
 	require("../../assets/step-2-slider.png"),
 	require("../../assets/step-3-slider.png"),
 	require("../../assets/step-4-slider.png"),
+	require("../../assets/time-icon.png"),
+	require("../../assets/truck-icon.png"),
+	require("../../assets/coin-icon.png"),
+	require("../../assets/map-icon.png"),
+	require("../../assets/file-icon.png"),
+	require("../../assets/logo-1.png"),
+	require("../../assets/logo-2.png"),
+	require("../../assets/logo-realist.jpg"),
 ];
 
 export function startLoading() {

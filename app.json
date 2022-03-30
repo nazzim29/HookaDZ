@@ -4,11 +4,11 @@
     "slug": "HookaDZ",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo-2.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo-2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0D1117"
+      "backgroundColor": "#21172d"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -22,14 +22,15 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#2a327a"
-      }
+        "foregroundImage": "./assets/logo-2.png",
+        "backgroundColor": "#21172d"
+      },
+      "package": "com.nazzim29.HookaDZ"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/logo-2.png"
     },
     "sdkVersion": "44.0.0"
   },
-  "name": "hookadz"
+  "name": "HookaDZ"
 }
