@@ -100,7 +100,6 @@ export default function Commandes(props) {
 	//show list of past order
 	const dispatch = useDispatch();
 	const handleCommandePress = () => {
-		// dispatch(PostCommande());
 		dispatch(getAllExtras());
 		props.navigation.navigate("Extras");
 	};
@@ -110,20 +109,22 @@ export default function Commandes(props) {
 	const commandeEnCours = useSelector(
 		(state) => state.commande.commandeEnCours
 	);
-	const extras = useSelector((state) => state.product.extras);
+	const t =  useSelector((state) => state.commande.commandeEnCours.produits);
 	const produits = useSelector((state) => state.product.products);
 	useEffect(() => {
+		console.log("salut")
 		if (commandeEnCours.produits.length === 0) {
-			props.navigation.navigate("Home");
+			props.navigation.popToTop();
 			dispatch({
 				type: "CLEAR_COMMANDE",
 			})
 		}
-	}, [commandeEnCours.produits]);
+	}, [t]);
+
 	return (
 		<>
 			<View style={styles.header}>
-				<View style={{ padding: 4 }}>
+				<View style={{ padding: 10}}>
 					<TouchableOpacity onPress={() => props.navigation.goBack()}>
 						<Image source={arrowBackIcon} style={styles.headerIcon} />
 					</TouchableOpacity>

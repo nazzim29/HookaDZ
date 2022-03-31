@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/logo-2.png",
       "resizeMode": "contain",
-      "backgroundColor": "#21172d"
+      "backgroundColor": "#0D1117"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -23,7 +23,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo-2.png",
-        "backgroundColor": "#21172d"
+        "backgroundColor": "#0D1117"
       },
       "package": "com.nazzim29.HookaDZ"
     },

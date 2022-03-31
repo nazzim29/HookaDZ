@@ -43,11 +43,11 @@ const commandeReducer = (state = initialState, action) => {
 				commandeEnCours: initialState.commandeEnCours,
 			};
 		case "REMOVE_PRODUCT":
-			return {
+			return{
 				...state,
 				commandeEnCours: {
 					...state.commandeEnCours,
-					produits: [...action.payload.produits],
+					produits: action.payload.produits,
 					commande: {
 						...state.commandeEnCours.commande,
 						montant: action.payload.montant,

@@ -304,7 +304,6 @@ export function PostCommande(navigate) {
 				return Location.getCurrentPositionAsync({}).then(({ coords }) => {
 					commandeEnCours.commande.latitude = coords.latitude;
 					commandeEnCours.commande.longitude = coords.longitude;
-					commandeEnCours.commande.montant = 0;
 					return axios
 						.post(
 							"http://chicha-dz.herokuapp.com/commandes/insert",

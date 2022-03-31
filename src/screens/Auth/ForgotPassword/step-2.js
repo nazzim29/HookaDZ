@@ -7,12 +7,13 @@ import {
 	TextInput,
 	TouchableOpacity,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, {  useState } from "react";
 import Input from "../../../components/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch} from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
+import { sendResetRequest } from "../../../actions/auth";
 
 const styles = StyleSheet.create({
 	step: {
@@ -81,16 +82,20 @@ const styles = StyleSheet.create({
 });
 
 export default function Forgot2(props) {
-    const {code,setCode} = useState()
+	const [ code, setCode ] = useState()
+	const { email } = props.route.params
+	const dispatch = useDispatch()
 	const slider = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "step-2-slider")
 	);
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
     );
-    const resend = ()=>{}
+	const resend = () => {
+		dispatch(sendResetRequest(email))
+	}
 	const suivantHandler = () => {
-        props.navigation.navigate("Forgot-3");
+        props.navigation.navigate("Forgot-3",{email,code});
 	};
 	return (
 		<>
@@ -105,7 +110,7 @@ export default function Forgot2(props) {
 					<Text style={styles.title}>Code</Text>
 					<Text style={styles.texte}>
 						Nous avons envoyé un code à 6 chiffres a l'adresse{" "}
-						{props.route.params.email}
+						{email}
 					</Text>
 					<Input
 						icon={"key-icon"}
@@ -116,7 +121,8 @@ export default function Forgot2(props) {
 							editable
 							keyboardType="number-pad"
 							autoComplete="sms-otp"
-							onChangeText={(e) => setCode(e)}
+							
+							onChangeText={(e) => setCode(parseInt(e))}
 							onSubmitEditing={() => {
 								suivantHandler();
 							}}

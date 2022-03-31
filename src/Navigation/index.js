@@ -51,6 +51,7 @@ const AuthStackScreen = () => {
 			}}
 			initialRouteName="Signup"
 		>
+			{/* <AuthStack.Screen name="SplashScreen" component={SplashScreen} /> */}
 			<AuthStack.Screen name="Login" component={Login} />
 			<AuthStack.Screen name="Signup" component={SignUp} />
 			<AuthStack.Screen name="SignupSuccess" component={SignUpSuccess} />
@@ -175,6 +176,7 @@ export default (props) => {
 	const error = useSelector((state) => state.error.message);
 	useEffect(() => {
 		dispatch(LoadAssests());
+		dispatch(readToken())
 	}, []);
 	useEffect(() => {
 		if (isAuth) {

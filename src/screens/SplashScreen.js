@@ -1,5 +1,5 @@
-import { View, ActivityIndicator, Image } from "react-native";
-import React from "react";
+import { View, ActivityIndicator, Image, Animated } from "react-native";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 
 export default function SplashScreen() {
@@ -12,6 +12,24 @@ export default function SplashScreen() {
 	const logoRealist = useSelector((state) =>
 		state.ui.assets.find((el) => el.name === "logo-realist")
 	);
+	const imgW = new Animated.Value(1);
+	useEffect(() => {
+		Animated.loop(
+			Animated.sequence(
+				[Animated.timing(imgW, {
+					toValue: 0.95,
+					duration: 1000,
+					useNativeDriver: true,
+				}),
+				Animated.timing(imgW, {
+					toValue: 1,
+					duration: 1000,
+					useNativeDriver: true,
+				})]
+			),
+			{ iterations: -1 }
+		).start();
+	}, []);
 	return (
 		<View
 			style={{
@@ -22,11 +40,17 @@ export default function SplashScreen() {
 			}}
 		>
 			{/* <ActivityIndicator size="large" color="#990091" /> */}
-			<Image
+
+			<Animated.Image
 				style={{
-					width: "100%",
-					height: "100%",
+					width: `100%`,
+					height: `100%`,
 					resizeMode: "contain",
+					transform: [
+						{
+							scale: imgW,
+						},
+					],
 				}}
 				source={logo2}
 			/>

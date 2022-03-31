@@ -4,6 +4,7 @@ import {
 	StyleSheet,
 	TextInput,
 	TouchableWithoutFeedback,
+	Image,
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Input from "../../components/Input";
@@ -17,11 +18,11 @@ import SplashScreen from "../SplashScreen";
 import { addError } from "../../actions/error";
 const styles = StyleSheet.create({
 	title: {
-		color: "#3299F1",
-		fontSize: 30,
-		fontFamily: "Inter-Bold",
-		textAlign: "center",
-		marginBottom: 50,
+		width: `100%`,
+		height: `110%`,
+		resizeMode: "contain",
+		// borderWidth: 1,
+		// borderColor: "#C9D1D9",
 	},
 	subtitle: {
 		fontSize: 20,
@@ -86,152 +87,162 @@ export default (props) => {
 	const [phone, setPhone] = React.useState("");
 	const isLoading = useSelector((state) => state.ui.isLoading);
 	const dispatch = useDispatch();
+	const logo = useSelector((state) => {
+		return state.ui.assets.find((el) => el.name == "logo-2");
+	});
 	const signupHandler = () => {
 		const user = {
 			nom: name,
 			email: email,
 			password: password,
+			// confirmPassword: confirmPassword,
 			numero: phone,
 		};
-
 		if (
-			!user.nom ||
-			user.email.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) == -1 ||
-			user.password.length < 8 ||
-			user.numero.search(/^(\+\d{3})( )?\d{9}$|^0( )?(\d( )?){9}$/g) == -1
-		)
-			dispatch(addError("Formulaire incomplet ou données incorrectes")) &&
-				console.log({
-					nom: !user.nom,
-					email: user.email.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) == -1,
-					password: user.password.length < 8,
-					numero:
-						user.numero.search(/^(\+\d{3})( )?\d{9}$|^0( )?(\d( )?){9}$/g) ==
-						-1,
-				});
-		else {
-			dispatch(signup(user));
+			user.nom == "" ||
+			user.email == "" ||
+			user.password == "" ||
+			user.numero == ""
+		) {
+			return dispatch(addError("Veuillez remplir tous les champs"));
 		}
+		// if (user.password.length < 8) {
+		// 	return dispatch(addError("Votre mot de passe doit contenir au moins 6 caractères"));
+		// }
+		if (user.email.search(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g) == -1) {
+			return dispatch(addError("Veuillez entrer un email valide"));
+		}
+		if (user.numero.search(/^(\+\d{3})( )?\d{9}$|^0( )?(\d( )?){9}$/g) == -1) {
+			return dispatch(
+				addError("Veuillez entrer un numéro de téléphone valide")
+			);
+		}
+
+		dispatch(signup(user));
 	};
 	if (isLoading) return <SplashScreen />;
 	return (
-		<KeyboardAwareScrollView
-			style={{ flex: 1 }}
-			contentContainerStyle={{ flex: 1, justifyContent: "center" }}
-		>
-			<View style={{ flex: 1, justifyContent: "center", alignitems: "center" }}>
-				<Text style={styles.title}>Shicha App Logo</Text>
-				<Text style={styles.subtitle}> Commandez en quelques secondes,</Text>
-				<Text style={styles.subtitle}>livré en 30 minutes ou moins</Text>
-				<View style={{ marginTop: 40 }}>
-					<Text style={styles.text}>Vous vous inscrivez.</Text>
-					<Text style={styles.text}>Nous livrons - rapidement.</Text>
+		<>
+			<KeyboardAwareScrollView
+				style={{ flex: 1 }}
+				contentContainerStyle={{ flex: 1, justifyContent: "flex-start" }}
+			>
+				<View style={{ width: "100%", height: "20%" }}>
+					<Image style={styles.title} source={logo} />
 				</View>
-				<View style={styles.form}>
-					<Input icon={"person-icon"} style={{ marginBottom: "5%" }}>
-						<TextInput
-							placeholder="Nom complet"
-							textContentType="name"
-							editable
-							keyboardType="default"
-							autoComplete="name"
-							style={styles.input}
-							ref={nameRef}
-							onSubmitEditing={() => {
-								emailRef.current.focus();
-							}}
-							onChangeText={(text) => setName(text)}
-							blurOnSubmit={false}
-							placeholderTextColor={"#858585"}
-						/>
-					</Input>
-					<Input icon={"email-1"} style={{ marginBottom: "5%" }}>
-						<TextInput
-							placeholder="Adresse email"
-							textContentType="emailAddress"
-							editable
-							keyboardType="email-address"
-							autoComplete="email"
-							style={styles.input}
-							ref={emailRef}
-							onSubmitEditing={() => {
-								phoneRef.current.focus();
-							}}
-							onChangeText={(text) => setEmail(text)}
-							blurOnSubmit={false}
-							placeholderTextColor={"#858585"}
-						/>
-					</Input>
-					<Input icon={"phone-icon"} style={{ marginBottom: "5%" }}>
-						<TextInput
-							placeholder="Numero de telephone"
-							textContentType="telephoneNumber"
-							editable
-							keyboardType="number-pad"
-							autoComplete="phoneNumber"
-							style={styles.input}
-							ref={phoneRef}
-							onSubmitEditing={() => {
-								passwordRef.current.focus();
-							}}
-							onChangeText={(text) => setPhone(text)}
-							blurOnSubmit={false}
-							placeholderTextColor={"#858585"}
-						/>
-					</Input>
-					<Input icon={"password-icon"} style={{ marginBottom: "5%" }}>
-						<TextInput
-							placeholder="Mot de passe"
-							textContentType="password"
-							secureTextEntry={true}
-							autoComplete="password"
-							placeholderTextColor={"#858585"}
-							editable
-							ref={passwordRef}
-							onChangeText={(text) => setPassword(text)}
-							style={styles.input}
-							onSubmitEditing={() => signupHandler()}
-						/>
-					</Input>
+				<View
+					style={{
+						justifyContent: "center",
+						alignitems: "center",
+						height: "75%",
+					}}
+				>
+					<Text style={styles.subtitle}> Commandez en quelques secondes,</Text>
+					<Text style={styles.subtitle}>livré en 30 minutes ou moins</Text>
+					<View style={{ marginTop: 20 }}>
+						<Text style={styles.text}>Vous vous inscrivez.</Text>
+						<Text style={styles.text}>Nous livrons - rapidement.</Text>
+					</View>
+					<View style={styles.form}>
+						<Input icon={"person-icon"} style={{ marginBottom: "5%" }}>
+							<TextInput
+								placeholder="Nom complet"
+								textContentType="name"
+								editable
+								keyboardType="default"
+								autoComplete="name"
+								style={styles.input}
+								ref={nameRef}
+								onSubmitEditing={() => {
+									emailRef.current.focus();
+								}}
+								onChangeText={(text) => setName(text)}
+								blurOnSubmit={false}
+								placeholderTextColor={"#858585"}
+							/>
+						</Input>
+						<Input icon={"email-1"} style={{ marginBottom: "5%" }}>
+							<TextInput
+								placeholder="Adresse email"
+								textContentType="emailAddress"
+								editable
+								keyboardType="email-address"
+								autoComplete="email"
+								style={styles.input}
+								ref={emailRef}
+								onSubmitEditing={() => {
+									phoneRef.current.focus();
+								}}
+								onChangeText={(text) => setEmail(text)}
+								blurOnSubmit={false}
+								placeholderTextColor={"#858585"}
+							/>
+						</Input>
+						<Input icon={"phone-icon"} style={{ marginBottom: "5%" }}>
+							<TextInput
+								placeholder="Numero de telephone"
+								textContentType="telephoneNumber"
+								editable
+								keyboardType="number-pad"
+								autoComplete="phoneNumber"
+								style={styles.input}
+								ref={phoneRef}
+								onSubmitEditing={() => {
+									passwordRef.current.focus();
+								}}
+								onChangeText={(text) => setPhone(text)}
+								blurOnSubmit={false}
+								placeholderTextColor={"#858585"}
+							/>
+						</Input>
+						<Input icon={"password-icon"} style={{ marginBottom: "5%" }}>
+							<TextInput
+								placeholder="Mot de passe"
+								textContentType="password"
+								secureTextEntry={true}
+								autoComplete="password"
+								placeholderTextColor={"#858585"}
+								editable
+								ref={passwordRef}
+								onChangeText={(text) => setPassword(text)}
+								style={styles.input}
+								onSubmitEditing={() => signupHandler()}
+							/>
+						</Input>
 
-					<TouchableWithoutFeedback onPress={signupHandler}>
-						<LinearGradient
-							colors={["#5D31BF", "#0B67FFD6"]}
-							{...deg(90)}
-							style={styles.button}
-						>
-							<Text style={styles.txtbtn}>Suivant</Text>
-						</LinearGradient>
-					</TouchableWithoutFeedback>
+						<TouchableWithoutFeedback onPress={signupHandler}>
+							<LinearGradient
+								colors={["#5D31BF", "#0B67FFD6"]}
+								{...deg(90)}
+								style={styles.button}
+							>
+								<Text style={styles.txtbtn}>Suivant</Text>
+							</LinearGradient>
+						</TouchableWithoutFeedback>
 
-					<View style={{ flexDirection: "row", marginTop: 10 }}>
-						<Text style={styles.conditions}>
-							{" "}
-							En continuant, vous acceptez nos
-						</Text>
-						<Text style={[styles.conditions, styles.link]}>
-							{" "}
-							conditions d'utilisation
-						</Text>
+						<View style={{ flexDirection: "row", marginTop: 10 }}>
+							<Text style={styles.conditions}>
+								{" "}
+								En continuant, vous acceptez nos
+							</Text>
+							<Text style={[styles.conditions, styles.link]}>
+								{" "}
+								conditions d'utilisation
+							</Text>
+						</View>
 					</View>
 				</View>
-			</View>
+			</KeyboardAwareScrollView>
 			<View
 				style={{
 					borderTopWidth: 1,
-					width: "90%",
 					borderColor: "#B0B0B0",
-					alignSelf: "center",
-				}}
-			></View>
-			<View
-				style={{
-					width: "100%",
+					width: "80%",
+					height: "5%",
 					justifyContent: "center",
+					alignItems: "center",
 					flexDirection: "row",
 					alignSelf: "center",
-					paddingTop: 20,
-					paddingBottom: 10,
 				}}
 			>
 				<Text
@@ -249,6 +260,6 @@ export default (props) => {
 					<Text style={styles.link}> Connectez-vous</Text>
 				</TouchableWithoutFeedback>
 			</View>
-		</KeyboardAwareScrollView>
+		</>
 	);
 };

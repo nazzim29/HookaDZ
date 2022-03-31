@@ -14,8 +14,8 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	card: {
-		maxHeight: 250,
-		maxWidth: 150,
+		minWidth: "40%",
+		height: "40%",
 		flex: 1,
 		marginHorizontal: 10,
 		backgroundColor: "#0D1117",

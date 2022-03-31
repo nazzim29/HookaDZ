@@ -75,7 +75,7 @@ export default function Card(props) {
 		)
 	}
 	return (
-		<View style={[styles.card,{marginHorizontal:10}]}>
+		<View style={[styles.card, { marginHorizontal: 10 }]}>
 			<View style={styles.top}>
 				<View style={{ maxWidth: "85%" }}>
 					<TouchableWithoutFeedback
@@ -114,17 +114,18 @@ export default function Card(props) {
 				</View>
 				<Pressable
 					onPress={
-						(!order.confirmation && !order.rejete) ||
+						(!order.confirmation && !order.refuse) ||
 						(order.confirmation && !order.livraison)
 							? openInGoogleMap
 							: null
 					}
 				>
 					<View style={styles.info_b}>
+						{console.log(order)}
 						<Image
 							style={styles.map_icon}
 							source={
-								(!order.confirmation && !order.rejete) ||
+								(!order.confirmation && !order.refuse) ||
 								(order.confirmation && !order.livraison)
 									? mapIcon
 									: order.livreur
@@ -167,7 +168,7 @@ export default function Card(props) {
 								}}
 							>
 								{order.livreur
-									? `Accepté ( livreur ${order.livreur.nom} )`
+									? `Accepté ` //( livreur ${order.livreur.nom} )
 									: "Livreur ..."}
 							</Text>
 						</View>

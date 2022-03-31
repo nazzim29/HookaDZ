@@ -10,9 +10,11 @@ import {
 import React, { useRef, useState } from "react";
 import Input from "../../../components/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
+import { resetPassword } from "../../../actions/auth";
+import { addError } from "../../../actions/error";
 
 const styles = StyleSheet.create({
 	step: {
@@ -81,18 +83,22 @@ const styles = StyleSheet.create({
 });
 
 export default function Forgot2(props) {
-    const { password, setPassword } = useState();
-    const { passwordConfirm, setPasswordConfirm } = useState();
-    const confirmPasswordRef = useRef();
+	const dispatch = useDispatch();
+	const [password, setPassword] = useState();
+	const [confirmPassword, setConfirmPassword] = useState();
+	const { email,code } = props.route.params;
+	const confirmPasswordRef = useRef();
 	const slider = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "step-3-slider")
 	);
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
-	const resend = () => {};
 	const suivantHandler = () => {
-		props.navigation.navigate("Forgot-4");
+		if (password !== confirmPassword) return dispatch(addError("Les mots de passe ne correspondent pas"));
+
+		dispatch(resetPassword({password, confirmPassword, email,code}, props.navigation));
+
 	};
 	return (
 		<>
@@ -116,6 +122,7 @@ export default function Forgot2(props) {
 							editable
 							keyboardType="default"
 							autoComplete="password-new"
+							secureTextEntry={true}
 							onChangeText={(e) => setPassword(e)}
 							onSubmitEditing={() => {
 								confirmPasswordRef.current.focus();
@@ -138,10 +145,11 @@ export default function Forgot2(props) {
 							placeholder="Confirmer le mot de passe"
 							textContentType="newPassword"
 							editable
+							secureTextEntry={true}
 							keyboardType="default"
 							autoComplete="password-new"
 							ref={confirmPasswordRef}
-							onChangeText={(e) => setPasswordConfirm(e)}
+							onChangeText={(e) => setConfirmPassword(e)}
 							onSubmitEditing={() => {
 								suivantHandler();
 							}}
@@ -154,9 +162,6 @@ export default function Forgot2(props) {
 							placeholderTextColor={"#858585"}
 						/>
 					</Input>
-					<TouchableOpacity onPressOut={resend}>
-						<Text style={styles.link}>Renvoyer le code</Text>
-					</TouchableOpacity>
 					<TouchableWithoutFeedback onPressOut={suivantHandler}>
 						<LinearGradient
 							colors={["#5D31BF", "#0B67FFD6"]}

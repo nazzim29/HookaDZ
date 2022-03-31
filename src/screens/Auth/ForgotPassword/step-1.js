@@ -10,10 +10,11 @@ import {
 import React, { useRef, useState } from "react";
 import Input from "../../../components/Input";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
-
+import { sendResetRequest } from "../../../actions/auth";
+import SplashScreen from "../../SplashScreen"
 const styles = StyleSheet.create({
 	step: {
 		maxWidth: "80%",
@@ -82,12 +83,18 @@ export default function Step1(props) {
 	const slider = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "step-1-slider")
 	);
+	const dispatch = useDispatch();
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
+	const isLoading = useSelector((state) => state.ui.isLoading);
 	const suivantHandler = () => {
-		props.navigation.navigate("Forgot-2", { email });
+		dispatch(sendResetRequest(
+			email,
+			props.navigation.navigate
+		))
 	};
+	if(isLoading) return <SplashScreen />
 	return (
 		<>
 			<View style={styles.header}>

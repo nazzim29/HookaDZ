@@ -17,20 +17,24 @@ import { deg } from "react-native-linear-gradient-degree";
 const styles = StyleSheet.create({
 	header: {
 		justifyContent: "space-between",
-		// backgroundColor: "#161B22",
+		backgroundColor: "#161B22",
 		width: "100%",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 10,
+		marginBottom:15,
+		paddingVertical: 2,
+		paddingHorizontal: 10,
 	},
 	headerText: {
-		fontSize: 25,
-		fontWeight: "bold",
-		fontFamily: "Inter-Bold",
-		color: "#7638FF",
-		textAlign: "center",
+		// fontSize: 25,
+		// fontWeight: "bold",
+		// fontFamily: "Inter-Bold",
+		// color: "#7638FF",
+		// textAlign: "center",
 		width: "100%",
-		marginVertical: "10%",
+		height: "100%",
+		resizeMode: "contain",
+		// marginVertical: "10%",
 	},
 	headerIcon: {
 		height: 25,
@@ -45,12 +49,15 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	screenContent: {
-		flex: 1,
-		minWidth: "100%",
-		minHeight: "100%",
-		justifyContent: "center",
+		// flex: 1,
+		// flexGrow:1,
+		width: "100%",
+		justifyContent: "space-evenly",
+		// overflow: "hidden",
 		flexDirection: "row",
 		flexWrap: "wrap",
+		borderWidth: 1,
+		borderColor: "#7638FF",
 	},
 	locationHeader: {
 		// backgroundColor: "#161B22",
@@ -79,7 +86,6 @@ const styles = StyleSheet.create({
 		maxHeight: 250,
 	},
 	panierBtn: {
-		bottom: 0,
 		width: "80%",
 		height: "7%",
 		backgroundColor: "#7638FF",
@@ -129,6 +135,9 @@ export default (props) => {
 	const panier = useSelector(
 		(state) => state.commande.commandeEnCours.produits
 	);
+	const logo = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "logo-1")
+	);
 	const currentAddress = useSelector((state) => state.ui.currentAddress);
 	let products = useSelector((state) => state.product.products);
 	const isLoading = useSelector((state) => state.ui.isLoading);
@@ -139,12 +148,16 @@ export default (props) => {
 		dispatch(Locate());
 	}, []);
 	if (isLoading) return <SplashScreen />;
+	console.log(products.length)
 	return (
 		<>
 			<Box style={styles.container}>
+				<View style={{ width: "100%", height: 150 }}>
+					<Image style={styles.headerText} source={logo} />
+				</View>
 				<View style={styles.header}>
 					<View style={styles.locationHeader}>
-						<Text style={styles.locationText}>Deliver to </Text>
+						<Text style={styles.locationText}>Livrer a </Text>
 						<Text style={styles.location}>{currentAddress || "..."}</Text>
 					</View>
 					<TouchableWithoutFeedback
@@ -158,8 +171,7 @@ export default (props) => {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
-				<Text style={styles.headerText}>Sicha App Logo</Text>
-				<TouchableWithoutFeedback
+				{/* <TouchableWithoutFeedback
 					onPress={() => props.navigation.navigate("Event1")}
 				>
 					<Box
@@ -196,8 +208,18 @@ export default (props) => {
 							</Text>
 						</Text>
 					</Box>
-				</TouchableWithoutFeedback>
-				<ScrollView contentContainerStyle={styles.screenContent}>
+				</TouchableWithoutFeedback> */}
+				<ScrollView
+					style={{
+						borderWidth: 1,
+						borderColor: "#3299F1",
+						width: "100%",
+						flexGrow: 1,
+					}}
+					showsVerticalScrollIndicator={false}
+					contentInsetAdjustmentBehavior="scrollableAxes"
+					contentContainerStyle={styles.screenContent}
+				>
 					{products.map((el) => (
 						<Card key={el._id} product={el} />
 					))}
@@ -206,7 +228,7 @@ export default (props) => {
 			{panier.length > 0 && (
 				<TouchableWithoutFeedback onPressIn={handleBagClick}>
 					<View style={styles.panierBtn}>
-						<Text style={styles.paniertxt}>Aller au panier</Text>
+						<Text style={styles.paniertxt}>Panier</Text>
 						<Image source={arrowIcon} style={styles.arrowIcon} />
 					</View>
 				</TouchableWithoutFeedback>
