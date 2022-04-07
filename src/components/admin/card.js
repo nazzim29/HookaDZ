@@ -43,7 +43,10 @@ export default function Card(props) {
 	const openInGoogleMap = () => {
 		try {
 			Linking.openURL(
-				`comgooglemapsurl://www.google.com/maps/?q=@${order.latitude},${order.longitude}&zoom=15&view=traffic`
+				Platform.select({
+					ios: `comgooglemapsurl://www.google.com/maps/?q=@${order.latitude},${order.longitude}&zoom=15&view=traffic`,
+					android: `https://www.google.com/maps/?q=@${order.latitude},${order.longitude}&zoom=15&view=traffic`,
+				})
 			);
 		} catch (err) {
 			console.log("can't open google maps");
@@ -77,7 +80,7 @@ export default function Card(props) {
 	return (
 		<View style={[styles.card, { marginHorizontal: 10 }]}>
 			<View style={styles.top}>
-				<View style={{ maxWidth: "85%" }}>
+				<View style={{ maxWidth: "80%" }}>
 					<TouchableWithoutFeedback
 						onPress={() =>
 							dispatch(getCommandeDetails(order._id)) &&
@@ -232,6 +235,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 		backgroundColor: "#161B22",
 		borderRadius: 8,
+		overflow: "hidden",
 	},
 
 	top: {

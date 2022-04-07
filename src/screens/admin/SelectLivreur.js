@@ -41,7 +41,6 @@ export default function SelectLivreur(props) {
 	const arrowIcon = useSelector(state=>state.ui.assets.find(el=>el.name == "arrow-back"))
 	const livreurs = useSelector((state) => state.commande.livreurs);
 	const isLoading = useSelector((state) => state.commande.isLoading);
-	console.log(livreurs);
 	const selectLivreur = (livreur) => {
 		dispatch(
 			UpdateCommande({
@@ -95,7 +94,7 @@ export default function SelectLivreur(props) {
 			<ScrollView>
 				{livreurs.map((livreur) => (
 					<TouchableOpacity
-						key={livreur.id}
+						key={livreur._id}
 						onPress={() => selectLivreur(livreur)}
 						style={{
 							padding: 15,

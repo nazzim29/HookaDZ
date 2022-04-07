@@ -1,20 +1,25 @@
-import { View, Text,ScrollView, StyleSheet,TouchableOpacity,Image} from 'react-native'
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllCommandes } from '../actions/commandes';
-import OrderCard from '../components/Order/OrderCard';
-
-
-
+import {
+	View,
+	Text,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	Image,
+} from "react-native";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllCommandes } from "../actions/commandes";
+import OrderCard from "../components/Order/OrderCard";
+import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
 	header: {
 		justifyContent: "flex-start",
-		// backgroundColor: "#161B22",
+		backgroundColor: "#161B22",
 		width: "100%",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 10,
+		padding: 6,
 	},
 	headerText: {
 		fontSize: 20,
@@ -29,24 +34,46 @@ const styles = StyleSheet.create({
 	},
 });
 export default function Historique(props) {
-  const commandes = useSelector(state =>state.commande.commandes)
-  const arrowBackIcon = useSelector((state) =>
+	const commandes = useSelector((state) => state.commande.commandes);
+	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
-  );
-  
-  return (
+	);
+
+	return (
 		<>
 			<View style={styles.header}>
 				<TouchableOpacity onPress={() => props.navigation.goBack()}>
-					<Image source={arrowBackIcon} style={styles.headerIcon} />
+					<View style={{flexDirection:'row',alignItems:'center'}}>
+						<Image source={arrowBackIcon} style={styles.headerIcon} />
+						<Text style={styles.headerText}>Historique</Text>
+					</View>
 				</TouchableOpacity>
-				<Text style={styles.headerText}>Historique</Text>
 			</View>
-      <ScrollView contentContainerStyle={{flexDirection:'row',flexWrap:'wrap',justifyContent:"center"}}>
-        {commandes.map((commande) => (
-              <OrderCard order={commande} key={commande._id} navigation={props.navigation}/>
-        ))}
-      </ScrollView>
+			{commandes.length > 0 ? (
+				<ScrollView
+					contentContainerStyle={{
+						flexDirection: "row",
+						flexWrap: "wrap",
+						justifyContent: "center",
+					}}
+				>
+					{commandes.map((commande) => (
+						<OrderCard
+							order={commande}
+							key={commande._id}
+							navigation={props.navigation}
+						/>
+					))}
+				</ScrollView>
+			) : (
+				<View
+					style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+				>
+					<Text style={{ fontSize: 18, color: "white" }}>
+						Vous n'avez pas de commandes
+					</Text>
+				</View>
+			)}
 		</>
 	);
 }

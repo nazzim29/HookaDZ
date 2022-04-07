@@ -20,17 +20,21 @@ const styles = StyleSheet.create({
 	border: {
 		padding: 2,
 		borderRadius: 10,
-		flex: 1,
-		height: "100%",
 		marginBottom: 10,
+		maxHeight: 100,
+		minHeight: 100,
+		marginHorizontal: 22,
+		marginVertical: 20,
 	},
 	header: {
 		justifyContent: "flex-start",
-		// backgroundColor: "#161B22",
+		backgroundColor: "#161B22",
 		width: "100%",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 10,
+
+		paddingHorizontal: 10,
+		paddingVertical: 6.5,
 	},
 	headerText: {
 		fontSize: 20,
@@ -57,9 +61,12 @@ const styles = StyleSheet.create({
 	},
 	floating: {
 		minWidth: "100%",
-		minHeight: "25%",
+		minHeight: "10%",
 		padding: 15,
 		flexDirection: "column",
+		backgroundColor: "#0D1117",
+		// position: "absolute",
+		// bottom: 15,
 	},
 	details: {
 		borderColor: "#2e8bdc",
@@ -101,8 +108,8 @@ export default function Extras(props) {
 	//show list of past order
 	const dispatch = useDispatch();
 	const handleCommandePress = () => {
-
-		dispatch(PostCommande(props.navigation.reset));
+		// dispatch(PostCommande(props.navigation.reset));
+		props.navigation.navigate("Recap");
 	};
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
@@ -111,79 +118,91 @@ export default function Extras(props) {
 		(state) => state.commande.commandeEnCours
 	);
 	const extras = useSelector((state) => state.product.extras);
-	extras.forEach(element => {
-		let or = commandeEnCours.extras.find(el => el.prd == element._id)
-		element.quantite = or?.quantite ||0
+	extras.forEach((element) => {
+		let or = commandeEnCours.extras.find((el) => el.prd == element._id);
+		element.quantite = or?.quantite || 0;
 	});
-	const isLoading = useSelector(state=>state.ui.isLoading)
-	if(isLoading) return (<SplashScreen/>)
+	const isLoading = useSelector((state) => state.ui.isLoading);
+	if (isLoading) return <SplashScreen />;
 	return (
 		<>
 			<View style={styles.header}>
-				<View style={{ padding: 4 }}>
-					<TouchableOpacity onPress={() => props.navigation.goBack()}>
-						<Image source={arrowBackIcon} style={styles.headerIcon} />
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.headerText}>Extras</Text>
-			</View>
-			<ScrollView
-				style={styles.container}
-				contentContainerStyle={styles.contentContainer}
-			>
-				{extras.map((item) => {
-					return <Extra key={item._id} extra={item} />;
-				})}
-			</ScrollView>
-
-			<View style={styles.floating}>
-				<LinearGradient
-					colors={[
-						"rgba(11, 103, 255, 1)",
-						"rgba(255, 255, 255, 0)",
-						"rgba(11, 103, 255, 1)",
-					]}
-					locations={[0, 0.5, 1]}
-					{...deg(3)}
-					style={styles.border}
+				<TouchableOpacity
+					style={{ flexDirection: "row", alignItems: "center" }}
+					onPress={() => props.navigation.goBack()}
 				>
-					<View
-						style={{
-							flex: 1,
-							backgroundColor: "#0D1117",
-							padding: 10,
-							borderRadius: 10,
-							justifyContent: "space-evenly",
-						}}
+					<Image source={arrowBackIcon} style={styles.headerIcon} />
+					<Text style={styles.headerText}>Extras</Text>
+				</TouchableOpacity>
+			</View>
+			<View style={{ flex: 1, overflow: "hidden" }}>
+				<ScrollView
+					style={{ marginBottom: 0, overflow: "visible" }}
+				>
+					{extras.map((item, index) => (
+						<Extra
+							key={index}
+							style={{
+								maxHeight: 100,
+								minHeight: 100,
+								marginHorizontal: 5,
+								marginVertical: 10,
+								alignItems: "center",
+							}}
+							extra={item}
+						/>
+					))}
+					<LinearGradient
+						key={extras.length}
+						colors={[
+							"rgba(11, 103, 255, 1)",
+							"rgba(255, 255, 255, 0)",
+							"rgba(11, 103, 255, 1)",
+						]}
+						locations={[0, 0.5, 1]}
+						{...deg(3)}
+						style={styles.border}
 					>
 						<View
 							style={{
-								maxWidth: "100%",
-								flexDirection: "row",
-								justifyContent: "space-between",
+								flex: 1,
+								backgroundColor: "#0D1117",
+								padding: 10,
+								borderRadius: 10,
+								justifyContent: "space-evenly",
 							}}
 						>
-							<Text style={styles.detailsHeader}>Total</Text>
-							<Text style={styles.totalPrice}>
-								{commandeEnCours.commande.montant + ""}
-							</Text>
+							<View
+								style={{
+									maxWidth: "100%",
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}
+							>
+								<Text style={styles.detailsHeader}>Total</Text>
+								<Text style={styles.totalPrice}>
+									{commandeEnCours.commande.montant + ""}
+								</Text>
+							</View>
+							<View
+								style={{
+									maxWidth: "100%",
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}
+							>
+								<Text style={[styles.detailsHeader, { color: "#7C7C7C" }]}>
+									Livraison
+								</Text>
+								<Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>
+									free
+								</Text>
+							</View>
 						</View>
-						<View
-							style={{
-								maxWidth: "100%",
-								flexDirection: "row",
-								justifyContent: "space-between",
-							}}
-						>
-							<Text style={[styles.detailsHeader, { color: "#7C7C7C" }]}>
-								Livraison
-							</Text>
-							<Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>
-								free
-							</Text>
-						</View>
-					</View>
-				</LinearGradient>
+					</LinearGradient>
+				</ScrollView>
+			</View>
+			<View style={styles.floating}>
 				<TouchableWithoutFeedback onPress={handleCommandePress}>
 					<LinearGradient
 						colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}
@@ -197,7 +216,7 @@ export default function Extras(props) {
 							justifyContent: "center",
 						}}
 					>
-						<Text style={styles.txtbtn}>Commander</Text>
+						<Text style={styles.txtbtn}>Suivant</Text>
 					</LinearGradient>
 				</TouchableWithoutFeedback>
 			</View>

@@ -6,7 +6,6 @@ import {
 	Image,
 	TouchableWithoutFeedback,
 	TouchableOpacity,
-	ScrollView,
 } from "react-native";
 import React, { useEffect } from "react";
 import { OrderRow } from "../components/Order";
@@ -14,22 +13,26 @@ import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
 import { getAllExtras } from "../actions/products";
+import { ScrollView } from "native-base";
 
 const styles = StyleSheet.create({
 	border: {
 		padding: 2,
 		borderRadius: 10,
-		flex: 1,
-		height: "100%",
 		marginBottom: 10,
+		height: 100,
+		marginTop: 20,
+		marginHorizontal: 22,
+		marginVertical: 10,
 	},
 	header: {
 		justifyContent: "flex-start",
-		// backgroundColor: "#161B22",
+		backgroundColor: "#161B22",
 		width: "100%",
 		flexDirection: "row",
 		alignItems: "center",
-		padding: 10,
+		paddingHorizontal: 10,
+		paddingVertical: 6.5,
 	},
 	headerText: {
 		fontSize: 20,
@@ -44,21 +47,27 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		backgroundColor: "#0D1117",
+
 		width: "100%",
 		flex: 1,
 	},
 	contentContainer: {
 		alignItems: "center",
 		justifyContent: "flex-start",
+		flexDirection: "column",
 		flex: 1,
 		width: "100%",
-		height: "100%",
+		borderWidth: 1,
+		borderColor: "#2e8bdc",
 	},
 	floating: {
 		minWidth: "100%",
-		minHeight: "25%",
+		minHeight: "10%",
 		padding: 15,
 		flexDirection: "column",
+
+		// position: "absolute",
+		// bottom: 15,
 	},
 	details: {
 		borderColor: "#2e8bdc",
@@ -109,83 +118,112 @@ export default function Commandes(props) {
 	const commandeEnCours = useSelector(
 		(state) => state.commande.commandeEnCours
 	);
-	const t =  useSelector((state) => state.commande.commandeEnCours.produits);
+	const t = useSelector((state) => state.commande.commandeEnCours.produits);
 	const produits = useSelector((state) => state.product.products);
 	useEffect(() => {
-		console.log("salut")
-		if (commandeEnCours.produits.length === 0) {
+		if (commandeEnCours.produits.length === 0 && !commandeEnCours.reseted) {
+			console.log("salut");
 			props.navigation.popToTop();
 			dispatch({
 				type: "CLEAR_COMMANDE",
-			})
+			});
 		}
 	}, [t]);
 
 	return (
 		<>
 			<View style={styles.header}>
-				<View style={{ padding: 10}}>
-					<TouchableOpacity onPress={() => props.navigation.goBack()}>
+				<TouchableOpacity style={{flexDirection:'row',alignItems:'center',}} onPress={() => props.navigation.goBack()}>
 						<Image source={arrowBackIcon} style={styles.headerIcon} />
-					</TouchableOpacity>
-				</View>
-				<Text style={styles.headerText}>Panier</Text>
+						<Text style={styles.headerText}>Panier</Text>
+				</TouchableOpacity>
 			</View>
-			<ScrollView
-				style={styles.container}
-				contentContainerStyle={styles.contentContainer}
-			>
-				{commandeEnCours.produits.map((item) => {
-					return <OrderRow key={item.prd} order={{...produits.find(el=>el._id == item.prd),...item}} />;
-				})}
-			</ScrollView>
-			
-			<View style={styles.floating}>
-				<LinearGradient
-					colors={[
-						"rgba(11, 103, 255, 1)",
-						"rgba(255, 255, 255, 0)",
-						"rgba(11, 103, 255, 1)",
-					]}
-					locations={[0, 0.5, 1]}
-					{...deg(3)}
-					style={styles.border}
+			<View style={{ flex: 1, overflow: "hidden" }}>
+				<ScrollView
+					style={{
+						width: "100%",
+						flexGrow: 1,
+						overflow: "visible",
+						// marginBottom:70,
+					}}
+					showsVerticalScrollIndicator={false}
+					contentInsetAdjustmentBehavior='scrollableAxes'
+					contentContainerStyle={{
+						width: "100%",
+						justifyContent: "flex-start",
+						flexDirection: "column",
+						// flexWrap: "wrap",
+						flexGrow: 0,
+					}}
+					
 				>
-					<View
-						style={{
-							flex: 1,
-							backgroundColor: "#0D1117",
-							padding: 10,
-							borderRadius: 10,
-							justifyContent: "space-evenly",
-						}}
+					{/* <> */}
+					{commandeEnCours.produits.map((item, index) => (
+						<OrderRow
+								key={index}
+							style={{
+								maxHeight: 100,
+								minHeight: 100,
+								marginHorizontal: 5,
+								marginVertical: 10,
+								alignItems: "center",
+							}}
+							order={{ ...produits.find((el) => el._id == item.prd), ...item }}
+						/>
+					))}
+					<LinearGradient
+						key={commandeEnCours.produits.length}
+						colors={[
+							"rgba(11, 103, 255, 1)",
+							"rgba(255, 255, 255, 0)",
+							"rgba(11, 103, 255, 1)",
+						]}
+						locations={[0, 0.5, 1]}
+						{...deg(3)}
+						style={styles.border}
 					>
 						<View
 							style={{
-								maxWidth: "100%",
-								flexDirection: "row",
-								justifyContent: "space-between",
+								flex: 1,
+								backgroundColor: "#0D1117",
+								padding: 10,
+								borderRadius: 10,
+								justifyContent: "space-evenly",
 							}}
 						>
-							<Text style={styles.detailsHeader}>Total</Text>
-							<Text style={styles.totalPrice}>{commandeEnCours.commande.montant+''}</Text>
+							<View
+								style={{
+									maxWidth: "100%",
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}
+							>
+								<Text style={styles.detailsHeader}>Total</Text>
+								<Text style={styles.totalPrice}>
+									{commandeEnCours.commande.montant + " Da"}
+								</Text>
+							</View>
+							<View
+								style={{
+									maxWidth: "100%",
+									flexDirection: "row",
+									justifyContent: "space-between",
+								}}
+							>
+								<Text style={[styles.detailsHeader, { color: "#7C7C7C" }]}>
+									Livraison
+								</Text>
+								<Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>
+									500 Da
+								</Text>
+							</View>
 						</View>
-						<View
-							style={{
-								maxWidth: "100%",
-								flexDirection: "row",
-								justifyContent: "space-between",
-							}}
-						>
-							<Text style={[styles.detailsHeader, { color: "#7C7C7C" }]}>
-								Livraison
-							</Text>
-							<Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>
-								free
-							</Text>
-						</View>
-					</View>
-				</LinearGradient>
+					</LinearGradient>
+					{/* </> */}
+				</ScrollView>
+			</View>
+
+			<View style={styles.floating}>
 				<TouchableWithoutFeedback onPress={handleCommandePress}>
 					<LinearGradient
 						colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}

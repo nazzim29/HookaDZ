@@ -9,6 +9,7 @@ const initialState = {
 		},
 		produits: [],
 		extras: [],
+		reseted:false,
 	},
 	livreurs:[],
 	commande: null,
@@ -37,7 +38,7 @@ const commandeReducer = (state = initialState, action) => {
 			};
 		case "POST_COMMANDE":
 			state.commandes.push(action.payload);
-			state.commandeEnCours = action.payload;
+			state.commandeEnCours = initialState.commandeEnCours;
 			return {
 				...state,
 				commandeEnCours: initialState.commandeEnCours,
@@ -141,6 +142,7 @@ const commandeReducer = (state = initialState, action) => {
 					},
 					produits: [],
 					extras: [],
+					reseted:true,
 				},
 			};
 		default:

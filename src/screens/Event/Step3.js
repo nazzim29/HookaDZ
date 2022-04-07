@@ -130,6 +130,7 @@ export default function Forgot2(props) {
 								borderBottomColor: "#3299F1",
 								flexDirection: "row",
 								alignItems: "center",
+								paddingBottom:5,
 							},
 						]}
 					>

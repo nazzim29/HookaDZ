@@ -90,7 +90,7 @@ export default function ForgotPassword(props) {
 		setDate(day.dateString);
 	};
 	const handleSuivant = () => {
-		if (date && moment().diff(moment(date)) >= 0) {
+		if (!date || moment().diff(moment(date)) >= 0) {
 			return;
 		}
 		props.navigation.navigate("Event2", { date });
@@ -103,7 +103,7 @@ export default function ForgotPassword(props) {
 				</TouchableOpacity>
 			</View>
 			<KeyboardAwareScrollView style={{ flex: 1 }}>
-				<View style={styles.screen}>
+				<View style={{paddingBottom:15}}>
 					<Image style={styles.step} source={slider} />
 					<Text style={styles.title}>
 						Quand pouvons nous vous rendre service ?

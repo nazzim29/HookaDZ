@@ -223,6 +223,29 @@ export function getAllEvents() {
 			});
 	};
 }
+export function cancelCommande(id, navigation=null) {
+	return (dispatch, getState) => {
+		const token = getState().auth.userToken;
+		dispatch(startLoading());
+		return axios.delete(`http://chicha-dz.herokuapp.com/commandes/${id}`, {
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `TOKEN ${token || ""}`,
+			},
+		})
+			.then(({ data }) => {
+				dispatch(stopLoading());
+				dispatch(getAllCommandes())
+				if(navigation && navigation.canGoBack())navigation.goBack();
+			})
+			.catch(({ data, response }) => {
+				console.log(response);
+				dispatch(stopLoading());
+				dispatch(addError(data));
+				dispatch({ type: "LOG_OUT" });
+			});
+	}
+}
 export function getCommandeDetails(id) {
 	return (dispatch, getState) => {
 		const token = getState().auth.userToken;
@@ -318,7 +341,7 @@ export function PostCommande(navigate) {
 						.then(({ data }) => {
 							dispatch(stopLoading());
 							dispatch({
-								type: "POST_COMMANDES",
+								type: "CLEAR_COMMANDE",
 							});
 							navigate({
 								index: 1,

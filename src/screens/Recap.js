@@ -7,15 +7,15 @@ import {
 	FlatList,
 	TouchableWithoutFeedback,
 } from "react-native";
-import React, { useEffect } from "react";
+import React, {  } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
-import { ScrollView } from "native-base";
 import OrderRow from "../components/Order/OrderRow";
 import Extra from "../components/Extra";
 import SplashScreen from "./SplashScreen";
 import { deg } from "react-native-linear-gradient-degree";
-import { cancelCommande } from "../actions/commandes";
+import {  PostCommande } from "../actions/commandes";
+import { ScrollView } from "native-base";
 const styles = StyleSheet.create({
 	header: {
 		justifyContent: "flex-start",
@@ -68,12 +68,12 @@ const styles = StyleSheet.create({
 	},
 	floating: {
 		minWidth: "100%",
-		minHeight: "25%",
+		minHeight: 50,
 		padding: 15,
 		// paddingTop:0,
 		flexDirection: "column",
-		position: "absolute",
-		bottom: 15,
+		// position: "absolute",
+		// bottom: 15,
 	},
 	details: {
 		borderColor: "#2e8bdc",
@@ -109,9 +109,10 @@ const styles = StyleSheet.create({
 		padding: 2,
 		borderRadius: 10,
 		flex: 1,
-		height: "100%",
-		marginBottom: 10,
+		height: 100,
+        marginTop: 10,
 	},
+
 	txtbtn: {
 		fontFamily: "Inter-Bold",
 		fontSize: 20,
@@ -120,35 +121,39 @@ const styles = StyleSheet.create({
 });
 
 export default function CommandeDetails({ navigation, route }) {
+	const dispatch = useDispatch();
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
 	);
-	const dispatch = useDispatch();
-	const commande = useSelector((state) => state.commande.commande);
-	const cancelCommandeHandler = () => {
-		console.log(commande);
-		dispatch(cancelCommande(route.params.order._id, navigation));
-	};
+	const commande = useSelector((state) => state.commande.commandeEnCours);
+	const commandePressHandler = () => {
+		dispatch(PostCommande(navigation.reset));
+    };
+    const isLoading = useSelector((state) => state.ui.isLoading);
 	const products = useSelector((state) => state.product.products);
 	const extras = useSelector((state) => state.product.extras);
-	const renderRow = ({ item }) => {
-		if (item.type == "extra") {
-			console.log(item);
+    const renderRow = (item, index) => {
+		if (!!extras.find(el=>el._id == item.prd)) {
+			
 			return (
 				<Extra
 					extra={{
 						...extras.find((el) => el._id == item.prd),
 						...item,
 					}}
+					key={index}
 					style={{
-						width: "100%",
+						maxHeight: 100,
+                        minHeight: 100,
+                        marginVertical: 5
 					}}
 					editable={false}
 				/>
 			);
 		} else {
 			return (
-				<OrderRow
+                <OrderRow
+                    key={index}
 					order={{
 						...products.find((el) => el._id == item.prd),
 						...item,
@@ -156,40 +161,47 @@ export default function CommandeDetails({ navigation, route }) {
 					style={{
 						maxHeight: 100,
 						minHeight: 100,
-						width:"100%%",
-						// marginHorizontal: 2,
-						marginVertical: 15,
-						alignItems: "center",
+                        marginVertical: 5
 					}}
 					editable={false}
 					deletable={false}
 				/>
 			);
 		}
-	};
+    };
+    if(isLoading) return <SplashScreen />
 	return (
 		<>
 			<View style={styles.header}>
 				<TouchableOpacity onPress={() => navigation.goBack()}>
 					<Image source={arrowBackIcon} style={styles.headerIcon} />
 				</TouchableOpacity>
-				<Text style={styles.headerText}>Details</Text>
+				<Text style={styles.headerText}>Recap</Text>
 			</View>
-			{commande == null ? (
-				<SplashScreen />
-			) :(
-				<>
-					<View style={{ flex: 1, overflow: "hidden" }}>
-						<FlatList
-							data={commande}
-							style={{ marginBottom: 190, overflow: "visible",width:"100%" }}
-							contentContainerStyle={{ alignItems: "center",flex:1}}
-							renderItem={renderRow}
-							keyExtractor={(item, index) => index}
-						/>
-					</View>
-					<View style={styles.floating}>
-						<LinearGradient
+			<>
+				<View style={{ flex: 1, overflow: "hidden" }}>
+					<ScrollView
+						style={{
+							width: "100%",
+							flexGrow: 1,
+							marginBottom: 30,
+                            overflow: "visible",
+						}}
+						showsVerticalScrollIndicator={false}
+						contentInsetAdjustmentBehavior="scrollableAxes"
+						contentContainerStyle={{
+							width: "100%",
+                            justifyContent: "flex-start",
+                            alignItems: "center",
+                            flexGrow: 0,
+                            
+                            // borderWidth: 1,
+                            // borderColor: "#2e8bdc",
+						}}
+					>
+						{[...commande.produits, ...commande.extras].map(renderRow)}
+                        <LinearGradient
+                            key={commande.produits.length + commande.extras.length}
 							colors={[
 								"rgba(11, 103, 255, 1)",
 								"rgba(255, 255, 255, 0)",
@@ -197,7 +209,7 @@ export default function CommandeDetails({ navigation, route }) {
 							]}
 							locations={[0.1, 0.5, 1]}
 							{...deg(10)}
-							style={styles.border}
+							style={[styles.border,{width:"90%",marginTop:30}]}
 						>
 							<View
 								style={{
@@ -216,9 +228,7 @@ export default function CommandeDetails({ navigation, route }) {
 									}}
 								>
 									<Text style={styles.detailsHeader}>Total</Text>
-									<Text style={styles.totalPrice}>
-										{route.params.order.montant} Da
-									</Text>
+									<Text style={styles.totalPrice}>{commande.montant} Da</Text>
 								</View>
 								<View
 									style={{
@@ -236,27 +246,27 @@ export default function CommandeDetails({ navigation, route }) {
 								</View>
 							</View>
 						</LinearGradient>
-						{!commande.confirmation && (
-							<TouchableWithoutFeedback onPress={cancelCommandeHandler}>
-								<LinearGradient
-									colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}
-									{...deg(60)}
-									style={{
-										padding: 1,
-										width: "100%",
-										height: 40,
-										borderRadius: 10,
-										alignItems: "center",
-										justifyContent: "center",
-									}}
-								>
-									<Text style={styles.txtbtn}>Anuller</Text>
-								</LinearGradient>
-							</TouchableWithoutFeedback>
-						)}
-					</View>
-				</>
-			)}
+					</ScrollView>
+				</View>
+				<View style={styles.floating}>
+					<TouchableWithoutFeedback onPress={commandePressHandler}>
+						<LinearGradient
+							colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}
+							{...deg(60)}
+							style={{
+								padding: 1,
+								width: "100%",
+								height: 40,
+								borderRadius: 10,
+								alignItems: "center",
+								justifyContent: "center",
+							}}
+						>
+							<Text style={styles.txtbtn}>Commander</Text>
+						</LinearGradient>
+					</TouchableWithoutFeedback>
+				</View>
+			</>
 		</>
 	);
 }

@@ -81,9 +81,8 @@ export default function Forgot2(props) {
 	const checkIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "check-icon")
 	);
-	const resend = () => {};
 	const suivantHandler = () => {
-		props.navigation.navigate("Login");
+		props.navigation.navigate("Home");
 	};
 	return (
 		<>

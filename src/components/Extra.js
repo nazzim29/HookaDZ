@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: "30%",
 		height: "100%",
+		backgroundColor: "white",
 		resizeMode: "contain",
 		borderWidth: 1,
 		borderColor: "white",
@@ -49,7 +50,7 @@ export default function Extra(props) {
 	const { extra } = props;
 	const dispatch = useDispatch();
 	const appleIcon = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "apple")
+		state.ui.assets.find((el) => el.name + "." + el.type== extra.image_url)
 	);
 	const PlusIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "plus-icon")

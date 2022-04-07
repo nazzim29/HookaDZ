@@ -32,7 +32,6 @@ export function login(credidentials) {
 			.then(({ data }) => {
 				console.log();
 				AsyncStorage.setItem("token", data.token)
-
 					.then((hh) => {
 						dispatch(stopLoading());
 						dispatch({

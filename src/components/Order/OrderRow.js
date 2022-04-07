@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 		padding: 2,
 		borderRadius: 10,
 		minWidth: "90%",
-		minHeight: 100,
+		height:"100%",
 		color: "white",
 		marginVertical: 20,
 	},
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		width: "30%",
 		height: "100%",
-		resizeMode: "contain",
+		resizeMode: "cover",
 		borderWidth: 1,
 		borderColor: "white",
 	},
@@ -49,7 +49,7 @@ export default function OrderRow(props) {
 	const { order } = props;
 	const dispatch = useDispatch();
 	const appleIcon = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "apple")
+		state.ui.assets.find((el) => el.name + "."+el.type == order.image_url)
 	);
 	const PlusIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "plus-icon")
@@ -154,8 +154,8 @@ export default function OrderRow(props) {
 					style={{
 						padding: 4,
 						position: "absolute",
-						top: 10,
-						right: -10,
+						top: 5,
+						right: 5,
 					}}
 				>
 					<TouchableWithoutFeedback onPressOut={removeFromCart}>

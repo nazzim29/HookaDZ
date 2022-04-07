@@ -8,16 +8,19 @@ import { deg } from "react-native-linear-gradient-degree";
 import { addProduit } from "../actions/commandes";
 const styles = StyleSheet.create({
 	border: {
-		padding: 2,
+		padding: 3,
 		borderRadius: 10,
 		flex: 1,
 		height: "100%",
 	},
 	card: {
 		minWidth: "40%",
-		height: "40%",
+		maxWidth: "40%",
+		minHeight: 100,
+		maxHeight: 200,
 		flex: 1,
-		marginHorizontal: 10,
+		padding:5,
+		marginHorizontal: 5,
 		backgroundColor: "#0D1117",
 		flexDirection: "column",
 		borderRadius: 10,
@@ -25,15 +28,16 @@ const styles = StyleSheet.create({
 	},
 	imageContainer: {
 		width: "100%",
-		height: "60%",
+		height: "75%",
 	},
 	image: {
-		resizeMode: "contain",
+		resizeMode: "cover",
 		flex: 1,
+		width: "100%",
 	},
 	details: {
-		marginTop: "5%",
-		height: "35%",
+		marginTop: 5,
+		height: "25%",
 		width: "100%",
 		flexDirection: "column",
 		color: "#C9D1D9",
@@ -46,16 +50,15 @@ const styles = StyleSheet.create({
 		width: 30,
 		borderRadius: 999,
 		position: "absolute",
-		bottom: -15,
-		right: -15,
+		bottom: -10,
+		right: -10,
 	},
 	productTitle: {
 		fontSize: 18,
 		marginLeft: 5,
-		marginTop: 5,
 		fontFamily: "Inter-Regular",
 		color: "#C9D1D9",
-		marginBottom: 5,
+		// marginBottom: 5,
 	},
 	price: {
 		fontSize: 18,
@@ -68,9 +71,12 @@ const styles = StyleSheet.create({
 export default (props) => {
 	const { index, product } = props;
 	const dispatch = useDispatch();
-	const appleIcon = useSelector((state) =>
-		state.ui.assets.find((el) => el.name == "apple")
-	);
+	const appleIcon = useSelector((state) => {
+			return state.ui.assets.find(
+				(el) => el.name + "." + el.type == product.image_url
+			);
+	});
+	
 	const plusIcon = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "plus-icon")
 	);
@@ -91,7 +97,7 @@ export default (props) => {
 					style={styles.border}
 				>
 					<View
-						style={{ backgroundColor: "#0D1117", flex: 1, borderRadius: 10 }}
+						style={{ backgroundColor: "#0D1117", flex: 1, borderRadius: 10, overflow:"hidden" }}
 					>
 						<Image
 							source={appleIcon}

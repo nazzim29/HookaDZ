@@ -14,6 +14,7 @@ import SplashScreen from "./SplashScreen";
 import { Locate } from "../actions/commandes";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
+import EventCard from "../components/EventCard";
 const styles = StyleSheet.create({
 	header: {
 		justifyContent: "space-between",
@@ -21,8 +22,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom:15,
-		paddingVertical: 2,
+		paddingVertical: 10,
 		paddingHorizontal: 10,
 	},
 	headerText: {
@@ -56,8 +56,7 @@ const styles = StyleSheet.create({
 		// overflow: "hidden",
 		flexDirection: "row",
 		flexWrap: "wrap",
-		borderWidth: 1,
-		borderColor: "#7638FF",
+		flexGrow: 0,
 	},
 	locationHeader: {
 		// backgroundColor: "#161B22",
@@ -86,12 +85,11 @@ const styles = StyleSheet.create({
 		maxHeight: 250,
 	},
 	panierBtn: {
-		width: "80%",
-		height: "7%",
+		width: "75%",
+		height: 50,
 		backgroundColor: "#7638FF",
 		borderRadius: 15,
 		alignItems: "center",
-		alignSelf: "center",
 		flexDirection: "row",
 		justifyContent: "center",
 	},
@@ -100,14 +98,13 @@ const styles = StyleSheet.create({
 		padding: 15,
 		backgroundColor: "#161B22",
 		borderColor: "#3299F1",
-		position: "relative",
 		borderWidth: 0.25,
 		shadowColor: "#3299F1",
 		shadowOffset: {
 			width: 0,
 			height: 0,
 		},
-		shadowOpacity: 0.62,
+		shadowOpacity: 0.72,
 		shadowRadius: 3.84,
 		elevation: 14,
 	},
@@ -138,23 +135,23 @@ export default (props) => {
 	const logo = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "logo-1")
 	);
+	const bagIcon = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "bag-icon")
+	);
 	const currentAddress = useSelector((state) => state.ui.currentAddress);
 	let products = useSelector((state) => state.product.products);
 	const isLoading = useSelector((state) => state.ui.isLoading);
 	const handleBagClick = () => {
+		console.log('clicked')
 		props.navigation.navigate("Panier");
 	};
 	useEffect(() => {
 		dispatch(Locate());
 	}, []);
 	if (isLoading) return <SplashScreen />;
-	console.log(products.length)
 	return (
 		<>
 			<Box style={styles.container}>
-				<View style={{ width: "100%", height: 150 }}>
-					<Image style={styles.headerText} source={logo} />
-				</View>
 				<View style={styles.header}>
 					<View style={styles.locationHeader}>
 						<Text style={styles.locationText}>Livrer a </Text>
@@ -171,6 +168,7 @@ export default (props) => {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
+
 				{/* <TouchableWithoutFeedback
 					onPress={() => props.navigation.navigate("Event1")}
 				>
@@ -209,29 +207,72 @@ export default (props) => {
 						</Text>
 					</Box>
 				</TouchableWithoutFeedback> */}
-				<ScrollView
-					style={{
-						borderWidth: 1,
-						borderColor: "#3299F1",
-						width: "100%",
-						flexGrow: 1,
-					}}
-					showsVerticalScrollIndicator={false}
-					contentInsetAdjustmentBehavior="scrollableAxes"
-					contentContainerStyle={styles.screenContent}
-				>
-					{products.map((el) => (
-						<Card key={el._id} product={el} />
-					))}
-				</ScrollView>
+				<View style={{ overflow: "hidden", flex: 1 }}>
+					<ScrollView
+						// stickyHeaderIndices={[0]}
+						style={{
+							width: "100%",
+							flexGrow: 1,
+							marginBottom: panier.length > 0 ? "30%" : "0%",
+							overflow: "visible",
+						}}
+						showsVerticalScrollIndicator={false}
+						contentInsetAdjustmentBehavior="scrollableAxes"
+						contentContainerStyle={styles.screenContent}
+					>
+						<View style={{ width: "100%", height: 150 }}>
+							<Image style={styles.headerText} source={logo} />
+						</View>
+						{products.map((el) => (
+							<Card key={el._id} product={el} />
+						))}
+						{products.length != 0 &&<EventCard {...props}/>}
+					</ScrollView>
+				</View>
 			</Box>
 			{panier.length > 0 && (
-				<TouchableWithoutFeedback onPressIn={handleBagClick}>
-					<View style={styles.panierBtn}>
-						<Text style={styles.paniertxt}>Panier</Text>
-						<Image source={arrowIcon} style={styles.arrowIcon} />
-					</View>
-				</TouchableWithoutFeedback>
+				<LinearGradient
+					colors={["rgba(13, 17, 23,0.8)", "rgba(13, 17, 23,1)"]}
+					style={{
+						width: "100%",
+						justifyContent: "space-evenly",
+						position: "absolute",
+						bottom: 0,
+						alignItems: "center",
+						flexDirection: "row-reverse",
+						paddingVertical: 15,
+						shadowColor: "#5D31BF",
+						shadowOffset: { width: 0, height: -5 },
+						shadowOpacity: 0.72,
+						shadowRadius: 3.84,
+						elevation: 14,
+					}}
+				>
+					<TouchableWithoutFeedback onPress={handleBagClick}>
+						<View
+							style={[
+								styles.dropShadow,
+								{
+									backgroundColor: "#161B22",
+									padding: 15,
+									borderRadius: 50,
+								},
+							]}
+						>
+							<Image source={bagIcon} style={{ width: 30, height: 30 }} />
+						</View>
+					</TouchableWithoutFeedback>
+					<TouchableWithoutFeedback onPressIn={handleBagClick}>
+						<LinearGradient
+							style={styles.panierBtn}
+							colors={["#5D31BF", "#0B67FFD6"]}
+							{...deg(90)}
+						>
+							<Text style={styles.paniertxt}>Aller au panier</Text>
+							<Image source={arrowIcon} style={styles.arrowIcon} />
+						</LinearGradient>
+					</TouchableWithoutFeedback>
+				</LinearGradient>
 			)}
 		</>
 	);

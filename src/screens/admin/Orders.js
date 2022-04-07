@@ -4,15 +4,17 @@ import {
 	Text,
 	View,
 	Image,
-	Pressable,
+	ActivityIndicator,
+	RefreshControl,
 	TouchableWithoutFeedback,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Card from "../../components/admin/card";
-import SplashScreen from "../SplashScreen";
 import Event from "../../components/admin/Event";
+import { getAllCommandes, getAllEvents } from "../../actions/commandes";
 export default function Orders(props) {
+	const dispatch = useDispatch();
 	const isLoading = useSelector((state) => state.ui.isLoading);
 	const orders = useSelector((state) => state.commande.commandes);
 	const currentId = useSelector((state) => state.auth._id);
@@ -20,7 +22,13 @@ export default function Orders(props) {
 	const [section, setSection] = React.useState("orders");
 	const [showedOrders, setShowedOrders] = React.useState([]);
 	const events = useSelector((state) => state.commande.evenements);
-
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		dispatch(getAllCommandes());
+		dispatch(getAllEvents());
+			setRefreshing(false);
+	}, [refreshing]);
 	useEffect(() => {
 		if (section == "orders") {
 			setShowedOrders(
@@ -53,7 +61,6 @@ export default function Orders(props) {
 			);
 		}
 	}, [orders, section]);
-	if(isLoading) return <SplashScreen />
 	return (
 		<View style={styles.container}>
 			<View style={styles.column}>
@@ -121,14 +128,26 @@ export default function Orders(props) {
 					)}
 				</View>
 			</View>
-			{section != "event" ? (
-				<ScrollView>
+			{isLoading ? (
+				<View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+					<ActivityIndicator size="large" color="#0000ff" />
+				</View>
+			) : section != "event" ? (
+				<ScrollView
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+				>
 					{showedOrders.map((order, index) => (
 						<Card order={order} key={index} {...props} />
 					))}
 				</ScrollView>
 			) : (
-				<ScrollView>
+				<ScrollView
+					refreshControl={
+						<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+					}
+				>
 					{events.map((event, index) => (
 						<Event event={event} key={index} {...props} />
 					))}
@@ -144,12 +163,13 @@ const styles = StyleSheet.create({
 		height: "100%",
 	},
 	column: {
+		backgroundColor: "",
 		paddingRight: 20,
 		paddingLeft: 20,
-		paddingBottom: 10,
+		backgroundColor: "#161B22",
+		marginBottom: 20,
 	},
 	nav: {
-		// backgroundColor: "#161B22",
 		padding: 15,
 	},
 	admin: {
@@ -162,7 +182,7 @@ const styles = StyleSheet.create({
 		display: "flex",
 		flexDirection: "row",
 		justifyContent: "space-around",
-		paddingVertical: 15,
+		paddingVertical: 5,
 		paddingHorizontal: 3,
 	},
 

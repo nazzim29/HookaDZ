@@ -173,7 +173,7 @@ export default function Forgot2(props) {
 						{moment(props.route.params.date).format("dddd D MMMM")}
 					</Text>
 					<Input
-						icon={"key-icon"}
+						icon={"marker-icon"}
 						style={{ marginTop: "5%", marginHorizontal: "5%", width: "90%" }}
 					>
 						<TextInput

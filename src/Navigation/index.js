@@ -25,6 +25,7 @@ import Historique from "../screens/Historique";
 import Panier from "../screens/Panier";
 import CommandeDetails from "../screens/CommandeDetails";
 import Extras from "../screens/Extras";
+import Recap from "../screens/Recap";
 import Event1 from "../screens/Event/Step1";
 import Event2 from "../screens/Event/Step2";
 import Event3 from "../screens/Event/Step3";
@@ -70,6 +71,13 @@ const AppStackScreen = () => {
 				<AppStack.Screen
 					name="Home"
 					component={Home}
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<AppStack.Screen
+					name="Recap"
+					component={Recap}
 					options={{
 						headerShown: false,
 					}}

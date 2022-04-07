@@ -1,5 +1,6 @@
 import { StatusBar } from "expo-status-bar";
-import { SafeAreaView,Image} from "react-native";
+import {Image } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React, {useState } from "react";
 import Navigation from "./src/Navigation";
 import { Provider,useSelector } from "react-redux";
@@ -22,6 +23,7 @@ export default function App({ navigation }) {
 						height: "100%",
 						width: "100%",
 						overflow: "hidden",
+						paddingTop: StatusBar.currentHeight,
 						backgroundColor: "#0D1117",
 						
 						flex: 1,

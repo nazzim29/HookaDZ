@@ -24,7 +24,6 @@ export default function Details(props) {
 		state.ui.assets.find((el) => el.name == "map-icon")
 	);
 	const c = useSelector((state) => state.commande.commande);
-	console.log(c)
 	const isLoading = useSelector((state) => state.ui.isLoading);
 	const order = props.route.params;
 	
@@ -34,8 +33,10 @@ export default function Details(props) {
 	const openInGoogleMap = () => {
 		try {
 			Linking.openURL(
-				`comgooglemapsurl://www.google.com/maps/?q=@${order.latitude},${order.longitude}&zoom=15&view=traffic`
-				);
+				Platform.select({
+					ios: `comgooglemapsurl://www.google.com/maps/?q=@${order.latitude},${order.longitude}&zoom=15&view=traffic`,
+					android: `https://www.google.com/maps/?q=@${order.latitude},${order.longitude}&zoom=15&view=traffic`,
+				}));
 		} catch (err) {
 			console.log("can't open google maps")
 		}
@@ -71,7 +72,7 @@ export default function Details(props) {
 								order={{ ...products.find((p) => p._id == el.prd), ...el }}
 								editable={false}
 								deletable={false}
-								style={{ marginHorizontal: 10 }}
+								style={{ marginHorizontal: 10,marginVertical:5,maxHeight:100 }}
 							/>
 						))}
 				{c &&
