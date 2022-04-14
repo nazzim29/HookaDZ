@@ -14,6 +14,7 @@ import {
   addProduit,
   minusProduit,
 } from "../../actions/commandes";
+import { withTheme } from "react-native-elements";
 const styles = StyleSheet.create({
   border: {
     padding: 2,
@@ -71,8 +72,27 @@ export default function OrderRow(props) {
     dispatch(minusProduit(order));
   };
   return (
-    <View style={[{ position: "relative" }, props.style]}>
-      <LinearGradient
+    <View
+      style={[
+        {
+          position: "relative",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "85%",
+          paddingTop: 10,
+          paddingBottom: 10,
+        },
+        // props.style,
+      ]}>
+      <Text style={{ fontSize: 15, color: "white" }}>
+        {`${order?.nom} (${order?.prix || "NaN"} Da X ${order?.quantite}) `}
+      </Text>
+      <Text style={{ fontSize: 15, color: "white" }}>
+        {order?.prix ? `${order?.quantite * order?.prix}` : "NaN"} Da
+      </Text>
+      {/* <LinearGradient
         colors={[
           "rgba(11, 103, 255, 1)",
           "rgba(255, 255, 255, 0)",
@@ -143,7 +163,7 @@ export default function OrderRow(props) {
             </View>
           </View>
         </View>
-      </LinearGradient>
+      </LinearGradient> */}
       {props.deletable !== false && (
         <View
           style={{
