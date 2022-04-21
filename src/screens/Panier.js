@@ -121,6 +121,7 @@ export default function Commandes(props) {
 	const t = useSelector((state) => state.commande.commandeEnCours.produits);
 	const produits = useSelector((state) => state.product.products);
 	useEffect(() => {
+		
 		if (commandeEnCours.produits.length === 0 && !commandeEnCours.reseted) {
 			console.log("salut");
 			props.navigation.popToTop();
@@ -133,9 +134,12 @@ export default function Commandes(props) {
 	return (
 		<>
 			<View style={styles.header}>
-				<TouchableOpacity style={{flexDirection:'row',alignItems:'center',}} onPress={() => props.navigation.goBack()}>
-						<Image source={arrowBackIcon} style={styles.headerIcon} />
-						<Text style={styles.headerText}>Panier</Text>
+				<TouchableOpacity
+					style={{ flexDirection: "row", alignItems: "center" }}
+					onPress={() => props.navigation.goBack()}
+				>
+					<Image source={arrowBackIcon} style={styles.headerIcon} />
+					<Text style={styles.headerText}>Panier</Text>
 				</TouchableOpacity>
 			</View>
 			<View style={{ flex: 1, overflow: "hidden" }}>
@@ -147,7 +151,7 @@ export default function Commandes(props) {
 						// marginBottom:70,
 					}}
 					showsVerticalScrollIndicator={false}
-					contentInsetAdjustmentBehavior='scrollableAxes'
+					contentInsetAdjustmentBehavior="scrollableAxes"
 					contentContainerStyle={{
 						width: "100%",
 						justifyContent: "flex-start",
@@ -155,12 +159,11 @@ export default function Commandes(props) {
 						// flexWrap: "wrap",
 						flexGrow: 0,
 					}}
-					
 				>
 					{/* <> */}
 					{commandeEnCours.produits.map((item, index) => (
 						<OrderRow
-								key={index}
+							key={index}
 							style={{
 								maxHeight: 100,
 								minHeight: 100,
@@ -171,8 +174,57 @@ export default function Commandes(props) {
 							order={{ ...produits.find((el) => el._id == item.prd), ...item }}
 						/>
 					))}
-					<LinearGradient
+					<OrderRow
 						key={commandeEnCours.produits.length}
+						style={{
+							maxHeight: 100,
+							minHeight: 100,
+							marginHorizontal: 5,
+							marginVertical: 10,
+							alignItems: "center",
+						}}
+						order={{
+							image_url: "bouteille-eau.jpg",
+							nom: "Bouteille d'eau",
+							prix: "Offert",
+							quantite: 1,
+						}}
+						editable={false}
+						deletable={false}
+					/>
+					<OrderRow
+						key={commandeEnCours.produits.length + 1}
+						style={{
+							maxHeight: 100,
+							minHeight: 100,
+							marginHorizontal: 5,
+							marginVertical: 10,
+							alignItems: "center",
+						}}
+						order={{
+							image_url: "charbon.jpg",
+							nom: "Charbon",
+							prix: "Offert",
+							quantite: 1,
+						}}
+						editable={false}
+						deletable={false}
+						/>
+					<OrderRow
+						editable={false}
+						deletable={false}
+						key={commandeEnCours.produits.length + 2}
+						style={{
+							maxHeight: 100,
+							minHeight: 100,
+							marginHorizontal: 5,
+							marginVertical: 10,
+							alignItems: "center",
+						}}
+						order={{ image_url: "tuyau.png", nom: "Tuyau", prix: "Offert", quantite: 1 }}
+					/>
+					<LinearGradient
+						key={commandeEnCours.produits.length + 3}
 						colors={[
 							"rgba(11, 103, 255, 1)",
 							"rgba(255, 255, 255, 0)",

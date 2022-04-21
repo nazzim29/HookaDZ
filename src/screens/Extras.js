@@ -195,7 +195,7 @@ export default function Extras(props) {
 									Livraison
 								</Text>
 								<Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>
-									free
+									500 Da
 								</Text>
 							</View>
 						</View>

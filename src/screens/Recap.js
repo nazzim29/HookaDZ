@@ -183,204 +183,212 @@ export default function CommandeDetails({ navigation, route }) {
   };
   if (isLoading) return <SplashScreen />;
   return (
-    <>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image source={arrowBackIcon} style={styles.headerIcon} />
-        </TouchableOpacity>
-        <Text style={styles.headerText}>Recap</Text>
-      </View>
-      <>
-        <View style={{ display: "flex", overflow: "hidden", maxHeight: "80%" }}>
-          <View style={{ width: "100%", paddingLeft: 20, marginBottom: 8 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
-              Resumé de la commande :
-            </Text>
-          </View>
-          <ScrollView
-            style={{
-              width: "100%",
-              flexGrow: 1,
-              marginBottom: 30,
-              overflow: "visible",
-              overflow: "hidden",
-            }}
-            showsVerticalScrollIndicator={false}
-            contentInsetAdjustmentBehavior="scrollableAxes"
-            contentContainerStyle={{
-              width: "100%",
-              justifyContent: "flex-start",
-              alignItems: "center",
-              flexGrow: 0,
+		<>
+			<View style={styles.header}>
+				<TouchableOpacity onPress={() => navigation.goBack()}>
+					<Image source={arrowBackIcon} style={styles.headerIcon} />
+				</TouchableOpacity>
+				<Text style={styles.headerText}>Recap</Text>
+			</View>
+			<>
+				<View style={{ display: "flex", overflow: "hidden", maxHeight: "80%" }}>
+					<View style={{ width: "100%", paddingLeft: 20, marginBottom: 8 }}>
+						<Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
+							Resumé de la commande :
+						</Text>
+					</View>
+					<ScrollView
+						style={{
+							width: "100%",
+							flexGrow: 1,
+							marginBottom: 30,
+							overflow: "visible",
+							overflow: "hidden",
+						}}
+						showsVerticalScrollIndicator={false}
+						contentInsetAdjustmentBehavior="scrollableAxes"
+						contentContainerStyle={{
+							width: "100%",
+							justifyContent: "flex-start",
+							alignItems: "center",
+							flexGrow: 0,
 
-              // borderWidth: 1,
-              // borderColor: "#2e8bdc",
-            }}>
-            {[...commande.produits, ...commande.extras].map(renderRow)}
-
-            {/* <LinearGradient
-              key={commande.produits.length + commande.extras.length}
-              colors={[
-                "rgba(11, 103, 255, 1)",
-                "rgba(255, 255, 255, 0)",
-                "rgba(11, 103, 255, 1)",
-              ]}
-              locations={[0.1, 0.5, 1]}
-              {...deg(10)}
-              style={[styles.border, { width: "90%", marginTop: 30 }]}>
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: "#0D1117",
-                  padding: 10,
-                  borderRadius: 10,
-                  justifyContent: "space-evenly",
-                }}>
-                <View
-                  style={{
-                    maxWidth: "100%",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}>
-                  <Text style={styles.detailsHeader}>Total</Text>
-                  <Text style={styles.totalPrice}>{commande.montant} Da</Text>
-                </View>
-                <View
-                  style={{
-                    maxWidth: "100%",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}>
-                  <Text style={[styles.detailsHeader, { color: "#7C7C7C" }]}>
-                    Livraison
-                  </Text>
-                  <Text style={[styles.totalPrice, { color: "#7C7C7C" }]}>
-                    500 Da
-                  </Text>
-                </View>
-              </View>
-            </LinearGradient> */}
-          </ScrollView>
-          <View
-            style={[
-              {
-                position: "relative",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: "100%",
-                paddingVertical: 10,
-                paddingHorizontal: 30,
-              },
-              // props.style,
-            ]}>
-            <Text style={{ fontSize: 15, color: "white" }}>
-              Total des produits :
-            </Text>
-            <Text style={{ fontSize: 15, color: "white" }}>
-              {commande?.montant} DA
-            </Text>
-          </View>
-          <View
-            style={[
-              {
-                position: "relative",
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "space-between",
-                width: "100%",
-                paddingVertical: 10,
-                paddingHorizontal: 30,
-              },
-              // props.style,
-            ]}>
-            <Text style={{ fontSize: 15, color: "white" }}>
-              Frais de livraison :
-            </Text>
-            <Text style={{ fontSize: 15, color: "white" }}>500 DA</Text>
-          </View>
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              alignItems: "center",
-              justifyContent: "space-between",
-              width: "100%",
-              paddingVertical: 10,
-              paddingHorizontal: 30,
-            }}>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>
-              Total de la commande :{" "}
-            </Text>
-            <Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>
-              {commande?.montant ? commande?.montant + 500 : "NAN"} DA
-            </Text>
-          </View>
-        </View>
-        <LinearGradient
-          colors={["rgba(13, 17, 23,0.8)", "rgba(13, 17, 23,1)"]}
-          style={{
-            width: "100%",
-            justifyContent: "space-evenly",
-            position: "absolute",
-            bottom: 0,
-            alignItems: "center",
-            flexDirection: "row-reverse",
-            paddingVertical: 15,
-            shadowColor: "#5D31BF",
-            shadowOffset: { width: 0, height: -5 },
-            shadowOpacity: 0.72,
-            shadowRadius: 3.84,
-            elevation: 14,
-          }}>
-          <View style={styles.floating}>
-            <View
-              style={{
-                display: "flex",
-                width: "40%",
-              }}>
-              <TouchableWithoutFeedback onPress={commandeCancelHandler}>
-                <LinearGradient
-                  colors={["#A40606", "#D98324"]}
-                  {...deg(60)}
-                  style={{
-                    padding: 1,
-                    width: "100%",
-                    height: 40,
-                    borderRadius: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}>
-                  <Text style={styles.txtbtn}>Annuler</Text>
-                </LinearGradient>
-              </TouchableWithoutFeedback>
-            </View>
-            <View
-              style={{
-                display: "flex",
-                width: "40%",
-              }}>
-              <TouchableWithoutFeedback onPress={commandePressHandler}>
-                <LinearGradient
-                  colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}
-                  {...deg(60)}
-                  style={{
-                    padding: 1,
-                    width: "100%",
-                    height: 40,
-                    borderRadius: 10,
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}>
-                  <Text style={styles.txtbtn}>Commander</Text>
-                </LinearGradient>
-              </TouchableWithoutFeedback>
-            </View>
-          </View>
-        </LinearGradient>
-      </>
-    </>
-  );
+							// borderWidth: 1,
+							// borderColor: "#2e8bdc",
+						}}
+					>
+						{[...commande.produits, ...commande.extras].map(renderRow)}
+						<Extra
+							extra={{
+                nom: "Bouteille d'eau",
+                prix: "Offert",
+                quantite:1
+							}}
+							key={[...commande.produits, ...commande.extras].length}
+							style={{
+								maxHeight: 100,
+								minHeight: 100,
+								marginVertical: 5,
+							}}
+							editable={false}
+						/>
+						<Extra
+							extra={{
+                nom: "Tuyeau",
+                prix: "Offert",
+                quantite:1
+							}}
+							key={[...commande.produits, ...commande.extras].length+1}
+							style={{
+								maxHeight: 100,
+								minHeight: 100,
+								marginVertical: 5,
+							}}
+							editable={false}
+						/>
+						<Extra
+							extra={{
+                nom: "Charbon",
+                prix: "Offert",
+                quantite:1
+							}}
+							key={[...commande.produits, ...commande.extras].length+2}
+							style={{
+								maxHeight: 100,
+								minHeight: 100,
+								marginVertical: 5,
+							}}
+							editable={false}
+						/>
+					</ScrollView>
+					<View
+						style={[
+							{
+								position: "relative",
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								justifyContent: "space-between",
+								width: "100%",
+								paddingVertical: 10,
+								paddingHorizontal: 30,
+							},
+							// props.style,
+						]}
+					>
+						<Text style={{ fontSize: 15, color: "white" }}>
+							Total des produits :
+						</Text>
+						<Text style={{ fontSize: 15, color: "white" }}>
+							{commande?.montant} DA
+						</Text>
+					</View>
+					<View
+						style={[
+							{
+								position: "relative",
+								display: "flex",
+								flexDirection: "row",
+								alignItems: "center",
+								justifyContent: "space-between",
+								width: "100%",
+								paddingVertical: 10,
+								paddingHorizontal: 30,
+							},
+							// props.style,
+						]}
+					>
+						<Text style={{ fontSize: 15, color: "white" }}>
+							Frais de livraison :
+						</Text>
+						<Text style={{ fontSize: 15, color: "white" }}>500 DA</Text>
+					</View>
+					<View
+						style={{
+							display: "flex",
+							flexDirection: "row",
+							alignItems: "center",
+							justifyContent: "space-between",
+							width: "100%",
+							paddingVertical: 10,
+							paddingHorizontal: 30,
+						}}
+					>
+						<Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>
+							Total de la commande :{" "}
+						</Text>
+						<Text style={{ fontSize: 15, fontWeight: "bold", color: "white" }}>
+							{commande?.montant ? commande?.montant + 500 : "NAN"} DA
+						</Text>
+					</View>
+				</View>
+				<LinearGradient
+					colors={["rgba(13, 17, 23,0.8)", "rgba(13, 17, 23,1)"]}
+					style={{
+						width: "100%",
+						justifyContent: "space-evenly",
+						position: "absolute",
+						bottom: 0,
+						alignItems: "center",
+						flexDirection: "row-reverse",
+						paddingVertical: 15,
+						shadowColor: "#5D31BF",
+						shadowOffset: { width: 0, height: -5 },
+						shadowOpacity: 0.72,
+						shadowRadius: 3.84,
+						elevation: 14,
+					}}
+				>
+					<View style={styles.floating}>
+						<View
+							style={{
+								display: "flex",
+								width: "40%",
+							}}
+						>
+							<TouchableWithoutFeedback onPress={commandeCancelHandler}>
+								<LinearGradient
+									colors={["#A40606", "#D98324"]}
+									{...deg(60)}
+									style={{
+										padding: 1,
+										width: "100%",
+										height: 40,
+										borderRadius: 10,
+										alignItems: "center",
+										justifyContent: "center",
+									}}
+								>
+									<Text style={styles.txtbtn}>Annuler</Text>
+								</LinearGradient>
+							</TouchableWithoutFeedback>
+						</View>
+						<View
+							style={{
+								display: "flex",
+								width: "40%",
+							}}
+						>
+							<TouchableWithoutFeedback onPress={commandePressHandler}>
+								<LinearGradient
+									colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}
+									{...deg(60)}
+									style={{
+										padding: 1,
+										width: "100%",
+										height: 40,
+										borderRadius: 10,
+										alignItems: "center",
+										justifyContent: "center",
+									}}
+								>
+									<Text style={styles.txtbtn}>Commander</Text>
+								</LinearGradient>
+							</TouchableWithoutFeedback>
+						</View>
+					</View>
+				</LinearGradient>
+			</>
+		</>
+	);
 }

@@ -66,26 +66,29 @@ export default function Extra(props) {
     dispatch(minusExtra(extra));
   };
   return (
-    <View
-      style={[
-        {
-          position: "relative",
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "85%",
-          paddingVertical: 10,
-        },
-        // props.style,
-      ]}>
-      <Text style={{ fontSize: 15, color: "white" }}>
-        {`${extra?.nom} (${extra?.prix || "NaN"} Da X ${extra?.quantite}) `}
-      </Text>
-      <Text style={{ fontSize: 15, color: "white" }}>
-        {extra?.prix ? `${extra?.quantite * extra?.prix}` : "NaN"} Da
-      </Text>
-      {/* <LinearGradient
+		<View
+			style={[
+				{
+					position: "relative",
+					display: "flex",
+					flexDirection: "row",
+					alignItems: "center",
+					justifyContent: "space-between",
+					width: "85%",
+					paddingVertical: 10,
+				},
+				// props.style,
+			]}
+		>
+			<Text style={{ fontSize: 15, color: "white" }}>
+				{extra?.nom} (
+				{typeof extra?.prix == "string" ? extra.prix : `${extra.prix} Da`} X{" "}
+				{extra?.quantite})
+			</Text>
+			<Text style={{ fontSize: 15, color: "white" }}>
+				{typeof extra?.prix == "string" ? extra.prix : extra.prix + "Da"}
+			</Text>
+			{/* <LinearGradient
                   colors={[
                       "rgba(11, 103, 255, 1)",
                       "rgba(255, 255, 255, 0)",
@@ -162,7 +165,7 @@ export default function Extra(props) {
                       </View>
                   </View>
               </LinearGradient> */}
-      {/* {props.deletable !== false && (
+			{/* {props.deletable !== false && (
                   <View
                       style={{
                           padding: 4,
@@ -176,6 +179,6 @@ export default function Extra(props) {
                       </TouchableWithoutFeedback>
                   </View>
               )} */}
-    </View>
-  );
+		</View>
+	);
 }
