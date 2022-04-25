@@ -21,7 +21,6 @@ export default function Details(props) {
 	const callClient = () => {
 		Linking.openURL(`tel:${event.user.numero}`);
 	};
-	console.log({ event });
 	return (
 		<>
 			<View style={styles.nav}>

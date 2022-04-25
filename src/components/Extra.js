@@ -61,7 +61,6 @@ export default function Extra(props) {
     dispatch(addExtra(extra));
   };
   const minusQuantite = () => {
-    console.log(extra.quantite);
     if (extra.quantite == 0) return;
     dispatch(minusExtra(extra));
   };

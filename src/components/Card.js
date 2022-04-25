@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
 	price: {
 		fontSize: 18,
 		marginLeft: 5,
+		height:20,
 		fontFamily: "Inter-Bold",
 		color: "#3299F1",
 	},

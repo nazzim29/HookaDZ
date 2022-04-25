@@ -163,7 +163,6 @@ export function getLivreurs() {
         },
       })
       .then(({ data }) => {
-        console.log({ data });
         dispatch(stopLoading());
         dispatch({
           type: "GET_LIVREURS",
@@ -196,7 +195,6 @@ export function getAllCommandes() {
         });
       })
       .catch(({ data, response }) => {
-        console.log(response);
         dispatch(stopLoading());
         dispatch(addError(data));
         dispatch({ type: "LOG_OUT" });
@@ -216,7 +214,6 @@ export function getAllEvents() {
         },
       })
       .then(({ data }) => {
-        console.log(data);
         dispatch(stopLoading());
         dispatch({
           type: "GET_ALL_EVENTS",
@@ -248,7 +245,6 @@ export function cancelCommande(id, navigation = null) {
         if (navigation && navigation.canGoBack()) navigation.goBack();
       })
       .catch(({ data, response }) => {
-        console.log(response);
         dispatch(stopLoading());
         dispatch(addError(data));
         dispatch({ type: "LOG_OUT" });
@@ -268,7 +264,6 @@ export function getCommandeDetails(id) {
       })
       .then(({ data }) => {
         dispatch(stopLoading());
-        console.log(data);
         dispatch({
           type: "GET_COMMANDE_DETAILS",
           payload: data,
@@ -325,8 +320,6 @@ export function PostCommande(navigate) {
     dispatch(startLoading());
     const { commandeEnCours } = getState().commande;
     const token = getState().auth.userToken;
-
-    console.log({ token });
     Location.requestForegroundPermissionsAsync()
       .then(({ status }) => {
         if (status !== "granted") {

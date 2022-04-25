@@ -26,8 +26,6 @@ export default function Details(props) {
 	const c = useSelector((state) => state.commande.commande);
 	const isLoading = useSelector((state) => state.ui.isLoading);
 	const order = props.route.params;
-	
-	console.log({order})
 	const extras = useSelector((state) => state.product.extras);
 	const products = useSelector((state) => state.product.products);
 	const openInGoogleMap = () => {

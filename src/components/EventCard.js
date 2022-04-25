@@ -135,7 +135,7 @@ export default (props) => {
                 height: 70,
                 resizeMode: "contain",
                 position: "absolute",
-                top: 0,
+                top: 20,
                 left: 70,
               }}
               source={logo}
@@ -144,11 +144,12 @@ export default (props) => {
               style={{
                 fontSize: 12,
                 fontFamily: "Inter-Bold",
+                textAlign:"center",
                 color: "#C9D1D9",
                 width: 200,
                 position: "absolute",
                 bottom: 25,
-                left: 20,
+                left: 10,
               }}>
               Faites une commande speciale pour vos evenements
             </Text>

@@ -104,7 +104,6 @@ export default function SelectLivreur(props) {
 							marginHorizontal: "5%",
 						}}
 					>
-						{console.log(livreur)}
 						<View
 							style={{
 								flexDirection: "row",

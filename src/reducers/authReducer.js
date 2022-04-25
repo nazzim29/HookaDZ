@@ -6,8 +6,8 @@ const initialState = {
     nom: null,
     prenom: null,
 	numero: null,
+	role: null,
 	isAdmin: false,
-	role: null
 };
 
 const authReducer = (state = initialState, action) => {
@@ -32,8 +32,7 @@ const authReducer = (state = initialState, action) => {
 		case "AUTHENTICATE":
 			return {
 				...state,
-				isAuthenticated:true,
-				userToken: action.payload,
+				...action.payload,
 			}
 		case 'LOG_OUT':
 			return {

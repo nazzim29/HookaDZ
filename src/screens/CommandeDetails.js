@@ -19,7 +19,7 @@ import { cancelCommande } from "../actions/commandes";
 const styles = StyleSheet.create({
 	header: {
 		justifyContent: "flex-start",
-		// backgroundColor: "#161B22",
+		backgroundColor: "#161B22",
 		width: "100%",
 		flexDirection: "row",
 		alignItems: "center",
@@ -67,13 +67,13 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 	},
 	floating: {
-		minWidth: "100%",
-		minHeight: "25%",
+	  width: "100%",
+		height: "20%",
 		padding: 15,
-		// paddingTop:0,
 		flexDirection: "column",
-		position: "absolute",
-		bottom: 15,
+		// paddingTop:0,
+		// flexDirection: "column",
+		// bottom: 15,
 	},
 	details: {
 		borderColor: "#2e8bdc",
@@ -126,44 +126,22 @@ export default function CommandeDetails({ navigation, route }) {
 	const dispatch = useDispatch();
 	const commande = useSelector((state) => state.commande.commande);
 	const cancelCommandeHandler = () => {
-		console.log(commande);
 		dispatch(cancelCommande(route.params.order._id, navigation));
 	};
 	const products = useSelector((state) => state.product.products);
 	const extras = useSelector((state) => state.product.extras);
 	const renderRow = ({ item }) => {
 		if (item.type == "extra") {
-			console.log(item);
 			return (
-				<Extra
-					extra={{
-						...extras.find((el) => el._id == item.prd),
-						...item,
-					}}
-					style={{
-						width: "100%",
-					}}
-					editable={false}
-				/>
+				<>
+					
+				</>
 			);
 		} else {
 			return (
-				<OrderRow
-					order={{
-						...products.find((el) => el._id == item.prd),
-						...item,
-					}}
-					style={{
-						maxHeight: 100,
-						minHeight: 100,
-						width:"100%%",
-						// marginHorizontal: 2,
-						marginVertical: 15,
-						alignItems: "center",
-					}}
-					editable={false}
-					deletable={false}
-				/>
+				<>
+					
+				</>
 			);
 		}
 	};
@@ -177,16 +155,131 @@ export default function CommandeDetails({ navigation, route }) {
 			</View>
 			{commande == null ? (
 				<SplashScreen />
-			) :(
+			) : (
 				<>
 					<View style={{ flex: 1, overflow: "hidden" }}>
-						<FlatList
-							data={commande}
-							style={{ marginBottom: 190, overflow: "visible",width:"100%" }}
-							contentContainerStyle={{ alignItems: "center",flex:1}}
+						<ScrollView
+							style={{
+								width: "100%",
+								flexGrow: 1,
+								overflow: "visible",
+								// marginBottom:70,
+							}}
+							showsVerticalScrollIndicator={false}
+							contentInsetAdjustmentBehavior="scrollableAxes"
+							contentContainerStyle={{
+								width: "100%",
+								justifyContent: "flex-start",
+								flexDirection: "column",
+								// flexWrap: "wrap",
+								flexGrow: 0,
+							}}
+						>
+							{commande.map((item, index) => {
+								if (item.type == "extra") {
+									return (
+										<Extra
+											extra={{
+												...extras.find((el) => el._id == item.prd),
+												...item,
+											}}
+											style={{
+												width: "90%",
+												marginVertical: 5,
+												marginHorizontal: "5%",
+												// marginHorizontal: "2%",
+											}}
+											editable={false}
+											key={index}
+										/>
+									);
+								} else {
+									return (
+										<OrderRow
+											key={index}
+											order={{
+												...products.find((el) => el._id == item.prd),
+												...item,
+											}}
+											style={{
+												maxHeight: 100,
+												minHeight: 100,
+												width: "100%",
+												marginVertical: 5,
+												alignItems: "center",
+											}}
+											editable={false}
+											deletable={false}
+										/>
+									);
+								}
+							})}
+							<OrderRow
+								key={commande.length}
+								style={{
+									maxHeight: 100,
+									minHeight: 100,
+									marginHorizontal: 5,
+									marginVertical: 10,
+									alignItems: "center",
+								}}
+								order={{
+									image_url: "bouteille-eau.jpg",
+									nom: "Bouteille d'eau",
+									prix: "Offert",
+									quantite: 1,
+								}}
+								editable={false}
+								deletable={false}
+							/>
+							<OrderRow
+								key={commande.length + 1}
+								style={{
+									maxHeight: 100,
+									minHeight: 100,
+									marginHorizontal: 5,
+									marginVertical: 10,
+									alignItems: "center",
+								}}
+								order={{
+									image_url: "charbon.jpg",
+									nom: "Charbon",
+									prix: "Offert",
+									quantite: 1,
+								}}
+								editable={false}
+								deletable={false}
+							/>
+							<OrderRow
+								editable={false}
+								deletable={false}
+								key={commande.length + 2}
+								style={{
+									maxHeight: 100,
+									minHeight: 100,
+									marginHorizontal: 5,
+									marginVertical: 10,
+									alignItems: "center",
+								}}
+								order={{
+									image_url: "tuyau.png",
+									nom: "Tuyau",
+									prix: "Offert",
+									quantite: 1,
+								}}
+							/>
+						</ScrollView>
+						{/* <FlatList
+							data={commande ? commande : null}
+							style={{ marginBottom: 190, overflow: "visible", width: "100%" }}
+							contentContainerStyle={{
+                alignItems: "center",
+								flex: 1,
+								paddingBottom: 190,
+							}}
 							renderItem={renderRow}
 							keyExtractor={(item, index) => index}
-						/>
+						/> */}
 					</View>
 					<View style={styles.floating}>
 						<LinearGradient
@@ -236,7 +329,7 @@ export default function CommandeDetails({ navigation, route }) {
 								</View>
 							</View>
 						</LinearGradient>
-						{!commande.confirmation && (
+						{!route.params.order?.confirmation && !route.params.order?.refuse && (
 							<TouchableWithoutFeedback onPress={cancelCommandeHandler}>
 								<LinearGradient
 									colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}
@@ -250,7 +343,7 @@ export default function CommandeDetails({ navigation, route }) {
 										justifyContent: "center",
 									}}
 								>
-									<Text style={styles.txtbtn}>Anuller</Text>
+									<Text style={styles.txtbtn}>Annuler</Text>
 								</LinearGradient>
 							</TouchableWithoutFeedback>
 						)}

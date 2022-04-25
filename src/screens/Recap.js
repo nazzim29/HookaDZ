@@ -1,11 +1,11 @@
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  FlatList,
-  TouchableWithoutFeedback,
+	View,
+	Text,
+	StyleSheet,
+	TouchableOpacity,
+	Image,
+	FlatList,
+	TouchableWithoutFeedback,
 } from "react-native";
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
@@ -18,171 +18,170 @@ import { deg } from "react-native-linear-gradient-degree";
 import { PostCommande, removeAll } from "../actions/commandes";
 import { ScrollView } from "native-base";
 const styles = StyleSheet.create({
-  header: {
-    justifyContent: "flex-start",
-    // backgroundColor: "#161B22",
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 10,
-  },
-  headerText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    fontFamily: "Inter-Bold",
-    color: "white",
-  },
-  headerIcon: {
-    margin: 10,
-    height: 20.5,
-    width: 12.5,
-  },
-  details: {
-    borderColor: "#2e8bdc",
-    borderWidth: 0.25,
-    maxWidth: "100%",
-    height: 80,
-    marginBottom: 20,
-    borderRadius: 15,
-    flexDirection: "column",
-    padding: 10,
-    justifyContent: "space-between",
-    shadowColor: "#3299F1",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.62,
-    shadowRadius: 3.84,
-    elevation: 14,
-    backgroundColor: "#161B22",
-  },
-  detailsHeader: {
-    fontFamily: "Inter-Bold",
-    fontSize: 20,
-    color: "white",
-  },
-  totalPrice: {
-    color: "#2e8bdc",
-    fontFamily: "Inter-Bold",
-    fontSize: 20,
-  },
-  floating: {
-    display: "flex",
-    minWidth: "90%",
-    minHeight: 50,
-    paddingTop: 15,
-    paddingBottom: 15,
-    paddingLeft: 25,
-    paddingRight: 25,
-    // paddingTop:0,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    // position: "absolute",
-    // bottom: 15,
-  },
-  details: {
-    borderColor: "#2e8bdc",
-    borderWidth: 0.25,
-    maxWidth: "100%",
-    height: 80,
-    marginBottom: 20,
-    borderRadius: 15,
-    flexDirection: "column",
-    padding: 10,
-    justifyContent: "space-between",
-    shadowColor: "#3299F1",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.62,
-    shadowRadius: 3.84,
-    elevation: 14,
-    backgroundColor: "#161B22",
-  },
-  detailsHeader: {
-    fontFamily: "Inter-Bold",
-    fontSize: 20,
-    color: "white",
-  },
-  totalPrice: {
-    color: "#2e8bdc",
-    fontFamily: "Inter-Bold",
-    fontSize: 20,
-  },
-  border: {
-    padding: 2,
-    borderRadius: 10,
-    flex: 1,
-    height: 100,
-    marginTop: 10,
-  },
+	header: {
+		justifyContent: "flex-start",
+		// backgroundColor: "#161B22",
+		width: "100%",
+		flexDirection: "row",
+		alignItems: "center",
+		padding: 10,
+	},
+	headerText: {
+		fontSize: 20,
+		fontWeight: "bold",
+		fontFamily: "Inter-Bold",
+		color: "white",
+	},
+	headerIcon: {
+		margin: 10,
+		height: 20.5,
+		width: 12.5,
+	},
+	details: {
+		borderColor: "#2e8bdc",
+		borderWidth: 0.25,
+		maxWidth: "100%",
+		height: 80,
+		marginBottom: 20,
+		borderRadius: 15,
+		flexDirection: "column",
+		padding: 10,
+		justifyContent: "space-between",
+		shadowColor: "#3299F1",
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowOpacity: 0.62,
+		shadowRadius: 3.84,
+		elevation: 14,
+		backgroundColor: "#161B22",
+	},
+	detailsHeader: {
+		fontFamily: "Inter-Bold",
+		fontSize: 20,
+		color: "white",
+	},
+	totalPrice: {
+		color: "#2e8bdc",
+		fontFamily: "Inter-Bold",
+		fontSize: 20,
+	},
+	floating: {
+		display: "flex",
+		minWidth: "90%",
+		minHeight: 50,
+		paddingTop: 15,
+		paddingBottom: 15,
+		paddingLeft: 25,
+		paddingRight: 25,
+		// paddingTop:0,
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		// position: "absolute",
+		// bottom: 15,
+	},
+	details: {
+		borderColor: "#2e8bdc",
+		borderWidth: 0.25,
+		maxWidth: "100%",
+		height: 80,
+		marginBottom: 20,
+		borderRadius: 15,
+		flexDirection: "column",
+		padding: 10,
+		justifyContent: "space-between",
+		shadowColor: "#3299F1",
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowOpacity: 0.62,
+		shadowRadius: 3.84,
+		elevation: 14,
+		backgroundColor: "#161B22",
+	},
+	detailsHeader: {
+		fontFamily: "Inter-Bold",
+		fontSize: 20,
+		color: "white",
+	},
+	totalPrice: {
+		color: "#2e8bdc",
+		fontFamily: "Inter-Bold",
+		fontSize: 20,
+	},
+	border: {
+		padding: 2,
+		borderRadius: 10,
+		flex: 1,
+		height: 100,
+		marginTop: 10,
+	},
 
-  txtbtn: {
-    fontFamily: "Inter-Bold",
-    fontSize: 20,
-    color: "white",
-  },
+	txtbtn: {
+		fontFamily: "Inter-Bold",
+		fontSize: 20,
+		color: "white",
+	},
 });
 
 export default function CommandeDetails({ navigation, route }) {
-  const dispatch = useDispatch();
-  const arrowBackIcon = useSelector((state) =>
-    state.ui.assets.find((asset) => asset.name === "arrow-back")
-  );
-  const commande = useSelector((state) => state.commande.commandeEnCours);
-  const commandePressHandler = () => {
-    dispatch(PostCommande(navigation.reset));
-  };
-  const commandeCancelHandler = () => {
-    console.log("cancel");
-    dispatch(removeAll());
-    navigation.navigate("Home");
-  };
-  const isLoading = useSelector((state) => state.ui.isLoading);
-  const products = useSelector((state) => state.product.products);
-  const extras = useSelector((state) => state.product.extras);
-  console.log("- array ----", commande?.montant);
-  const renderRow = (item, index) => {
-    if (!!extras.find((el) => el._id == item.prd)) {
-      return (
-        <Extra
-          extra={{
-            ...extras.find((el) => el._id == item.prd),
-            ...item,
-          }}
-          key={index}
-          style={{
-            maxHeight: 100,
-            minHeight: 100,
-            marginVertical: 5,
-          }}
-          editable={false}
-        />
-      );
-    } else {
-      return (
-        <OrderRow
-          key={index}
-          order={{
-            ...products.find((el) => el._id == item.prd),
-            ...item,
-          }}
-          style={{
-            maxHeight: 100,
-            minHeight: 100,
-            marginVertical: 5,
-          }}
-          editable={false}
-          deletable={false}
-        />
-      );
-    }
-  };
-  if (isLoading) return <SplashScreen />;
-  return (
+	const dispatch = useDispatch();
+	const arrowBackIcon = useSelector((state) =>
+		state.ui.assets.find((asset) => asset.name === "arrow-back")
+	);
+	const commande = useSelector((state) => state.commande.commandeEnCours);
+	const commandePressHandler = () => {
+		dispatch(PostCommande(navigation.reset));
+	};
+	const commandeCancelHandler = () => {
+		console.log("cancel");
+		dispatch(removeAll());
+		navigation.navigate("Home");
+	};
+	const isLoading = useSelector((state) => state.ui.isLoading);
+	const products = useSelector((state) => state.product.products);
+	const extras = useSelector((state) => state.product.extras);
+	const renderRow = (item, index) => {
+		if (!!extras.find((el) => el._id == item.prd)) {
+			return (
+				<Extra
+					extra={{
+						...extras.find((el) => el._id == item.prd),
+						...item,
+					}}
+					key={index}
+					style={{
+						maxHeight: 100,
+						minHeight: 100,
+						marginVertical: 5,
+					}}
+					editable={false}
+				/>
+			);
+		} else {
+			return (
+				<OrderRow
+					key={index}
+					order={{
+						...products.find((el) => el._id == item.prd),
+						...item,
+					}}
+					style={{
+						maxHeight: 100,
+						minHeight: 100,
+						marginVertical: 5,
+					}}
+					editable={false}
+					deletable={false}
+				/>
+			);
+		}
+	};
+	if (isLoading) return <SplashScreen />;
+	return (
 		<>
 			<View style={styles.header}>
 				<TouchableOpacity onPress={() => navigation.goBack()}>
@@ -201,9 +200,11 @@ export default function CommandeDetails({ navigation, route }) {
 						style={{
 							width: "100%",
 							flexGrow: 1,
-							marginBottom: 30,
+							marginBottom: 5,
 							overflow: "visible",
 							overflow: "hidden",
+							maxHeight: "70%",
+							// flex:1
 						}}
 						showsVerticalScrollIndicator={false}
 						contentInsetAdjustmentBehavior="scrollableAxes"
@@ -220,9 +221,9 @@ export default function CommandeDetails({ navigation, route }) {
 						{[...commande.produits, ...commande.extras].map(renderRow)}
 						<Extra
 							extra={{
-                nom: "Bouteille d'eau",
-                prix: "Offert",
-                quantite:1
+								nom: "Bouteille d'eau",
+								prix: "Offert",
+								quantite: 1,
 							}}
 							key={[...commande.produits, ...commande.extras].length}
 							style={{
@@ -234,11 +235,11 @@ export default function CommandeDetails({ navigation, route }) {
 						/>
 						<Extra
 							extra={{
-                nom: "Tuyeau",
-                prix: "Offert",
-                quantite:1
+								nom: "Tuyeau",
+								prix: "Offert",
+								quantite: 1,
 							}}
-							key={[...commande.produits, ...commande.extras].length+1}
+							key={[...commande.produits, ...commande.extras].length + 1}
 							style={{
 								maxHeight: 100,
 								minHeight: 100,
@@ -248,11 +249,11 @@ export default function CommandeDetails({ navigation, route }) {
 						/>
 						<Extra
 							extra={{
-                nom: "Charbon",
-                prix: "Offert",
-                quantite:1
+								nom: "Charbon",
+								prix: "Offert",
+								quantite: 1,
 							}}
-							key={[...commande.produits, ...commande.extras].length+2}
+							key={[...commande.produits, ...commande.extras].length + 2}
 							style={{
 								maxHeight: 100,
 								minHeight: 100,
@@ -261,6 +262,15 @@ export default function CommandeDetails({ navigation, route }) {
 							editable={false}
 						/>
 					</ScrollView>
+					<View
+						style={{
+							width: "90%",
+							borderTopWidth: 1,
+							borderColor: "gray",
+							height: 20,
+							alignSelf: "center",
+						}}
+					></View>
 					<View
 						style={[
 							{
@@ -366,7 +376,7 @@ export default function CommandeDetails({ navigation, route }) {
 						<View
 							style={{
 								display: "flex",
-								width: "40%",
+								width: "50%",
 							}}
 						>
 							<TouchableWithoutFeedback onPress={commandePressHandler}>
@@ -380,6 +390,7 @@ export default function CommandeDetails({ navigation, route }) {
 										borderRadius: 10,
 										alignItems: "center",
 										justifyContent: "center",
+										paddingHorizontal: 10,
 									}}
 								>
 									<Text style={styles.txtbtn}>Commander</Text>
