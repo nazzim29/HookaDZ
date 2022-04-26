@@ -144,7 +144,7 @@ export default function OrderCard({ order, navigation }) {
               ? "en attente"
               : order?.livraison === true
               ? "Livré"
-              : "Livraison ..."}
+              : "En cours"}
           </Text>
         </View>
         {!order?.confirmation && !order?.refuse && (

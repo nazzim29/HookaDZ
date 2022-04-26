@@ -1,14 +1,13 @@
 import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
+	StyleSheet,
+	Text,
+	View,
+	Image,
 	TouchableWithoutFeedback,
-  Dimensions
 } from "react-native";
 
 import { Box, ScrollView } from "native-base";
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Card from "../components/Card";
 import SplashScreen from "./SplashScreen";
@@ -17,161 +16,151 @@ import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
 import EventCard from "../components/EventCard";
 import DropDown from "../components/DropDown";
-import SocialCard from "../components/SocialCard";
-import Carousel,{Pagination} from "react-native-snap-carousel";
+
 const styles = StyleSheet.create({
-  header: {
-    justifyContent: "space-between",
-    backgroundColor: "#161B22",
-    width: "100%",
-    flexDirection: "row",
-    alignItems: "center",
-    paddingVertical: 10,
-    paddingHorizontal: 10,
-  },
-  headerText: {
-    // fontSize: 25,
-    // fontWeight: "bold",
-    // fontFamily: "Inter-Bold",
-    // color: "#7638FF",
-    // textAlign: "center",
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
-    // marginVertical: "10%",
-  },
-  headerIcon: {
-    height: 25,
-    width: 25,
-  },
-  container: {
-    flex: 1,
-    backgroundColor: "#0D1117",
-    alignItems: "flex-start",
-    justifyContent: "center",
-    width: "100%",
-    height: "100%",
-    paddingBottom: 30,
-  },
-  screenContent: {
-    // flex: 1,
-    // flexGrow:1,
-    width: "100%",
-    justifyContent: "flex-start",
-    // overflow: "hidden",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    flexGrow: 0,
-    paddingBottom: 10,
-  },
-  locationHeader: {
-    // backgroundColor: "#161B22",
-    paddingVertical: 8,
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  locationText: {
-    fontSize: 14,
-    color: "#C9D1D9",
-  },
-  location: {
-    fontSize: 14,
-    color: "#2e8bdc",
-  },
-  headertxt: {
-    color: "white",
-    fontSize: 20,
-    fontFamily: "Inter-Bold",
-    marginLeft: 10,
-    marginTop: 20,
-  },
-  produitsSection: {
-    minWidth: "100%",
-    paddingVertical: 5,
-    maxHeight: 250,
-  },
-  panierBtn: {
-    width: "75%",
-    height: 50,
-    backgroundColor: "#7638FF",
-    borderRadius: 15,
-    alignItems: "center",
-    flexDirection: "row",
-    justifyContent: "center",
-  },
-  dropShadow: {
-    borderRadius: 50,
-    padding: 15,
-    backgroundColor: "#161B22",
-    borderColor: "#3299F1",
-    borderWidth: 0.25,
-    shadowColor: "#3299F1",
-    shadowOffset: {
-      width: 0,
-      height: 0,
-    },
-    shadowOpacity: 0.72,
-    shadowRadius: 3.84,
-    elevation: 14,
-  },
-  arrowIcon: {
-    resizeMode: "contain",
-    height: 20,
-    width: 20,
-    marginLeft: "5%",
-    transform: [{ rotate: "180deg" }],
-  },
-  paniertxt: {
-    color: "white",
-    fontSize: 20,
-    fontFamily: "Inter-Bold",
-  },
+	header: {
+		justifyContent: "space-between",
+		backgroundColor: "#161B22",
+		width: "100%",
+		flexDirection: "row",
+		alignItems: "center",
+		paddingVertical: 10,
+		paddingHorizontal: 10,
+	},
+	headerText: {
+		// fontSize: 25,
+		// fontWeight: "bold",
+		// fontFamily: "Inter-Bold",
+		// color: "#7638FF",
+		// textAlign: "center",
+		width: "100%",
+		height: "100%",
+		resizeMode: "contain",
+		// marginVertical: "10%",
+	},
+	headerIcon: {
+		height: 25,
+		width: 25,
+	},
+	container: {
+		flex: 1,
+		backgroundColor: "#0D1117",
+		alignItems: "flex-start",
+		justifyContent: "center",
+		width: "100%",
+		height: "100%",
+		paddingBottom: 30,
+	},
+	screenContent: {
+		// flex: 1,
+		// flexGrow:1,
+		width: "100%",
+		justifyContent: "flex-start",
+		// overflow: "hidden",
+		flexDirection: "row",
+		flexWrap: "wrap",
+		flexGrow: 0,
+		paddingBottom: 10,
+	},
+	locationHeader: {
+		// backgroundColor: "#161B22",
+		paddingVertical: 8,
+		flexDirection: "row",
+		justifyContent: "center",
+	},
+	locationText: {
+		fontSize: 14,
+		color: "#C9D1D9",
+	},
+	location: {
+		fontSize: 14,
+		color: "#2e8bdc",
+	},
+	headertxt: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "Inter-Bold",
+		marginLeft: 10,
+		marginTop: 20,
+	},
+	produitsSection: {
+		minWidth: "100%",
+		paddingVertical: 5,
+		maxHeight: 250,
+	},
+	panierBtn: {
+		width: "75%",
+		height: 50,
+		backgroundColor: "#7638FF",
+		borderRadius: 15,
+		alignItems: "center",
+		flexDirection: "row",
+		justifyContent: "center",
+	},
+	dropShadow: {
+		borderRadius: 50,
+		padding: 15,
+		backgroundColor: "#161B22",
+		borderColor: "#3299F1",
+		borderWidth: 0.25,
+		shadowColor: "#3299F1",
+		shadowOffset: {
+			width: 0,
+			height: 0,
+		},
+		shadowOpacity: 0.72,
+		shadowRadius: 3.84,
+		elevation: 14,
+	},
+	arrowIcon: {
+		resizeMode: "contain",
+		height: 20,
+		width: 20,
+		marginLeft: "5%",
+		transform: [{ rotate: "180deg" }],
+	},
+	paniertxt: {
+		color: "white",
+		fontSize: 20,
+		fontFamily: "Inter-Bold",
+	},
 });
-const FirstCard = (props) => {
-	return <EventCard {...props} />;
-};
-const SecondCard = (props) => {
-	return <SocialCard {...props} />;
-};
 export default (props) => {
-  const dispatch = useDispatch();
-  const historyIcon = useSelector((state) =>
-    state.ui.assets.find((el) => el.name == "history-icon")
-  );
-	const carouselRef = useRef(null);
-	const windowSize = Dimensions.get('window')
-	const [activeSlide, setActiveSlide] = useState(0);
-  //   const hamburgerIcon = useSelector((state) =>
-  //     state.ui.assets.find((el) => el.name == "hamburger-icon")
-  //   );
-  const profileIcon = useSelector((state) =>
-    state.ui.assets.find((el) => el.name == "profile")
-  );
-  const arrowIcon = useSelector((state) =>
-    state.ui.assets.find((el) => el.name == "arrow-back")
-  );
-  const panier = useSelector(
-    (state) => state.commande.commandeEnCours.produits
-  );
-  const logo = useSelector((state) =>
-    state.ui.assets.find((el) => el.name == "logo-1")
-  );
-  const bagIcon = useSelector((state) =>
-    state.ui.assets.find((el) => el.name == "bag-icon")
-  );
-  const currentAddress = useSelector((state) => state.ui.currentAddress);
-  let products = useSelector((state) => state.product.products);
-  const isLoading = useSelector((state) => state.ui.isLoading);
-  const handleBagClick = () => {
-    console.log("clicked");
-    props.navigation.navigate("Panier");
-  };
-  const [openDropDown, setOpenDropDown] = useState(false);
-  useEffect(() => {
-    dispatch(Locate());
-  }, []);
-  if (isLoading) return <SplashScreen />;
-  return (
+	const dispatch = useDispatch();
+	const historyIcon = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "history-icon")
+	);
+	//   const hamburgerIcon = useSelector((state) =>
+	//     state.ui.assets.find((el) => el.name == "hamburger-icon")
+	//   );
+	const profileIcon = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "profile")
+	);
+	const arrowIcon = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "arrow-back")
+	);
+	const panier = useSelector(
+		(state) => state.commande.commandeEnCours.produits
+	);
+	const logo = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "logo-1")
+	);
+	const bagIcon = useSelector((state) =>
+		state.ui.assets.find((el) => el.name == "bag-icon")
+	);
+	const currentAddress = useSelector((state) => state.ui.currentAddress);
+	let products = useSelector((state) => state.product.products);
+	const isLoading = useSelector((state) => state.ui.isLoading);
+	const handleBagClick = () => {
+		console.log("click");
+		props.navigation.navigate("Panier");
+	};
+	const [openDropDown, setOpenDropDown] = useState(false);
+	useEffect(() => {
+		dispatch(Locate());
+	}, []);
+	if (isLoading) return <SplashScreen />;
+	return (
 		<>
 			<Box style={styles.container}>
 				<View style={styles.header}>
@@ -193,6 +182,7 @@ export default (props) => {
 						</View>
 					</TouchableWithoutFeedback>
 				</View>
+
 				<View style={{ overflow: "hidden", flex: 1 }}>
 					<ScrollView
 						// stickyHeaderIndices={[0]}
@@ -212,50 +202,7 @@ export default (props) => {
 						{products.map((el) => (
 							<Card key={el._id} product={el} />
 						))}
-						{/* <View
-							style={{
-								width: "100%",
-								height: 250,
-								justifyContent: "flex-start",
-							}}
-						>
-							<Carousel
-								ref={carouselRef}
-								style={{ marginBottom: -20, height: 200 }}
-								data={[FirstCard, SecondCard]}
-								renderItem={(item) => <item.item {...props} />}
-								onSnapToItem={(index) => setActiveSlide(index)}
-								sliderWidth={windowSize.width}
-								itemWidth={windowSize.width}
-							/>
-							<Pagination
-								dotsLength={2}
-								activeDotIndex={activeSlide}
-								containerStyle={{
-									width: 30,
-									marginTop: -50,
-									paddingTop: -50,
-									// borderWidth: 1,
-									// borderColor: "white",
-									height: 10,
-									alignSelf: "center",
-								}}
-								dotStyle={{
-									width: 10,
-									height: 10,
-									borderRadius: 5,
-									backgroundColor: "#2e8bdc",
-								}}
-								inactiveDotStyle={
-									{
-										// Define styles for inactive dots here
-									}
-								}
-								inactiveDotOpacity={0.4}
-								inactiveDotScale={0.6}
-							/>
-						</View> */}
-					  <FirstCard {...props} />
+						{products.length != 0 && <EventCard {...props} />}
 					</ScrollView>
 				</View>
 			</Box>
@@ -277,7 +224,7 @@ export default (props) => {
 						elevation: 14,
 					}}
 				>
-					<TouchableWithoutFeedback onPress={handleBagClick}>
+					<TouchableWithoutFeedback onPressIn={handleBagClick}>
 						<View
 							style={[
 								styles.dropShadow,
