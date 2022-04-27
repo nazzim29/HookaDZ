@@ -81,7 +81,7 @@ const AppStackScreen = () => {
           }}
         />
         <AppStack.Screen
-          name="Panier"
+          name={"Panier"}
           component={Panier}
           options={{
             headerShown: false,

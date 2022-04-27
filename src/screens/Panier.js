@@ -1,12 +1,4 @@
-import {
-	StyleSheet,
-	FlatList,
-	Text,
-	View,
-	Image,
-	TouchableWithoutFeedback,
-	TouchableOpacity,
-} from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity,TouchableWithoutFeedback } from "react-native";
 import React, { useEffect } from "react";
 import { OrderRow } from "../components/Order";
 import { useDispatch, useSelector } from "react-redux";
@@ -105,8 +97,7 @@ const styles = StyleSheet.create({
 		color: "white",
 	},
 });
-export default function Commandes(props) {
-	//show list of past order
+export default function Panier(props) {
 	const dispatch = useDispatch();
 	const handleCommandePress = () => {
 		dispatch(getAllExtras());
@@ -118,10 +109,17 @@ export default function Commandes(props) {
 	const commandeEnCours = useSelector(
 		(state) => state.commande.commandeEnCours
 	);
-	const t = useSelector((state) => state.commande.commandeEnCours.produits);
+	const t = useSelector(
+		(state) => state.commande.commandeEnCours.produits
+	);
 	const produits = useSelector((state) => state.product.products);
+	const backHandler = ()=>{
+		if (props.navigation.canGoBack()) {
+			props.navigation.goBack();
+		}
+	}
 	useEffect(() => {
-		
+		console.log(commandeEnCours.reseted, commandeEnCours.produits.length == 0);
 		if (commandeEnCours.produits.length === 0 && !commandeEnCours.reseted) {
 			console.log("salut");
 			props.navigation.popToTop();
@@ -136,7 +134,7 @@ export default function Commandes(props) {
 			<View style={styles.header}>
 				<TouchableOpacity
 					style={{ flexDirection: "row", alignItems: "center" }}
-					onPress={() => props.navigation.goBack()}
+					onPressIn={backHandler}
 				>
 					<Image source={arrowBackIcon} style={styles.headerIcon} />
 					<Text style={styles.headerText}>Panier</Text>
@@ -160,7 +158,6 @@ export default function Commandes(props) {
 						flexGrow: 0,
 					}}
 				>
-					{/* <> */}
 					{commandeEnCours.produits.map((item, index) => (
 						<OrderRow
 							key={index}
@@ -209,7 +206,7 @@ export default function Commandes(props) {
 						}}
 						editable={false}
 						deletable={false}
-						/>
+					/>
 					<OrderRow
 						editable={false}
 						deletable={false}
@@ -221,7 +218,12 @@ export default function Commandes(props) {
 							marginVertical: 10,
 							alignItems: "center",
 						}}
-						order={{ image_url: "tuyau.png", nom: "Tuyau", prix: "Offert", quantite: 1 }}
+						order={{
+							image_url: "tuyau.png",
+							nom: "Tuyau",
+							prix: "Offert",
+							quantite: 1,
+						}}
 					/>
 					<LinearGradient
 						key={commandeEnCours.produits.length + 3}
@@ -271,12 +273,11 @@ export default function Commandes(props) {
 							</View>
 						</View>
 					</LinearGradient>
-					{/* </> */}
 				</ScrollView>
 			</View>
 
 			<View style={styles.floating}>
-				<TouchableWithoutFeedback onPress={handleCommandePress}>
+				<TouchableWithoutFeedback onPressIn={handleCommandePress}>
 					<LinearGradient
 						colors={["rgba(93, 49, 191, 1)", "rgba(11, 103, 255, 0.84)"]}
 						{...deg(60)}

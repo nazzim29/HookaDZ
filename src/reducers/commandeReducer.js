@@ -53,6 +53,7 @@ const commandeReducer = (state = initialState, action) => {
 						...state.commandeEnCours.commande,
 						montant: action.payload.montant,
 					},
+					reseted:false
 				},
 			};
 		case "MINUS_PRODUCT":
@@ -65,6 +66,7 @@ const commandeReducer = (state = initialState, action) => {
 						...state.commandeEnCours.commande,
 						montant: action.payload.montant,
 					},
+					reseted: false,
 				},
 			};
 		case "MINUS_EXTRA":
@@ -77,6 +79,7 @@ const commandeReducer = (state = initialState, action) => {
 						...state.commandeEnCours.commande,
 						montant: action.payload.montant,
 					},
+					reseted:false,
 				},
 			};
 
@@ -91,6 +94,7 @@ const commandeReducer = (state = initialState, action) => {
 						...state.commandeEnCours.commande,
 						montant: action.payload.montant,
 					},
+					reseted:false,
 				},
 			};
 		case "ADD_EXTRAS":
@@ -103,6 +107,7 @@ const commandeReducer = (state = initialState, action) => {
 						...state.commandeEnCours.commande,
 						montant: action.payload.montant,
 					},
+					reseted: false,
 				},
 			};
 		case "REMOVE_EXTRAS":

@@ -12,6 +12,7 @@
     "@ant-design/icons": "^4.7.0",
     "@expo-google-fonts/inter": "^0.2.2",
     "@react-native-async-storage/async-storage": "~1.15.0",
+    "@react-native-community/datetimepicker": "^6.1.2",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/bottom-tabs": "^6.2.0",
     "@react-navigation/material-top-tabs": "^6.1.1",
@@ -58,7 +59,8 @@
     "react-redux": "^7.2.6",
     "redux": "^4.1.2",
     "redux-thunk": "^2.4.1",
-    "xdl": "^59.2.30"
+    "xdl": "^59.2.30",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9"

@@ -152,7 +152,6 @@ export default (props) => {
 	let products = useSelector((state) => state.product.products);
 	const isLoading = useSelector((state) => state.ui.isLoading);
 	const handleBagClick = () => {
-		console.log("click");
 		props.navigation.navigate("Panier");
 	};
 	const [openDropDown, setOpenDropDown] = useState(false);
