@@ -126,6 +126,7 @@ const styles = StyleSheet.create({
 export default (props) => {
 	const dispatch = useDispatch();
 	const shakeAnimationRef = useRef(new Animated.Value(0));
+	const [showHeader, setShowHeader] = useState(false);
 
 	const profileIcon = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "profile")
@@ -233,6 +234,13 @@ export default (props) => {
 				<View style={{ overflow: "hidden", flex: 1 }}>
 					<ScrollView
 						// stickyHeaderIndices={[0]}
+						onScroll={(e) => {
+							if (e.nativeEvent.contentOffset.y > 0) {
+								setShowHeader(true);
+							} else {
+								setShowHeader(false);
+							}
+						}}
 						style={{
 							width: "100%",
 							flexGrow: 1,
@@ -263,109 +271,128 @@ export default (props) => {
 					</ScrollView>
 				</View>
 			</Box>
-			<LinearGradient
-				colors={["rgba(13, 17, 23,0.8)", "rgba(13, 17, 23,1)"]}
-				style={{
-					width: "100%",
-					justifyContent: "space-evenly",
-					position: "absolute",
-					bottom: 0,
-					alignItems: "center",
-					flexDirection: "row-reverse",
-					paddingVertical: 15,
-					shadowColor: "#5D31BF",
-					shadowOffset: { width: 0, height: -5 },
-					shadowOpacity: 0.72,
-					shadowRadius: 3.84,
-					elevation: 14,
-				}}
-			>
-				{panier.length > 0 ? (
-					<>
-						<TouchableWithoutFeedback onPressIn={handleBagClick}>
-							<Animated.View
-								style={[
-									styles.dropShadow,
-									{
-										backgroundColor: "#161B22",
-										padding: 15,
-										borderRadius: 100,
-										position: "relative",
-										transform: [
-											{
-												rotate: shakeAnimationRef.current.interpolate({
-													inputRange: [-1, 1],
-													outputRange: ["-0.3rad", "0.3rad"],
-												}),
-											},
-										],
-									},
-								]}
+			{(panier.length > 0 || showHeader) && (
+				<LinearGradient
+					colors={["rgba(13, 17, 23,0.8)", "rgba(13, 17, 23,1)"]}
+					style={{
+						width: "100%",
+						justifyContent: "space-evenly",
+						position: "absolute",
+						bottom: 0,
+						alignItems: "center",
+						flexDirection: "row-reverse",
+						paddingVertical: 15,
+						shadowColor: "#5D31BF",
+						shadowOffset: { width: 0, height: -5 },
+						shadowOpacity: 0.72,
+						shadowRadius: 3.84,
+						elevation: 14,
+					}}
+				>
+					{panier.length > 0 ? (
+						<>
+							<TouchableWithoutFeedback onPressIn={handleBagClick}>
+								<Animated.View
+									style={[
+										styles.dropShadow,
+										{
+											backgroundColor: "#161B22",
+											padding: 15,
+											borderRadius: 100,
+											position: "relative",
+											transform: [
+												{
+													rotate: shakeAnimationRef.current.interpolate({
+														inputRange: [-1, 1],
+														outputRange: ["-0.3rad", "0.3rad"],
+													}),
+												},
+											],
+										},
+									]}
+								>
+									<Image source={bagIcon} style={{ width: 30, height: 30 }} />
+									<View
+										style={{
+											height: 25,
+											width: 25,
+											backgroundColor: "red",
+											borderRadius: 500,
+											alignItems: "center",
+											justifyContent: "center",
+											position: "absolute",
+											top: -5,
+											right: -5,
+										}}
+									>
+										<Text
+											style={{
+												fontSize: 16,
+												fontFamily: "Inter-Bold",
+												color: "white",
+											}}
+										>
+											{panier.length < 10 ? panier.length : "9+"}
+										</Text>
+									</View>
+								</Animated.View>
+							</TouchableWithoutFeedback>
+							<TouchableWithoutFeedback onPressIn={handleBagClick}>
+								<LinearGradient
+									style={styles.panierBtn}
+									colors={["#5D31BF", "#0B67FFD6"]}
+									{...deg(90)}
+								>
+									<Text style={styles.paniertxt}>Aller au panier</Text>
+									<Image source={arrowIcon} style={styles.arrowIcon} />
+								</LinearGradient>
+							</TouchableWithoutFeedback>
+						</>
+					) : (
+						<>
+							<TouchableWithoutFeedback
+								onPressIn={() => props.navigation.navigate("Event1")}
 							>
-								<Image source={bagIcon} style={{ width: 30, height: 30 }} />
-								<View
+								<LinearGradient
 									style={{
-										height: 25,
-										width: 25,
-										backgroundColor: "red",
-										borderRadius: 500,
+										width: "35%",
+										height: 40,
+										backgroundColor: "#7638FF",
+										borderRadius: 15,
 										alignItems: "center",
+										flexDirection: "row",
 										justifyContent: "center",
-										position: "absolute",
-										top: -5,
-										right: -5,
 									}}
+									colors={["#5D31BF", "#0B67FFD6"]}
+									{...deg(90)}
 								>
 									<Text
 										style={{
+											color: "white",
 											fontSize: 16,
 											fontFamily: "Inter-Bold",
-											color: "white",
 										}}
 									>
-										{panier.length < 10 ? panier.length : "9+"}
+										Commandez
 									</Text>
-								</View>
-							</Animated.View>
-						</TouchableWithoutFeedback>
-						<TouchableWithoutFeedback onPressIn={handleBagClick}>
-							<LinearGradient
-								style={styles.panierBtn}
-								colors={["#5D31BF", "#0B67FFD6"]}
-								{...deg(90)}
-							>
-								<Text style={styles.paniertxt}>Aller au panier</Text>
-								<Image source={arrowIcon} style={styles.arrowIcon} />
-							</LinearGradient>
-						</TouchableWithoutFeedback>
-					</>
-				) : (
-					<>
-						<TouchableWithoutFeedback
-							onPressIn={() => props.navigation.navigate("Event1")}
-						>
-							<LinearGradient
+									{/* <Image source={arrowIcon} style={styles.arrowIcon} /> */}
+								</LinearGradient>
+							</TouchableWithoutFeedback>
+							<Text
 								style={{
-									width: "90%",
-									height: 50,
-									backgroundColor: "#7638FF",
-									borderRadius: 15,
-									alignItems: "center",
-									flexDirection: "row",
-									justifyContent: "center",
+									fontFamily: "Inter-Bold",
+									width: "50%",
+									fontSize: 14,
+									color: "white",
+									textAlign: "center",
 								}}
-								colors={["#5D31BF", "#0B67FFD6"]}
-								{...deg(90)}
 							>
-								<Text style={styles.paniertxt}>
-									Commandez
-								</Text>
-								{/* <Image source={arrowIcon} style={styles.arrowIcon} /> */}
-							</LinearGradient>
-						</TouchableWithoutFeedback>
-					</>
-				)}
-			</LinearGradient>
+								On vous livre aussi pour vos événements
+							</Text>
+						</>
+					)}
+				</LinearGradient>
+			)}
 			<DropDown open={openDropDown} close={() => setOpenDropDown(false)} />
 		</>
 	);

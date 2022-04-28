@@ -88,7 +88,7 @@ export default (props) => {
 	const isLoading = useSelector((state) => state.ui.isLoading);
 	const dispatch = useDispatch();
 	const logo = useSelector((state) => {
-		return state.ui.assets.find((el) => el.name == "logo-2");
+		return state.ui.assets.find((el) => el.name == "logo-1");
 	});
 	const signupHandler = () => {
 		const user = {
@@ -132,12 +132,13 @@ export default (props) => {
 				</View>
 				<View
 					style={{
-						justifyContent: "center",
+						// justifyContent: "center",
+						paddingVertical: 15,
 						alignitems: "center",
-						height: "75%",
+						marginBottom:20
 					}}
 				>
-					<View style={{ marginTop: 10 }}>
+					<View>
 						<Text style={styles.text}>Vous vous inscrivez.</Text>
 						<Text style={styles.text}>Nous livrons - rapidement.</Text>
 					</View>
@@ -230,34 +231,35 @@ export default (props) => {
 						</View>
 					</View>
 				</View>
-			</KeyboardAwareScrollView>
-			<View
-				style={{
-					borderTopWidth: 1,
-					borderColor: "#B0B0B0",
-					width: "80%",
-					height: "5%",
-					justifyContent: "center",
-					alignItems: "center",
-					flexDirection: "row",
-					alignSelf: "center",
-				}}
-			>
-				<Text
+				<View
 					style={{
-						fontFamily: "Inter-Regular",
-						fontSize: 16,
-						color: "#9A9A9A",
+						borderTopWidth: 1,
+						borderColor: "#B0B0B0",
+						width: "80%",
+						height: "5%",
+						marginBottom: 20,
+						justifyContent: "center",
+						alignItems: "center",
+						flexDirection: "row",
+						alignSelf: "center",
 					}}
 				>
-					Vous avez deja un compte?
-				</Text>
-				<TouchableWithoutFeedback
-					onPress={() => props.navigation.navigate("Login")}
-				>
-					<Text style={styles.link}> Connectez-vous</Text>
-				</TouchableWithoutFeedback>
-			</View>
+					<Text
+						style={{
+							fontFamily: "Inter-Regular",
+							fontSize: 16,
+							color: "#9A9A9A",
+						}}
+					>
+						Vous avez deja un compte?
+					</Text>
+					<TouchableWithoutFeedback
+						onPress={() => props.navigation.navigate("Login")}
+					>
+						<Text style={styles.link}> Connectez-vous</Text>
+					</TouchableWithoutFeedback>
+				</View>
+			</KeyboardAwareScrollView>
 		</>
 	);
 };
