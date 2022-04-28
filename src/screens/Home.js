@@ -198,9 +198,11 @@ export default (props) => {
 						<View style={{ width: "100%", height: 150 }}>
 							<Image style={styles.headerText} source={logo} />
 						</View>
+						{/* <View style={{flex:"column",flexWrap:"wrap",overflow:"hidden"}}> */}
 						{products.map((el) => (
 							<Card key={el._id} product={el} />
 						))}
+							{/* </View> */}
 						{products.length != 0 && <EventCard {...props} />}
 					</ScrollView>
 				</View>

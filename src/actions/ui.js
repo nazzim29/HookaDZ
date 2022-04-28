@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native";
 import { Asset } from "expo-asset";
 import { Image } from "react-native";
 

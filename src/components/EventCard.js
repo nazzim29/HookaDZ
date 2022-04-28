@@ -6,12 +6,8 @@ import {
   View,
   ImageBackground,
 } from "react-native";
-import { Box } from "native-base";
 import React from "react";
-import { Card } from "react-native-card-stack-swiper";
 import { useSelector, useDispatch } from "react-redux";
-import { LinearGradient } from "expo-linear-gradient";
-import { deg } from "react-native-linear-gradient-degree";
 import { addProduit } from "../actions/commandes";
 const styles = StyleSheet.create({
   border: {
@@ -98,7 +94,7 @@ export default (props) => {
     dispatch(addProduit(product));
   };
   return (
-    <Card style={styles.card}>
+    <View style={styles.card}>
       <TouchableWithoutFeedback
         onPress={() => {
           props.navigation.navigate("Event1");
@@ -181,6 +177,6 @@ export default (props) => {
           {/* </LinearGradient> */}
         </View>
       </TouchableWithoutFeedback>
-    </Card>
+    </View>
   );
 };

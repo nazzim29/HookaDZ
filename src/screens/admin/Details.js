@@ -15,7 +15,6 @@ import { useSelector } from "react-redux";
 import Extra from "../../components/Extra";
 import OrderRow from "../../components/Order/OrderRow";
 import SplashScreen from "../SplashScreen"
-import openMap from "react-native-open-maps";
 export default function Details(props) {
 	const arrowIcon = useSelector((state) =>
 		state.ui.assets.find((el) => el.name == "arrow-back")

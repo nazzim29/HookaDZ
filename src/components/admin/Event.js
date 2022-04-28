@@ -9,11 +9,9 @@ import {
 	Linking,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getCommandeDetails, UpdateCommande } from "../../actions/commandes";
 import moment from "moment";
 export default function Card(props) {
 	let { event } = props;
-    const dispatch = useDispatch();
     const timeIcon = useSelector((state) =>
         state.ui.assets.find(el => el.name === "time-icon")
     )

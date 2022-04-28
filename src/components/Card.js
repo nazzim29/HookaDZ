@@ -1,7 +1,6 @@
 import { Text, StyleSheet, Image, TouchableOpacity, View } from "react-native";
 import { Box } from "native-base";
 import React from "react";
-import { Card } from "react-native-card-stack-swiper";
 import { useSelector, useDispatch } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
@@ -10,26 +9,29 @@ const styles = StyleSheet.create({
 	border: {
 		padding: 3,
 		borderRadius: 10,
-		flex: 1,
-		height: "100%",
+		maxWidth: "100%",
+		aspectRatio: 1,
+		overflow: "hidden",
+		// borderWidth: 1,
+		// borderColor: "white",
 	},
 	card: {
-		minWidth: "40%",
-		maxWidth: "40%",
-		minHeight: 100,
-		maxHeight: 200,
-		flex: 1,
-		padding: 5,
-		marginVertical: "5%",
-		marginHorizontal: "5%",
+		maxWidth: "45%",
+		marginVertical: 15,
+		marginHorizontal: "2.5%",
+		maxHeight: 230,
+		overflow: "hidden",
+		justifyContent: "flex-start",
+		paddingRight: 13,
 		backgroundColor: "#0D1117",
 		flexDirection: "column",
 		borderRadius: 10,
-		justifyContent: "center",
+		flexGrow: 1,
+		flexShrink: 1,
 	},
 	imageContainer: {
 		width: "100%",
-		height: "75%",
+		aspectRatio: 1,
 	},
 	image: {
 		resizeMode: "cover",
@@ -37,8 +39,8 @@ const styles = StyleSheet.create({
 		width: "100%",
 	},
 	details: {
-		marginTop: 5,
-		height: "25%",
+		// marginTop: 5,
+		height: "20%",
 		width: "100%",
 		flexDirection: "column",
 		color: "#C9D1D9",
@@ -51,22 +53,23 @@ const styles = StyleSheet.create({
 		width: 30,
 		borderRadius: 999,
 		position: "absolute",
-		bottom: -10,
+		bottom: -5,
 		right: -10,
 	},
 	productTitle: {
-		fontSize: 18,
-		minHeight: "25%",
-		marginTop:3,
+		fontSize: 14,
+		textAlign: "left",
+		marginVertical: 3,
 		marginLeft: 5,
-		fontFamily: "Inter-Regular",
+		fontFamily: "Inter-Bold",
 		color: "#C9D1D9",
-		// marginBottom: 5,
+		flexGrow: 1,
 	},
 	price: {
 		fontSize: 18,
 		marginLeft: 5,
-		height:20,
+		minHeight: 25,
+		height: 20,
 		fontFamily: "Inter-Bold",
 		color: "#3299F1",
 	},
@@ -88,7 +91,7 @@ export default (props) => {
 		dispatch(addProduit(product));
 	};
 	return (
-		<Card style={styles.card}>
+		<View style={[styles.card]}>
 			<View style={styles.imageContainer}>
 				<LinearGradient
 					colors={[
@@ -119,10 +122,10 @@ export default (props) => {
 				</TouchableOpacity>
 			</View>
 
-			<Box style={styles.details}>
+			<Box style={[styles.details,]}>
 				<Text style={styles.productTitle}>{product.nom}</Text>
 				<Text style={styles.price}>{product.prix || "NaN"} Da</Text>
 			</Box>
-		</Card>
+		</View>
 	);
 };

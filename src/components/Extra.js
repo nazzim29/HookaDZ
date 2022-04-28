@@ -20,12 +20,12 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   card: {
-    flex: 1,
     backgroundColor: "#0D1117",
     flexDirection: "row",
     borderRadius: 10,
     padding: 10,
     alignItems: "center",
+    overflow:"hidden"
   },
   image: {
     borderRadius: 10,
@@ -35,6 +35,7 @@ const styles = StyleSheet.create({
     resizeMode: "contain",
     borderWidth: 1,
     borderColor: "white",
+    overflow:"hidden"
   },
   deleteIcon: {
     height: 25,
@@ -82,17 +83,19 @@ export default function Extra(props) {
         {...deg(-5)}
         style={styles.border}>
         <View style={styles.card}>
-          <Image style={styles.image} source={appleIcon} />
-          <View style={{ flex: 1, flexDirection: "column", marginLeft: 15 }}>
-            <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
+          <View style={styles.image}>
+            <Image style={[styles.image,{height:"100%",width:"100%"}]} source={appleIcon} />
+          </View>
+          <View style={{ flex: 1, flexDirection: "column", marginLeft: 15,maxHeight:"100%" }}>
+            <Text style={{ fontSize: 16, fontWeight: "bold", color: "white" }}>
               {extra.nom}
             </Text>
-            <Text style={{ fontSize: 15, color: "white" }}>
+            <Text style={{ fontSize: 12, color: "white" }}>
               {extra.prix || "NaN"} Da
             </Text>
             <View
               style={{
-                marginTop: 10,
+                marginTop: 5,
                 alignItems: "flex-end",
                 width: "100%",
               }}>
@@ -144,20 +147,6 @@ export default function Extra(props) {
           </View>
         </View>
       </LinearGradient>
-      {/* {props.deletable !== false && (
-				<View
-					style={{
-						padding: 4,
-						position: "absolute",
-						top: 10,
-						right: -10,
-					}}
-				>
-					<TouchableWithoutFeedback onPressOut={removeFromCart}>
-						<Image source={deleteIcon} style={styles.deleteIcon} />
-					</TouchableWithoutFeedback>
-				</View>
-			)} */}
     </View>
   );
 }

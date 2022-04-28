@@ -50,7 +50,6 @@ export default function Card(props) {
     } catch (err) {
       console.log("can't open google maps");
     }
-    // props.navigation.navigate("Map", order);
   };
   const Accepter = () => {
     dispatch(
@@ -163,7 +162,7 @@ export default function Card(props) {
                   borderRadius: 4,
                 }}>
                 {order.livreur
-                  ? `Accepté ` //( livreur ${order.livreur.nom} )
+                  ? `Accepté `
                   : "Livreur ..."}
               </Text>
             </View>

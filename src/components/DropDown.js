@@ -1,20 +1,13 @@
 import React from "react";
 import { StyleSheet, Modal, View, Pressable, Text, Image } from "react-native";
-import { Calendar } from "react-native-calendars";
 import { useNavigation } from "@react-navigation/native";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../actions/auth";
 const styles = StyleSheet.create({
   headerText: {
-    // fontSize: 25,
-    // fontWeight: "bold",
-    // fontFamily: "Inter-Bold",
-    // color: "#7638FF",
-    // textAlign: "center",
     width: "100%",
     height: "100%",
     resizeMode: "contain",
-    // marginVertical: "10%",
   },
   headerIcon: {
     height: 25,

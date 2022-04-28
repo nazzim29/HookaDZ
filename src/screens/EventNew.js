@@ -6,8 +6,9 @@ import {
 	Image,
 	TextInput,
 	TouchableOpacity,
+	Platform,
 } from "react-native";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
@@ -15,7 +16,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { deg } from "react-native-linear-gradient-degree";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
-import ModalCalender from "../components/ModalCalender";
 
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -23,7 +23,8 @@ import { PostEvent } from "../actions/commandes";
 
 //others
 import Input from "../components/Input";
-
+import { debounce } from "lodash";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 const styles = StyleSheet.create({
 	step: {
 		maxWidth: "80%",
@@ -91,24 +92,46 @@ const Event = (props) => {
 	const dispatch = useDispatch();
 	const arrowBackIcon = useSelector((state) =>
 		state.ui.assets.find((asset) => asset.name === "arrow-back")
-	);
-	const [OpenCalender, setOpenCalender] = useState(false);
+  );
+	const [OpenCalender, setOpenCalender] = useState(true);
 	const [fields, setFields] = useState({
-		adress: "",
+    adress: "",
 		desc: "",
 		dateEvent: new Date(),
+		numero: "",
 	});
 	const SubSchema = Yup.object().shape({
 		adress: Yup.string().required("Ce champ est obligatoire"),
 		desc: Yup.string().required("Ce champ est obligatoire"),
 		dateEvent: Yup.date().required("Ce champ est obligatoire"),
-	});
+		numero: Yup.string()
+			.matches(/^(\+\d{3})( )?\d{9}$|^0( )?(\d( )?){9}$/, "numero erroné")
+			.required("Ce champ est obligatoire"),
+  });
+  const OpenCalenderAndroid = async () => {
+    console.log('salut')
+    if (Platform.OS === "android") {
+      const date = await DateTimePickerAndroid.open({
+				value: fields?.dateEvent,
+				mode: "spinner",
+				accentColor: "#5d31bf",
+				minimumDate: new Date(),
+				onChange: (event, date) => {
+					if (date !== undefined) {
+						setFields({ ...fields, dateEvent: date });
+					}
+				},
+			});
+      console.log(date)
+    }
+  }
 	const formik = useFormik({
 		enableReinitialize: true,
 		initialValues: {
 			adress: fields?.adress,
 			desc: fields?.desc,
 			dateEvent: fields?.dateEvent,
+			numero: fields?.numero,
 		},
 		validationSchema: SubSchema,
 		onSubmit: (values) => {
@@ -116,16 +139,18 @@ const Event = (props) => {
 				date: values.dateEvent,
 				adresse: values.adress,
 				description: values.desc,
+				numeros: values.numero,
 			};
+
 			dispatch(PostEvent(dataFormat, props.navigation.navigate));
 			setFields({
 				adress: "",
 				desc: "",
 				dateEvent: new Date(),
+				numero: "",
 			});
 		},
 	});
-
 	return (
 		<>
 			<View style={styles.header}>
@@ -146,61 +171,61 @@ const Event = (props) => {
 						Quand pouvons nous vous rendre service ?
 					</Text>
 					<Text style={styles.texte}>Selectionner une date</Text>
-					{/* <Input
-						icon={"event-icon"}
-						onPressIcon={() => {
-							console.log("test");
-							setOpenCalender(!OpenCalender);
-						}}
-						style={{
-							marginBottom: "10%",
-							marginTop: "5%",
-							marginHorizontal: "5%",
-							width: "90%",
-							overflow: "hidden",
-						}}
-					>
-						<TextInput
-							placeholder="Date"
-							editable
-							keyboardType="default"
-							value={
-								fields?.dateEvent
-									? moment(fields?.dateEvent).format("YYYY-MM-DD")
-									: ""
-							}
-							onChangeText={(e) =>
-								setFields({ ...fields, dateEvent: new Date(e) })
-							}
-							style={{
-								flex: 1,
-								fontFamily: "Inter-Regular",
-								fontSize: 16,
-								color: "#C9D1D9",
-							}}
-							error={
-								formik.touched.dateEvent && Boolean(formik.errors.dateEvent)
-							}
-							placeholderTextColor={"#858585"}
-						/>
-					</Input> */}
+					{Platform.OS == "android" && (
+            <TouchableWithoutFeedback
+              onPressIn={() => OpenCalenderAndroid}
+              // style={{borderWidth:2,borderColor:'#C9D1D9',borderRadius:10,padding:10,marginTop:10}}
+            >
+							<Input
+                icon={"event-icon"}
+                onPressIcon={() => OpenCalenderAndroid()}
+								style={{
+									marginBottom: "10%",
+									marginTop: "5%",
+									marginHorizontal: "5%",
+									width: "90%",
+								}}
+							>
+								<Text
+									style={{
+										flex: 1,
+										fontFamily: "Inter-Regular",
+										fontSize: 16,
+										color: "#C9D1D9",
+									}}
+								>
+									{moment(fields?.dateEvent).format("dddd D MMMM") ||
+										"Choisir une date"}
+								</Text>
+							</Input>
+						</TouchableWithoutFeedback>
+					)}
+					{Platform.OS=="ios" && (
 						<DateTimePicker
 							testID="dateTimePicker"
-            style={{ width: "90%", backgroundColor: "transparent", marginHorizontal: "5%", marginBottom:"5%" }}
-							value={fields?.dateEvent}
+							style={{
+								width: "90%",
+								backgroundColor: "transparent",
+								marginHorizontal: "5%",
+								marginBottom: "5%",
+							}}
+							value={fields?.dateEvent|| new Date()}
 							themeVariant="dark"
 							textColor="white"
 							accentColor={"transparent"}
 							locale="fr-FR"
-							minimumDate={new Date()}
+							// minimumDate={new Date()}
 							mode={"date"}
 							display={"spinner"}
-							is24Hour={true}
-							onChange={(e, date) =>
-								console.log({ ...fields, dateEvent: new Date(date) })
-							}
+              is24Hour={true}
+              onChange={(e, date) => {
+                console.log(date.toDateString());
+                const sd = date
+								setFields({ ...fields, dateEvent: sd });
+								Platform.OS === "android" &&setOpenCalender(false);
+							}}
 						/>
-
+					)}
 					{formik.touched.dateEvent && Boolean(formik.errors.dateEvent) && (
 						<Text
 							style={{
@@ -216,7 +241,7 @@ const Event = (props) => {
 					<Text style={styles.texte}>
 						Vous commandez pour le{" "}
 						{fields?.dateEvent
-							? moment(fields?.dateEvent).format("dddd D MMMM")
+							? moment(fields?.dateEvent).format("dddd D MMMM YYYY")
 							: ""}
 					</Text>
 					<Input
@@ -253,6 +278,44 @@ const Event = (props) => {
 							}}
 						>
 							{formik.touched.adress && formik.errors.adress}
+						</Text>
+					)}
+					<Text style={styles.title}>Numero</Text>
+					<Text style={styles.texte}>Ou pouvons nous vous contacter ?</Text>
+					<Input
+						icon={"phone-icon"}
+						style={{
+							marginBottom: "10%",
+							marginTop: "5%",
+							marginHorizontal: "5%",
+							width: "90%",
+						}}
+					>
+						<TextInput
+							placeholder="Numero de telephone"
+							editable
+							keyboardType="phone-pad"
+							value={fields?.numero}
+							onChangeText={(e) => setFields({ ...fields, numero: e })}
+							style={{
+								flex: 1,
+								fontFamily: "Inter-Regular",
+								fontSize: 16,
+								color: "#C9D1D9",
+							}}
+							error={formik.touched.numero && Boolean(formik.errors.numero)}
+							placeholderTextColor={"#858585"}
+						/>
+					</Input>
+					{formik.touched.numero && Boolean(formik.errors.numero) && (
+						<Text
+							style={{
+								color: "#b9203d",
+								marginHorizontal: "5%",
+								width: "90%",
+							}}
+						>
+							{formik.touched.numero && formik.errors.numero}
 						</Text>
 					)}
 					<Text style={styles.title}>Description</Text>
@@ -310,24 +373,6 @@ const Event = (props) => {
 					</View>
 				</View>
 			</KeyboardAwareScrollView>
-
-			{/* <ModalCalender
-				open={OpenCalender}
-				close={() => setOpenCalender(false)}
-				value={
-					fields?.dateEvent
-						? moment(fields?.dateEvent).format("YYYY-MM-DD")
-						: moment(new Date()).format("YYYY-MM-DD")
-				}
-				handleDateClick={(e) => {
-					setFields({
-						...fields,
-						dateEvent: e
-							? moment(e).format("YYYY-MM-DD")
-							: moment(fields?.dateEvent).format("YYYY-MM-DD"),
-					});
-				}}
-			/> */}
 		</>
 	);
 };
