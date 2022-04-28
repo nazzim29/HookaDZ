@@ -137,9 +137,7 @@ export default (props) => {
 						height: "75%",
 					}}
 				>
-					<Text style={styles.subtitle}> Commandez en quelques secondes,</Text>
-					<Text style={styles.subtitle}>livré en 30 minutes ou moins</Text>
-					<View style={{ marginTop: 20 }}>
+					<View style={{ marginTop: 10 }}>
 						<Text style={styles.text}>Vous vous inscrivez.</Text>
 						<Text style={styles.text}>Nous livrons - rapidement.</Text>
 					</View>

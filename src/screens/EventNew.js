@@ -23,7 +23,6 @@ import { PostEvent } from "../actions/commandes";
 
 //others
 import Input from "../components/Input";
-import { debounce } from "lodash";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 const styles = StyleSheet.create({
 	step: {
@@ -114,7 +113,8 @@ const Event = (props) => {
       const date = await DateTimePickerAndroid.open({
 				value: fields?.dateEvent,
 				mode: "spinner",
-				accentColor: "#5d31bf",
+		  accentColor: "#5d31bf",
+				themeVariant:"dark",
 				minimumDate: new Date(),
 				onChange: (event, date) => {
 					if (date !== undefined) {

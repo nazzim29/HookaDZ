@@ -26,9 +26,6 @@ import Panier from "../screens/Panier";
 import CommandeDetails from "../screens/CommandeDetails";
 import Extras from "../screens/Extras";
 import Recap from "../screens/Recap";
-import Event1 from "../screens/Event/Step1";
-import Event2 from "../screens/Event/Step2";
-import Event3 from "../screens/Event/Step3";
 import EventSuccess from "../screens/Event/Success";
 import EventErreur from "../screens/Event/Erreur";
 import Event from "../screens/EventNew";
@@ -111,20 +108,6 @@ const AppStackScreen = () => {
         <AppStack.Screen
           name="Event1"
           component={Event}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <AppStack.Screen
-          name="Event2"
-          component={Event2}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <AppStack.Screen
-          name="Event3"
-          component={Event3}
           options={{
             headerShown: false,
           }}
