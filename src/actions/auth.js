@@ -41,7 +41,8 @@ export function login(credidentials) {
 					prenom: data.result.prenom,
 					numero: data.result.numero,
           role: data.result.role,
-          isAdmin: data.result.role === "client"? false : true,
+          isAdmin: data.result.role === "client" ? false : true,
+          fcmToken: credidentials.token,
 				}))
 					.then((hh) => {
 						dispatch(stopLoading());
@@ -55,9 +56,22 @@ export function login(credidentials) {
 								numero: data.result.numero,
 								isAuthenticated: true,
 								role: data.result.role,
-								_id: data.result._id,
+                _id: data.result._id,
+                fcmToken: credidentials.token,
 							},
-						});
+            });
+            // send update token request
+            axios.post(
+							"https://chicha-dz.herokuapp.com/token",
+							{ userId: data.result._id, token: credidentials.token },
+							{
+								headers: {
+									"Content-Type": "application/json",
+									Accept: "application/json",
+									authorization: `Bearer ${data.token || ""}`,
+								},
+							}
+						);
 					})
 					.catch((err) => {
 						console.log(err);

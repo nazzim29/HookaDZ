@@ -21,6 +21,7 @@
       "bundleIdentifier": "com.nazzim29.HookaDZ"
     },
     "android": {
+      "googleServicesFile": "",
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo-2.png",
         "backgroundColor": "#0D1117"
@@ -29,8 +30,7 @@
     },
     "web": {
       "favicon": "./assets/logo-2.png"
-    },
-    "sdkVersion": "44.0.0"
+    }
   },
   "name": "HookaDZ"
 }

@@ -151,7 +151,6 @@ export default (props) => {
 	};
 	const startShake = () => {
 		//shake animation
-		console.debug("start shake");
 		Animated.sequence([
 			Animated.timing(shakeAnimationRef.current, {
 				toValue: 1,

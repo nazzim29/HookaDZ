@@ -31,7 +31,7 @@ const images = [
 	require("../../assets/oasis.jpg"),
 	require("../../assets/redbull.jpg"),
 	require("../../assets/Schweppes.png"),
-	require("../../assets/tuyau.jpg"),
+	require("../../assets/tuyau-1.jpg"),
 	require("../../assets/tuyau.png"),
 	require("../../assets/cocacola.jpg"),
 	require("../../assets/edit-icon.png"),

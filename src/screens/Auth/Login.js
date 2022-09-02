@@ -13,9 +13,9 @@ import React, { useRef, useState, useEffect, forwardRef } from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector, useStore } from "react-redux";
 import { login } from "../../actions/auth";
-
+// import messaging from "@react-native-firebase/messaging";
 import Input from "../../components/Input";
-import SplashScreen from "../SplashScreen";
+// import SplashScreen from "../SplashScreen";
 const styles = StyleSheet.create({
 	screen: {
 		flex: 1,
@@ -90,7 +90,13 @@ export default (props) => {
 	const [password, setPassword] = useState("");
 	const dispatch = useDispatch();
 	const loginHandler = () => {
-		dispatch(login({email, password}));
+		// messaging()
+		// 	.getToken()
+		// 	.then((fcmToken) => {
+		// 		console.log("FCM token:", fcmToken);
+		// 	});
+		dispatch(login({ email, password,token:'disabled' }));
+	
 	};
 	if (isLoading) return (
 		<SplashScreen />
